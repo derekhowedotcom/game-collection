@@ -1,11 +1,11 @@
 <template>
-    <form @submit.prevent="storePost(post)">
+    <form @submit.prevent="storeCollectionItem(collectionItem)">
         <!-- Title -->
         <div>
-            <label for="post-title" class="block font-medium text-sm text-gray-700">
+            <label for="collectionItem-title" class="block font-medium text-sm text-gray-700">
                 Title
             </label>
-            <input v-model="post.title" id="post-title" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <input v-model="collectionItem.title" id="collectionItem-title" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             <div class="text-red-600 mt-1">
                 <div v-for="message in validationErrors?.title" :key="message">
                     {{ message }}
@@ -16,10 +16,10 @@
 
         <!-- Content -->
         <div class="mt-4">
-            <label for="post-content" class="block font-medium text-sm text-gray-700">
+            <label for="collectionItem-content" class="block font-medium text-sm text-gray-700">
                 Content
             </label>
-            <textarea v-model="post.content" id="post-content" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+            <textarea v-model="collectionItem.content" id="collectionItem-content" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
             <div class="text-red-600 mt-1">
                 <div v-for="message in validationErrors?.content" :key="message">
                     {{ message }}
@@ -29,10 +29,10 @@
 
         <!-- Category -->
         <div class="mt-4">
-            <label for="post-category" class="block font-medium text-sm text-gray-700">
+            <label for="collectionItem-category" class="block font-medium text-sm text-gray-700">
                 Category
             </label>
-            <select v-model="post.category_id" id="post-category" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <select v-model="collectionItem.category_id" id="collectionItem-category" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="" selected>-- Choose category --</option>
                 <option v-for="category in categories" :value="category.id" :key="category.id" >
                     {{ category.name }}
@@ -50,7 +50,7 @@
             <label for="thumbnail" class="block font-medium text-sm text-gray-700">
                 Thumbnail
             </label>
-            <input @change="post.thumbnail = $event.target.files[0]" type="file" id="thumbnail" />
+            <input @change="collectionItem.thumbnail = $event.target.files[0]" type="file" id="thumbnail" />
             <div class="text-red-600 mt-1">
                 <div v-for="message in validationErrors?.thumbnail" :key="message">
                     {{ message }}
@@ -73,11 +73,11 @@
 
 import { onMounted, reactive } from 'vue'
 import useCategories from '../../composables/categories'
-import usePosts from '../../composables/posts'
+import useCollectionItems from '../../composables/collectionItems'
 
 export default {
     setup() {
-        const post = reactive({
+        const collectionItem = reactive({
             title: '',
             content: '',
             category_id: '',
@@ -85,12 +85,12 @@ export default {
         })
         
         const { categories, getCategories } = useCategories()
-        const { storePost, validationErrors, isLoading } = usePosts()
+        const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems()
         onMounted( () => {
             getCategories()
         })
 
-        return { categories, post, storePost, validationErrors, isLoading }
+        return { categories, collectionItem, storeCollectionItem, validationErrors, isLoading }
     }
     
 }        

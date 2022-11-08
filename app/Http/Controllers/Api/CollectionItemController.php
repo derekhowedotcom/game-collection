@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Post;
+use App\Models\CollectionItem;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PostResource;
+use App\Http\Resources\CollectionItemResource;
 use Illuminate\Http\Request;
-use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\StoreCollectionItemRequest;
 use Illuminate\Support\Facades\Log;
 
-class PostController extends Controller
+class CollectionItemController extends Controller
 {
     public function index()
     {
@@ -23,7 +23,7 @@ class PostController extends Controller
             $orderDirection = 'desc';
         }
 
-        $posts = Post::with('category')
+        $collectionItem = CollectionItem::with('category')
         ->when(request('search_category'), function($query){
             $query->where('category_id', request('search_category'));
         })
@@ -47,40 +47,40 @@ class PostController extends Controller
 
         ->orderBy($orderColumn, $orderDirection)
         ->paginate(10);
-        return PostResource::collection($posts);
+        return CollectionItemResource::collection($collectionItem);
     }
 
-    public function store(StorePostRequest $request)
+    public function store(StoreCollectionItemRequest $request)
     {
-        $this->authorize('posts.create'); 
+        $this->authorize('collection-items.create'); 
         if ($request->hasFile('thumbnail')) {
             $filename = $request->file('thumbnail')->getClientOriginalName();
             info($filename);
         }
 
-        $post = Post::create($request->validated());
+        $collectionItem = CollectionItem::create($request->validated());
 
-        return new PostResource($post);
+        return new CollectionItemResource($collectionItem);
     }
 
-    public function update(Post $post, StorePostRequest $request)
+    public function update(CollectionItem $collectionItem, StoreCollectionItemRequest $request)
     {
-        $this->authorize('posts.update'); 
-        $post->update($request->validated());
+        $this->authorize('collection-items.update'); 
+        $collectionItem->update($request->validated());
 
-        return new PostResource($post);
+        return new CollectionItemResource($collectionItem);
     }
 
-    public function show(Post $post)
+    public function show(CollectionItem $collectionItem)
     {
-        $this->authorize('posts.update'); 
-        return new PostResource($post);
+        $this->authorize('collection-items.update'); 
+        return new CollectionItemResource($collectionItem);
     }
 
-    public function destroy(Post $post)
+    public function destroy(CollectionItem $collectionItem)
     {
-        $this->authorize('posts.delete');   
-        $post->delete();
+        $this->authorize('collection-items.delete');   
+        $collectionItem->delete();
 
         return response()->noContent();
     }

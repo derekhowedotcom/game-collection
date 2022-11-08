@@ -3,9 +3,9 @@ import {createRouter, createWebHistory } from "vue-router";
 import AuthenticatedLayout from '../layouts/Authenticated.vue';
 import GuestLayout from '../layouts/Guest.vue';
 
-import PostsIndex from '../components/Posts/Index.vue';
-import PostsCreate from '../components/Posts/Create.vue';
-import PostsEdit from '../components/Posts/Edit.vue';
+import CollectionItemsIndex from '../components/collection-items/Index.vue';
+import CollectionItemsCreate from '../components/collection-items/Create.vue';
+import CollectionItemsEdit from '../components/collection-items/Edit.vue';
 import Login from '../components/Login.vue';
 
 function auth(to, from, next) {
@@ -36,22 +36,22 @@ const routes = [
         beforeEnter: auth,
         children:[
             { 
-                path: '/posts', 
-                name: 'posts.index',
-                component: PostsIndex,
-                meta: { title: 'Posts' }
+                path: '/collection-items', 
+                name: 'collection-items.index',
+                component: CollectionItemsIndex,
+                meta: { title: 'Collection Items' }
             },
             { 
-                path: '/posts/create', 
-                name: 'posts.create', 
-                component: PostsCreate,
-                meta: { title: 'Create New Post' }
+                path: '/collection-items/create', 
+                name: 'collection-items.create', 
+                component: CollectionItemsCreate,
+                meta: { title: 'Create New Collection Item' }
             },
             { 
-                path: '/posts/edit/:id', 
-                name: 'posts.edit', 
-                component: PostsEdit,
-                meta: { title: 'Edit Post' }
+                path: '/collection-items/edit/:id', 
+                name: 'collection-items.edit', 
+                component: CollectionItemsEdit,
+                meta: { title: 'Edit Collection Item' }
             },
         ]
     },

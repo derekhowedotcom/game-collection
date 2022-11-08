@@ -95,30 +95,30 @@
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200 divide-solid">
-                    <tr v-for="post in posts.data" :key="post.id">
+                    <tr v-for="collectionItem in collectionItems.data" :key="collectionItem.id">
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ post.id }}
+                        {{ collectionItem.id }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ post.title }}
+                        {{ collectionItem.title }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ post.category }}
+                        {{ collectionItem.category }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ post.content }}
+                        {{ collectionItem.content }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ post.created_at }}
+                        {{ collectionItem.created_at }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        <router-link v-if="can('posts.update')" :to="{ name: 'posts.edit', params: { id: post.id } }">Edit</router-link>
-                        <a href="#"  v-if="can('posts.delete')" @click.prevent="deletePost(post.id)" class="ml-2">Delete</a>
+                        <router-link v-if="can('collection-items.update')" :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">Edit</router-link>
+                        <a href="#"  v-if="can('collection-items.delete')" @click.prevent="deleteCollectionItem(collectionItem.id)" class="ml-2">Delete</a>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <Pagination :data="posts" @pagination-change-page="page => getPosts(page, selectedCategory)" />
+            <Pagination :data="collectionItems" @pagination-change-page="page => getCollectionItems(page, selectedCategory)" />
         </div>
     </div>
 </template>
@@ -128,7 +128,7 @@
 <script>
 import axios from 'axios';
 import { ref, onMounted, watch } from 'vue'
-import usePosts from '../../composables/posts'
+import useCollectionItems from '../../composables/collectionItems'
 import useCategories from '../../composables/categories'
 import { current } from 'tailwindcss/colors';
 import { useAbility } from '@casl/vue'
@@ -144,18 +144,18 @@ export default {
         const search_global = ref('')
         const orderColumn = ref('created_at')
         const orderDirection = ref('desc')
-        const { posts, getPosts, deletePost } = usePosts()
+        const { collectionItems, getCollectionItems, deleteCollectionItem } = useCollectionItems()
         const { categories, getCategories } = useCategories()
         const { can } = useAbility()
         onMounted( () => {
-            getPosts(),
+            getCollectionItems(),
             getCategories()
             
         })
         const updateOrdering = (column) => {
             orderColumn.value = column;
             orderDirection.value = (orderDirection.value === 'asc') ? 'desc' : 'asc';
-            getPosts(
+            getCollectionItems(
                 1, 
                 search_category.value,
                 search_id.value,
@@ -169,7 +169,7 @@ export default {
         }
 
         watch(search_category, (current, previous) => {
-            getPosts(
+            getCollectionItems(
                 1, 
                 current, 
                 search_id.value,
@@ -180,7 +180,7 @@ export default {
         })
 
         watch(search_id, (current, previous) => {
-            getPosts(
+            getCollectionItems(
                 1, 
                 search_category.value,
                 current, 
@@ -191,7 +191,7 @@ export default {
         })
 
         watch(search_title, (current, previous) => {
-            getPosts(
+            getCollectionItems(
                 1, 
                 search_category.value,
                 search_id.value,
@@ -202,7 +202,7 @@ export default {
         })
 
         watch(search_content, (current, previous) => {
-            getPosts(
+            getCollectionItems(
                 1, 
                 search_category.value,
                 search_id.value,
@@ -213,7 +213,7 @@ export default {
         })
 
         watch(search_global, (current, previous) => {
-            getPosts(
+            getCollectionItems(
                 1, 
                 search_category.value,
                 search_id.value,
@@ -224,9 +224,9 @@ export default {
         })
 
         return { 
-            posts,
-            getPosts,
-            deletePost,
+            collectionItems,
+            getCollectionItems,
+            deleteCollectionItem,
             categories,
             search_category,
             search_id,

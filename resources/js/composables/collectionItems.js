@@ -2,16 +2,16 @@ import axios from 'axios'
 import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 
-export default function usePosts() {
-    const posts = ref({})
-    const post = ref({})
+export default function useCollectionItems() {
+    const collectionItems = ref({})
+    const collectionItem = ref({})
     const router = useRouter()
     const validationErrors = ref({})
     const isLoading = ref(false)
     const swal = inject('$swal')
 
-    //get all posts
-    const getPosts = async (
+    //get all collectionItems
+    const getCollectionItems = async (
         page = 1, 
         search_category = '',
         search_id = '',
@@ -21,7 +21,7 @@ export default function usePosts() {
         order_column = 'created_at',
         order_direction = 'desc'
     ) => {
-        axios.get('/api/posts?page=' + page + 
+        axios.get('/api/collection-items?page=' + page + 
             '&search_category=' + search_category +
             '&search_id=' + search_id +
             '&search_title=' + search_title +
@@ -31,40 +31,40 @@ export default function usePosts() {
             '&order_direction=' + order_direction 
             )
             .then(response => {
-                posts.value = response.data
+                collectionItems.value = response.data
             })
     }
 
-    //get one post
-    const getPost = async (id) => {
-        axios.get('/api/posts/' + id)
+    //get one collectionItem
+    const getCollectionItem = async (id) => {
+        axios.get('/api/collection-items/' + id)
             .then(response => {
-                post.value = response.data.data;
+                collectionItem.value = response.data.data;
             })
     }
 
-    //store a new post
-    const storePost = async (post) => {
+    //store a new collectionItem
+    const storeCollectionItem = async (collectionItem) => {
         if(isLoading.value) return;
 
        isLoading.value =true
        validationErrors.value = {}     
 
-       let serializedPost = new FormData()
-       for (let item in post){
-            if(post.hasOwnProperty(item)){
-                serializedPost.append(item, post[item])
+       let serializedCollectionItem = new FormData()
+       for (let item in collectionItem){
+            if(collectionItem.hasOwnProperty(item)){
+                serializedCollectionItem.append(item, collectionItem[item])
             }
        }
 
-        axios.post('/api/posts', serializedPost)
+        axios.post('/api/collection-items', serializedCollectionItem)
             .then(response => {
-                router.push({ name: 'posts.index' })
+                router.push({ name: 'collection-items.index' })
                 swal({
                     icon: 'success',
-                    title: 'Post saved successfully'
+                    title: 'CollectionItem saved successfully'
                 })
-                posts.value = response.data
+                collectionItems.value = response.data
             })
             .catch(error => {
                 
@@ -75,21 +75,21 @@ export default function usePosts() {
             .finally(() => isLoading.value = false)
     }
 
-    //update a post
-    const updatePost = async (post) => {
+    //update a collectionItem
+    const updateCollectionItem = async (collectionItem) => {
         if(isLoading.value) return;
 
        isLoading.value =true
        validationErrors.value = {}     
 
-        axios.put('/api/posts/' + post.id, post)
+        axios.put('/api/collection-items/' + collectionItem.id, collectionItem)
             .then(response => {
-                router.push({ name: 'posts.index' })
+                router.push({ name: 'collection-items.index' })
                 swal({
                     icon: 'success',
-                    title: 'Post saved successfully'
+                    title: 'CollectionItem saved successfully'
                 })
-                posts.value = response.data
+                collectionItems.value = response.data
             })
             .catch(error => {
                 
@@ -101,7 +101,7 @@ export default function usePosts() {
     }
 
     //delete
-    const deletePost = async (id) => {
+    const deleteCollectionItem = async (id) => {
         swal({
             title: 'Are you sure?',
             text: 'You won\'t be able to revert this action!',
@@ -115,13 +115,13 @@ export default function usePosts() {
         })
             .then(result => {
                 if (result.isConfirmed) {
-                    axios.delete('/api/posts/' + id)
+                    axios.delete('/api/collection-items/' + id)
                         .then(response => {
-                            getPosts()
-                            router.push({name: 'posts.index'})
+                            getCollectionItems()
+                            router.push({name: 'collection-items.index'})
                             swal({
                                 icon: 'success',
-                                title: 'Post deleted successfully'
+                                title: 'CollectionItem deleted successfully'
                             })
                         })
                         .catch(error => {
@@ -136,13 +136,13 @@ export default function usePosts() {
     }
 
     return { 
-        posts,
-        post,
-        getPosts,
-        getPost,
-        storePost,
-        updatePost,
-        deletePost,
+        collectionItems,
+        collectionItem,
+        getCollectionItems,
+        getCollectionItem,
+        storeCollectionItem,
+        updateCollectionItem,
+        deleteCollectionItem,
         validationErrors,
         isLoading 
     }
