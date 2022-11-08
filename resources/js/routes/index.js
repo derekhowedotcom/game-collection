@@ -39,13 +39,13 @@ const routes = [
                 path: '/collection-items', 
                 name: 'collection-items.index',
                 component: CollectionItemsIndex,
-                meta: { title: 'Collection Items' }
+                meta: { title: 'Collection' }
             },
             { 
                 path: '/collection-items/create', 
                 name: 'collection-items.create', 
                 component: CollectionItemsCreate,
-                meta: { title: 'Create New Collection Item' }
+                meta: { title: 'Add New Collection Item' }
             },
             { 
                 path: '/collection-items/edit/:id', 

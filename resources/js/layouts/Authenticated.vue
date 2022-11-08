@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-gray-200">
         <nav class="flex items-center justify-between flex-wrap border-b border-gray-100 p-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  
             <div class="flex items-center flex-shrink-0 text-white mr-6   ">
                 <!-- Logo -->
@@ -59,7 +59,7 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
                 <svg class="fill-current h-6 w-6" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
                 </button>
             </div>
-            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto " :class="showMenu ? '' : 'hidden'">
+            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto sm:flex" :class="showMenu ? '' : 'hidden'">
                 <div class="text-sm lg:flex-grow mt-9">
                     <router-link :to="{ name: 'collection-items.index' }" active-class="font-bold" class="block mt-4 lg:inline-block lg:mt-0 lg:mr-5 px-1 pt-1 text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out text-center">
                         Collection
@@ -67,6 +67,7 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
                     <router-link v-if="can('collection-items.create')" :to="{ name: 'collection-items.create' }" active-class="font-bold" class="block mt-4 lg:inline-block lg:mt-0 px-1 pt-1  text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out text-center">
                         New Collection Item
                     </router-link>
+                    <a href="#" @click="logout" active-class="font-bold" class="lg:hidden block mt-4 lg:inline-block lg:mt-0 px-1 pt-1  text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out text-center">Logout</a>
 
                 </div>
                 <div class="flex items-center mt-5 hidden sm:flex">
@@ -74,7 +75,7 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
                         <div>Hi, {{ user.name }}</div>
                         <div class="text-sm text-gray-500">{{ user.email }}</div>
                     </div>
-                    <button @click="logout" type="button" class="inline-flex items-center h-10 px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 ml-4" :class="{ 'opacity-25': processing }" :disabled="processing">
+                    <button @click="logout" type="button" class="inline-flex items-center h-10 px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 ml-4" :class="{ 'opacity-25': processing }" :disabled="processing">
                         Log out
                     </button>
                 </div>
