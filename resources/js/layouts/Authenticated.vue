@@ -1,21 +1,18 @@
 <template>
     <div class="min-h-screen bg-gray-100">
-        <nav class="bg-white border-b border-gray-100">
-            <!-- Primary Navigation Menu -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex">
-                        <!-- Logo -->
-                        <div class="shrink-0 flex items-center">
-                            <a href="/">
-                                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 58 58" style="enable-background:new 0 0 316 316;" xml:space="preserve" class="w-10 h-10 fill-current text-gray-500">
+        <nav class="flex items-center justify-between flex-wrap border-b border-gray-100 p-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  
+            <div class="flex items-center flex-shrink-0 text-white mr-6   ">
+                <!-- Logo -->
+                <div class="shrink-0 flex items-center">
+                    <a href="/">
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+viewBox="0 0 58 58" style="enable-background:new 0 0 316 316;" xml:space="preserve" class="w-14 h-14 fill-current text-gray-500">
 <path style="fill:none;stroke:#38454F;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;" d="M19,31V13.5
-	c0-2.475,2.025-4.5,4.5-4.5h0c2.475,0,4.5,2.025,4.5,4.5V20c0,2.2,1.8,4,4,4h0c2.2,0,4-1.8,4-4V1"/>
+c0-2.475,2.025-4.5,4.5-4.5h0c2.475,0,4.5,2.025,4.5,4.5V20c0,2.2,1.8,4,4,4h0c2.2,0,4-1.8,4-4V1"/>
 <path style="fill:#546A79;" d="M54.016,58H3.984C2.336,58,1,56.664,1,55.016V31.984C1,30.336,2.336,29,3.984,29h50.032
-	C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
+C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
 <polygon style="fill:#38454F;stroke:#CBD4D8;stroke-width:2;stroke-miterlimit:10;" points="17,41 14,41 14,38 9,38 9,41 6,41 6,46 
-	9,46 9,49 14,49 14,46 17,46 "/>
+9,46 9,49 14,49 14,46 17,46 "/>
 <rect x="41" y="46" style="fill:#DD352E;stroke:#CBD4D8;stroke-width:2;stroke-miterlimit:10;" width="4" height="4"/>
 <rect x="49" y="46" style="fill:#DD352E;stroke:#CBD4D8;stroke-width:2;stroke-miterlimit:10;" width="4" height="4"/>
 <rect x="21" y="45" style="fill:#FFFFFF;" width="16" height="5"/>
@@ -54,52 +51,39 @@
 <g>
 </g>
 </svg>      </a>
-                        
-                        </div>
-
-                        <!-- Navigation Links -->
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <router-link :to="{ name: 'collection-items.index' }" active-class="border-b-2 border-indigo-400" class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
-                                Collection
-                            </router-link>
-                            <router-link v-if="can('collection-items.create')" :to="{ name: 'collection-items.create' }" active-class="border-b-2 border-indigo-400" class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
-                                New Collection Item
-                            </router-link>
-                            
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <div>
-                            <div>Hi, {{ user.name }}</div>
-                            <div class="text-sm text-gray-500">{{ user.email }}</div>
-                        </div>
-                        <button @click="logout" type="button" class="inline-flex items-center h-10 px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 ml-4" :class="{ 'opacity-25': processing }" :disabled="processing">
-                            Log out
-                        </button>
-                    </div>
+                
                 </div>
             </div>
-            <!-- Responsive Navigation Menu -->
-            <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-                <div class="pt-2 pb-3 space-y-1">
-                    <router-link :to="{ name: 'collection-items.index' }" active-class="border-b-2 border-indigo-400" class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+            <div class="block lg:hidden">
+                <button @click="toggleNav" class="flex items-center px-3 py-2 border rounded text-grey-900 border-grey-900 hover:text-grey hover:border-grey">
+                <svg class="fill-current h-6 w-6" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+                </button>
+            </div>
+            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto " :class="showMenu ? '' : 'hidden'">
+                <div class="text-sm lg:flex-grow mt-9">
+                    <router-link :to="{ name: 'collection-items.index' }" active-class="font-bold" class="block mt-4 lg:inline-block lg:mt-0 lg:mr-5 px-1 pt-1 text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out text-center">
                         Collection
                     </router-link>
-                    <router-link :to="{ name: 'collection-items.create' }" active-class="border-b-2 border-indigo-400" class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+                    <router-link v-if="can('collection-items.create')" :to="{ name: 'collection-items.create' }" active-class="font-bold" class="block mt-4 lg:inline-block lg:mt-0 px-1 pt-1  text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out text-center">
                         New Collection Item
                     </router-link>
-                    <div class="flex items-center">
-                        <div>
-                            <div>Hi, {{ user.name }}</div>
-                            <div class="text-sm text-gray-500">{{ user.email }}</div>
-                        </div>
+
+                </div>
+                <div class="flex items-center mt-5 hidden sm:flex">
+                    <div>
+                        <div>Hi, {{ user.name }}</div>
+                        <div class="text-sm text-gray-500">{{ user.email }}</div>
                     </div>
-                    <button @click="logout" type="button" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 ml-4" :class="{ 'opacity-25': processing }" :disabled="processing">
+                    <button @click="logout" type="button" class="inline-flex items-center h-10 px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 ml-4" :class="{ 'opacity-25': processing }" :disabled="processing">
                         Log out
                     </button>
                 </div>
             </div>
         </nav>
+
+
+
+
 
         <!-- Page Heading -->
         <header class="bg-white shadow">
@@ -126,6 +110,7 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import useAuth from '../composables/auth';
 import { useAbility } from '@casl/vue'
 
@@ -134,7 +119,10 @@ export default {
         const { user, processing, logout } = useAuth()
         const { can } = useAbility()
 
-        return { user, processing, logout, can }
+        let showMenu = ref(false);
+    const toggleNav = () => (showMenu.value = !showMenu.value);
+
+        return { user, processing, logout, can, showMenu, toggleNav }
     },
     computed: {
         currentPagetitle() {
