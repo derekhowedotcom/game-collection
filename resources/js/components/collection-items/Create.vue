@@ -14,14 +14,14 @@
         </div>
        
 
-        <!-- Content -->
+        <!-- Description -->
         <div class="mt-4">
-            <label for="collectionItem-content" class="block font-medium text-sm text-gray-700">
-                Content
+            <label for="collectionItem-description" class="block font-medium text-sm text-gray-700">
+                Description
             </label>
-            <textarea v-model="collectionItem.content" id="collectionItem-content" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+            <textarea v-model="collectionItem.description" id="collectionItem-description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
             <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.content" :key="message">
+                <div v-for="message in validationErrors?.description" :key="message">
                     {{ message }}
                 </div>
             </div>
@@ -79,7 +79,7 @@ export default {
     setup() {
         const collectionItem = reactive({
             title: '',
-            content: '',
+            description: '',
             category_id: '',
             thumbnail: ''
         })

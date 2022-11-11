@@ -14,13 +14,13 @@ class CollectionItemController extends Controller
     public function index()
     {
         
-        $orderColumn = request('order_column', 'created_at');
+        $orderColumn = request('order_column', 'title');
         if(!in_array($orderColumn, ['id', 'title', 'created_at'])){
-            $orderColumn = 'created_at';
+            $orderColumn = 'title';
         }
         $orderDirection = request('order_direction', 'desc');
         if(!in_array($orderDirection, ['asc', 'desc'])){
-            $orderDirection = 'desc';
+            $orderDirection = 'asc';
         }
 
         $collectionItem = CollectionItem::with('category')
@@ -33,14 +33,14 @@ class CollectionItemController extends Controller
         ->when(request('search_title'), function($query){
             $query->where('title', 'like',  '%'.request('search_title').'%');
         })
-        ->when(request('search_content'), function($query){
-            $query->where('content', 'like',  '%'.request('search_content').'%');
+        ->when(request('search_description'), function($query){
+            $query->where('description', 'like',  '%'.request('search_description').'%');
         })
         ->when(request('search_global'), function ($query) {
             $query->where(function($q) {
                 $q->where('id', request('search_global'))
                     ->orWhere('title', 'like', '%'.request('search_global').'%')
-                    ->orWhere('content', 'like', '%'.request('search_global').'%');
+                    ->orWhere('description', 'like', '%'.request('search_global').'%');
 
             });
         })

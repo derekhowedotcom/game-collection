@@ -54,6 +54,7 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
                 
                 </div>
             </div>
+            <!--Mobile menu button-->
             <div class="block lg:hidden">
                 <button @click="toggleNav" class="flex items-center px-3 py-2 border rounded text-grey-900 border-grey-900 hover:text-grey hover:border-grey">
                 <svg class="fill-current h-6 w-6" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
@@ -82,12 +83,8 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
             </div>
         </nav>
 
-
-
-
-
         <!-- Page Heading -->
-        <header class="bg-white shadow">
+        <header class="bg-white shadow text-center">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     {{ currentPagetitle }}
@@ -97,10 +94,10 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
 
         <!-- Page Content -->
         <main>
-            <div class="py-12">
+            <div class="py-2">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 bg-white border-b border-gray-200">
+                        <div class="p-4 bg-white border-b border-gray-200">
                             <router-view></router-view>
                         </div>
                     </div>
@@ -120,8 +117,9 @@ export default {
         const { user, processing, logout } = useAuth()
         const { can } = useAbility()
 
+        //show/hide mobile menu
         let showMenu = ref(false);
-    const toggleNav = () => (showMenu.value = !showMenu.value);
+        const toggleNav = () => (showMenu.value = !showMenu.value);
 
         return { user, processing, logout, can, showMenu, toggleNav }
     },

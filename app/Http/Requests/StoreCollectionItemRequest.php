@@ -25,7 +25,7 @@ class StoreCollectionItemRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'content' => 'required',
+            'description' => 'required',
             'category_id' => ['required', 'exists:categories,id']
         ];
     }

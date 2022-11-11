@@ -21,7 +21,7 @@ class CollectionItemFactory extends Factory
 
         return [
             'title' => $this->faker->text(20),
-            'content' => $this->faker->paragraphs(5, true),
+            'description' => $this->faker->paragraphs(5, true),
             'category_id' => $categoryIds->random(),
         ];
     }
