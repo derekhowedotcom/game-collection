@@ -1,5 +1,5 @@
 <template>
-    <router-link class="router-link" v-if="can('collection-items.update')" :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }">{{ collectionItem.title }}</router-link>
+    <router-link class="router-link" :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }">{{ collectionItem.title }}</router-link>
 </template>
 
 <script>

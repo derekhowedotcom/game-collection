@@ -73,7 +73,6 @@ class CollectionItemController extends Controller
 
     public function show(CollectionItem $collectionItem)
     {
-        $this->authorize('collection-items.update'); 
         return new CollectionItemResource($collectionItem);
     }
 

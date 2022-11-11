@@ -20,13 +20,12 @@
             <router-link class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" v-if="can('collection-items.update')" :to="{ name: 'collection-items.edit', params: { id: this.$route.params.id } }">Edit</router-link>
             
 
-            <a href="#"  v-if="can('collection-items.delete')" @click.prevent="deleteCollectionItem(collectionItem.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">Delete</a>
+            <a href="#" v-if="can('collection-items.delete')" @click.prevent="deleteCollectionItem(collectionItem.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">Delete</a>
         </div>
   
 </template>
 
 <script>
-
 import {onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
 import useCategories from "../../composables/categories";
@@ -53,6 +52,7 @@ export default {
             getCollectionItem(route.params.id)
             getCategories()
         })
+        console.log(collectionItem);
         return { 
             categories, 
             collectionItem, 
