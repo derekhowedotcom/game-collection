@@ -1,6 +1,5 @@
 <template>
-    <router-link class="router-link" v-if="can('collection-items.update')" :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">{{ collectionItem.title }}</router-link>
-    <span v-else>{{ collectionItem.title }}</span>
+    <router-link class="router-link" v-if="can('collection-items.update')" :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }">{{ collectionItem.title }}</router-link>
 </template>
 
 <script>

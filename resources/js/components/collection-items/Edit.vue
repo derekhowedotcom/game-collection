@@ -13,7 +13,6 @@
             </div>
         </div>
        
-
         <!-- Description -->
         <div class="mt-4">
             <label for="collectionItem-description" class="block font-medium text-sm text-gray-700">

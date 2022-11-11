@@ -15,7 +15,7 @@
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
                         <select v-model="search_category" class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            <option value="" selected>-- all categories --</option>
+                            <option value="" selected>-- All Categories --</option>
                             <option v-for="category in categories" :key="category.id" :value="category.id">
                                 {{ category.name }}
                             </option>
@@ -134,8 +134,6 @@ import titleComponent from '../ui/Title.vue'
 
 export default {
     setup() {
-
-        
         const search_category = ref('')
         const search_id = ref('')
         const search_title = ref('')

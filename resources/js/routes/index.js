@@ -6,6 +6,7 @@ import GuestLayout from '../layouts/Guest.vue';
 import CollectionItemsIndex from '../components/collection-items/Index.vue';
 import CollectionItemsCreate from '../components/collection-items/Create.vue';
 import CollectionItemsEdit from '../components/collection-items/Edit.vue';
+import CollectionItemsDetails from '../components/collection-items/Details.vue';
 import Login from '../components/Login.vue';
 
 function auth(to, from, next) {
@@ -46,6 +47,12 @@ const routes = [
                 name: 'collection-items.create', 
                 component: CollectionItemsCreate,
                 meta: { title: 'Add New Collection Item' }
+            },
+            { 
+                path: '/collection-items/details/:id', 
+                name: 'collection-items.details', 
+                component: CollectionItemsDetails,
+                meta: { title: 'Details Collection Item' }
             },
             { 
                 path: '/collection-items/edit/:id', 
