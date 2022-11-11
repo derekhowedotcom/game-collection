@@ -68,7 +68,7 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Category</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Description</span>
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">description</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
 <!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Created at</span>-->
@@ -99,8 +99,8 @@
                         {{ collectionItem.id }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        <router-link class="router-link" v-if="can('collection-items.update')" :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">{{ collectionItem.title }}</router-link>
-                        <span v-else>{{ collectionItem.title }}</span>
+                        
+                        <titleComponent :collectionItem="collectionItem" />
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ collectionItem.category }}
@@ -123,14 +123,6 @@
     </div>
 </template>
 
-<style scoped>
-.router-link:hover {
-    color: rgb(37 99 235)
-}
-    
-
-</style>
-
 <script>
 import axios from 'axios';
 import { ref, onMounted, watch } from 'vue'
@@ -138,6 +130,7 @@ import useCollectionItems from '../../composables/collectionItems'
 import useCategories from '../../composables/categories'
 import { current } from 'tailwindcss/colors';
 import { useAbility } from '@casl/vue'
+import titleComponent from '../ui/Title.vue'
 
 export default {
     setup() {
@@ -245,6 +238,9 @@ export default {
             can 
         }
     },
+    components: {
+        titleComponent
+    }
     
 }
 </script>
