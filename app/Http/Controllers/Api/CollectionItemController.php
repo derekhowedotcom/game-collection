@@ -8,9 +8,17 @@ use App\Http\Resources\CollectionItemResource;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCollectionItemRequest;
 use Illuminate\Support\Facades\Log;
+use App\Interfaces\CollectionItemRepositoryInterface;
 
 class CollectionItemController extends Controller
 {
+    private CollectionItemRepositoryInterface $collectionItemRepository;
+
+    public function __construct(CollectionItemRepositoryInterface $collectionItemRepository) 
+    {
+        $this->collectionItemRepository = $collectionItemRepository;
+    }
+
     public function index()
     {
         
