@@ -4,10 +4,8 @@ namespace App\Interfaces;
 
 interface CollectionItemRepositoryInterface 
 {
-    // public function getAllOrders();
-    // public function getOrderById($orderId);
+   public function getFilteredCollectionItems();
     public function deleteCollectionItem($collectionItem);
-    // public function createOrder(array $orderDetails);
-    // public function updateOrder($orderId, array $newDetails);
-    // public function getFulfilledOrders();
+    public function createCollectionItem(array $collectionItemDetails);
+    public function updateCollectionItem($collectionItemId, array $collectionItemDetails);
 }

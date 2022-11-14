@@ -21,40 +21,7 @@ class CollectionItemController extends Controller
 
     public function index()
     {
-        
-        $orderColumn = request('order_column', 'title');
-        if(!in_array($orderColumn, ['id', 'title', 'created_at'])){
-            $orderColumn = 'title';
-        }
-        $orderDirection = request('order_direction', 'desc');
-        if(!in_array($orderDirection, ['asc', 'desc'])){
-            $orderDirection = 'asc';
-        }
-
-        $collectionItem = CollectionItem::with('category')
-        ->when(request('search_category'), function($query){
-            $query->where('category_id', request('search_category'));
-        })
-        ->when(request('search_id'), function($query){
-            $query->where('id', request('search_id'));
-        })
-        ->when(request('search_title'), function($query){
-            $query->where('title', 'like',  '%'.request('search_title').'%');
-        })
-        ->when(request('search_description'), function($query){
-            $query->where('description', 'like',  '%'.request('search_description').'%');
-        })
-        ->when(request('search_global'), function ($query) {
-            $query->where(function($q) {
-                $q->where('id', request('search_global'))
-                    ->orWhere('title', 'like', '%'.request('search_global').'%')
-                    ->orWhere('description', 'like', '%'.request('search_global').'%');
-
-            });
-        })
-
-        ->orderBy($orderColumn, $orderDirection)
-        ->paginate(10);
+        $collectionItem = $this->collectionItemRepository->getFilteredCollectionItems();
         return CollectionItemResource::collection($collectionItem);
     }
 
@@ -66,7 +33,7 @@ class CollectionItemController extends Controller
             info($filename);
         }
 
-        $collectionItem = CollectionItem::create($request->validated());
+        $collectionItem = $this->collectionItemRepository->createCollectionItem($request->validated());
 
         return new CollectionItemResource($collectionItem);
     }
@@ -74,7 +41,8 @@ class CollectionItemController extends Controller
     public function update(CollectionItem $collectionItem, StoreCollectionItemRequest $request)
     {
         $this->authorize('collection-items.update'); 
-        $collectionItem->update($request->validated());
+
+        $collectionItem = $this->collectionItemRepository->updateCollectionItem($collectionItem->id, $request->validated());
 
         return new CollectionItemResource($collectionItem);
     }
@@ -87,7 +55,7 @@ class CollectionItemController extends Controller
     public function destroy(CollectionItem $collectionItem)
     {
         $this->authorize('collection-items.delete');   
-        $collectionItem->delete();
+        $this->collectionItemRepository->deleteCollectionItem($collectionItem->id);
 
         return response()->noContent();
     }
