@@ -1,5 +1,12 @@
 <template>
     <form @submit.prevent="storeCollectionItem(collectionItem)">
+        <!-- Barcode TODO: add validation and save to db -->
+        <div>
+            <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
+                Barcode
+            </label>
+            <input v-model="decodeText" id="collectionItem-barcode" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"> <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button>
+        </div>    
         <!-- Title -->
         <div>
             <label for="collectionItem-title" class="block font-medium text-sm text-gray-700">
@@ -67,13 +74,21 @@
             </button>
         </div>
     </form>
+    <modal @close="toggleModal" :modalActive="modalActive">
+      <div class="modal-content">
+            <h1>Barcode Scanner</h1>
+            <StreamBarcodeReader @decode='onDecode' @loaded='onLoaded'></StreamBarcodeReader>
+        </div>
+    </modal>
 </template>
 
 <script>
 
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import useCategories from '../../composables/categories'
 import useCollectionItems from '../../composables/collectionItems'
+import { StreamBarcodeReader } from "vue-barcode-reader";
+import Modal from "../Modal.vue";
 
 export default {
     setup() {
@@ -83,6 +98,20 @@ export default {
             category_id: '',
             thumbnail: ''
         })
+
+        const decodeText = ref('')
+
+        function onDecode (result) {
+            //display the result from barcode scan
+            decodeText.value = result
+            //close the modal
+            toggleModal()
+        }
+
+        const modalActive = ref(false);
+        const toggleModal = () => {
+            modalActive.value = !modalActive.value;
+        };
         
         const { categories, getCategories } = useCategories()
         const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems()
@@ -90,7 +119,10 @@ export default {
             getCategories()
         })
 
-        return { categories, collectionItem, storeCollectionItem, validationErrors, isLoading }
+        return { categories, collectionItem, storeCollectionItem, validationErrors, isLoading, onDecode, modalActive, toggleModal  }
+    },
+    components: {
+        Modal
     }
     
 }        

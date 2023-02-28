@@ -10,6 +10,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import useAuth from './composables/auth'
 import { abilitiesPlugin } from '@casl/vue';
 import ability from './services/ability';
+import { StreamBarcodeReader } from "vue-barcode-reader";
+import { ImageBarcodeReader } from "vue-barcode-reader";
 
 const app = createApp({
     setup(){
@@ -19,6 +21,8 @@ const app = createApp({
 })
 app.use(router)
 app.use(VueSweetalert2)
+app.use(StreamBarcodeReader)
 app.use(abilitiesPlugin, ability)
 app.component('Pagination', laravelVuePagination)
+app.component('StreamBarcodeReader', StreamBarcodeReader)
 app.mount('#app')

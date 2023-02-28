@@ -100,7 +100,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         
-                        <titleComponent :collectionItem="collectionItem" />
+                        <titleLinkComponent :collectionItem="collectionItem" />
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ collectionItem.category }}
@@ -130,7 +130,7 @@ import useCollectionItems from '../../composables/collectionItems'
 import useCategories from '../../composables/categories'
 import { current } from 'tailwindcss/colors';
 import { useAbility } from '@casl/vue'
-import titleComponent from '../ui/Title.vue'
+import titleLinkComponent from '../ui/TitleLink.vue'
 
 export default {
     setup() {
@@ -237,7 +237,7 @@ export default {
         }
     },
     components: {
-        titleComponent
+        titleLinkComponent
     }
     
 }
