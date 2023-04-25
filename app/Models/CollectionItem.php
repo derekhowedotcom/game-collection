@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class CollectionItem extends Model
 {
     use HasFactory;
+    
 
-    protected $fillable = ['title', 'description', 'category_id'];
+    protected $fillable = ['title', 'description', 'barcode', 'category_id'];
+
     
     public function category()
     {

@@ -20,6 +20,7 @@ class CollectionItemResource extends JsonResource
             'category_id' => $this->category_id,
             'category' => $this->category->name,
             'description' => substr($this->description,0, 50). '...',
+            'barcode' => $this->barcode,
             'created_at' => $this->created_at->toDateString()
         ];
     }

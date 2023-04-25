@@ -5,7 +5,7 @@
             <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
                 Barcode
             </label>
-            <input v-model="decodeText" id="collectionItem-barcode" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"> <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button>
+            <input v-model="collectionItem.barcode" id="collectionItem-barcode" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"> <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button>
         </div>    
         <!-- Title -->
         <div>
@@ -93,17 +93,18 @@ import Modal from "../Modal.vue";
 export default {
     setup() {
         const collectionItem = reactive({
+            barcode: '',
             title: '',
             description: '',
             category_id: '',
             thumbnail: ''
         })
 
-        const decodeText = ref('')
+        // const decodeText = ref('')
 
         function onDecode (result) {
             //display the result from barcode scan
-            decodeText.value = result
+            // collectionItem.barcode.value = result
             //close the modal
             toggleModal()
         }

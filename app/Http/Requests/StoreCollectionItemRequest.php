@@ -26,6 +26,7 @@ class StoreCollectionItemRequest extends FormRequest
         return [
             'title' => 'required',
             'description' => 'required',
+            'barcode' => 'nullable|string',
             'category_id' => ['required', 'exists:categories,id']
         ];
     }

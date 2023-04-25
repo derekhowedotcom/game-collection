@@ -37,6 +37,7 @@ export default function useCollectionItems() {
 
     //get one collectionItem
     const getCollectionItem = async (id) => {
+        
         axios.get('/api/collection-items/' + id)
             .then(response => {
                 collectionItem.value = response.data.data;
@@ -45,6 +46,7 @@ export default function useCollectionItems() {
 
     //store a new collectionItem
     const storeCollectionItem = async (collectionItem) => {
+        
         if(isLoading.value) return;
 
        isLoading.value =true
@@ -52,6 +54,8 @@ export default function useCollectionItems() {
 
        let serializedCollectionItem = new FormData()
        for (let item in collectionItem){
+        console.log(item);
+
             if(collectionItem.hasOwnProperty(item)){
                 serializedCollectionItem.append(item, collectionItem[item])
             }
@@ -81,6 +85,8 @@ export default function useCollectionItems() {
 
        isLoading.value =true
        validationErrors.value = {}     
+
+       console.log(collectionItem);
 
         axios.put('/api/collection-items/' + collectionItem.id, collectionItem)
             .then(response => {

@@ -1,13 +1,12 @@
 <template>
     <form @submit.prevent="updateCollectionItem(collectionItem)">
-        <!-- Barcode TODO: add validation and save to db -->
-        <div>
+         <!-- Barcode TODO: add validation and save to db -->
+         <div>
             <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
                 Barcode
             </label>
-            <input v-model="decodeText" id="collectionItem-barcode" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"> <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button>
+            <input v-model="collectionItem.barcode" id="collectionItem-barcode" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"> <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button>
         </div>    
-
         <!-- Title -->
         <div>
             <label for="collectionItem-title" class="block font-medium text-sm text-gray-700">
@@ -67,6 +66,17 @@
 
         <!-- Buttons -->
         <div class="mt-4">
+
+            <div class="mt-4 mb-4 w-96">
+                    <p @click="clickme">here</p>
+                    <StreamBarcodeReader
+                @decode="onDecode"
+                @loaded="onLoaded"
+                
+            ></StreamBarcodeReader>
+       Barcode - {{ decodeText }}
+
+        </div>
             <button :disabled="isLoading" class="inline-flex items-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded ml-2 disabled:opacity-75 disabled:cursor-not-allowed">
                 <div v-show="isLoading" class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
                 <span v-if="isLoading">Processing...</span>
@@ -74,38 +84,35 @@
             </button>
         </div>
     </form>
-
-    <modal @close="toggleModal" :modalActive="modalActive">
-      <div class="modal-content">
-            <h1>Barcode Scanner</h1>
-            <StreamBarcodeReader @decode='onDecode' @loaded='onLoaded'></StreamBarcodeReader>
-        </div>
-    </modal>
 </template>
 
 <script>
 
-import {onMounted, reactive, ref, computed, inject } from "vue";
+import {onMounted, reactive, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { StreamBarcodeReader } from "vue-barcode-reader";
 
 import useCategories from "../../composables/categories";
 import useCollectionItems from "../../composables/collectionItems";
-import Modal from "../Modal.vue";
 export default {
     setup() {
         const { categories, getCategories } = useCategories()
         const { collectionItem, getCollectionItem, updateCollectionItem, validationErrors, isLoading } = useCollectionItems()
-        const swal = inject('$swal')
 
         const decodeText = ref('')
 
-        
-        function onDecode (result) {
-            //display the result from barcode scan
+        function clickme (credentials) {
+            this.text = 'billy'
+        alert('yoyoyoy')
+        }
+
+        function onLoaded (loaded){
+            console.log(loaded)
+
+        }
+        function onDecode (result) { 
             decodeText.value = result
-            //close the modal
-            toggleModal()
+            
         }
 
         const text2 = computed(() => {
@@ -117,24 +124,11 @@ export default {
             getCollectionItem(route.params.id)
             getCategories()
         })
-
-
-
-
-
-        const modalActive = ref(false);
-        const toggleModal = () => {
-            modalActive.value = !modalActive.value;
-        };
-
         
         
 
-        return { categories, collectionItem, validationErrors, isLoading, decodeText, text2, updateCollectionItem, StreamBarcodeReader, clickme, onDecode, modalActive, toggleModal }
+        return { categories, collectionItem, validationErrors, isLoading, decodeText, text2, updateCollectionItem, StreamBarcodeReader, clickme, onDecode }
     },
-    components: {
-        Modal
-    }
     
     
     
