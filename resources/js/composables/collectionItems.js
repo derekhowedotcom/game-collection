@@ -54,8 +54,6 @@ export default function useCollectionItems() {
 
        let serializedCollectionItem = new FormData()
        for (let item in collectionItem){
-        console.log(item);
-
             if(collectionItem.hasOwnProperty(item)){
                 serializedCollectionItem.append(item, collectionItem[item])
             }
@@ -86,9 +84,14 @@ export default function useCollectionItems() {
        isLoading.value =true
        validationErrors.value = {}     
 
-       console.log(collectionItem);
+       let serializedCollectionItem = new FormData()
+       for (let item in collectionItem){
+            if(collectionItem.hasOwnProperty(item)){
+                serializedCollectionItem.append(item, collectionItem[item])
+            }
+       }
 
-        axios.put('/api/collection-items/' + collectionItem.id, collectionItem)
+        axios.post('/api/collection-items/' + collectionItem.id, serializedCollectionItem)
             .then(response => {
                 router.push({ name: 'collection-items.index' })
                 swal({

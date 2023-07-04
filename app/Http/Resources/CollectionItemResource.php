@@ -19,7 +19,9 @@ class CollectionItemResource extends JsonResource
             'title' => $this->title,
             'category_id' => $this->category_id,
             'category' => $this->category->name,
-            'description' => substr($this->description,0, 50). '...',
+            // 'description' => substr($this->description,0, 50). '...',
+            'description' => $this->description,
+            'thumbnail' => $this->thumbnail,
             'barcode' => $this->barcode,
             'created_at' => $this->created_at->toDateString()
         ];

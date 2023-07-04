@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('collection_items', function (Blueprint $table) {
-            $table->string('barcode')->after('description')->nullable();
+            $table->string('thumbnail')->after('description')->nullable();
         });
     }
 
@@ -25,8 +25,10 @@ return new class extends Migration
      */
     public function down()
     {
-        if (Schema::hasColumn('collection_items', 'barcode')) {
-            $table->$table->dropColumn('barcode');    
+        if (Schema::hasColumn('collection_items', 'thumbnail')) {
+            Schema::table('collection_items', function (Blueprint $table) {
+                $table->dropColumn('thumbnail');    
+            });
         }
     }
 };
