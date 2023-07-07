@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Cex;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 class CexController extends Controller
 {
@@ -23,14 +24,31 @@ class CexController extends Controller
     {
         
         try{  
-
-            $response = Http::withUserAgent($this->userAgent)
+            // If we have a barcode send the request
+            if(!empty($barcode)){
+                $response = Http::withUserAgent($this->userAgent)
                         ->get($this->baseCexUrl . '/' . $barcode . '/detail');
 
-            return $response->json();
+                return $response->json();
+            }
 
+            // No barcode fail and send errors back
+            Log::error('Cex error -  No barcode sent');
+            return [
+                'response' => [
+                    'ack' => 'Failure',
+                    'data' => '',
+                    'error' => [
+                        'code' => 12,
+                        'internal_message' => 'Service not found',
+                        'moreInfo' => []
+                    ],
+                    'status' => Response::HTTP_BAD_REQUEST,
+                ]
+            ];
+            
         }catch(\Exception $e) {
-            Log::error('Cex error ' . $e->getMessage());
+            Log::error('Cex error - ' . $e->getMessage());
             return [
                 'errors' => $e->getMessage()
             ];
