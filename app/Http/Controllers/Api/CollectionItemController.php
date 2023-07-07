@@ -43,8 +43,7 @@ class CollectionItemController extends Controller
             Image::make($request->thumbnail->getRealPath())->resize(300, 200)->save($path);
 
             //overwrite thumbnail with the name ready to store in db    
-            $requestValues['thumbnail'] = $filename;
-          
+            $requestValues['thumbnail'] = $filename; 
         }
         
         $collectionItem = $this->collectionItemRepository->createCollectionItem($requestValues);
@@ -54,6 +53,7 @@ class CollectionItemController extends Controller
 
     public function update(CollectionItem $collectionItem, StoreCollectionItemRequest $request)
     {
+        
         $this->authorize('collection-items.update'); 
 
         //validate fields

@@ -27,7 +27,7 @@ class StoreCollectionItemRequest extends FormRequest
             'title' => 'required',
             'description' => 'required',
             'barcode' => 'nullable|string',
-            'thumbnail' => 'nullable|mimes:jpeg,png,jpg,gif',
+            'thumbnail' => 'nullable|sometimes|mimes:jpeg,png,jpg,gif',
             'category_id' => ['required', 'exists:categories,id']
         ];
     }

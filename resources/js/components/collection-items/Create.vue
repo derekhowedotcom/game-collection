@@ -71,11 +71,13 @@
 
         <!-- Buttons -->
         <div class="mt-4">
-            <button :disabled="isLoading" class="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
+            <button @click="$router.push({ name: 'collection-items.index' })" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-red-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Cancel</button>
+            <button :disabled="isLoading" class="inline-flex items-center ml-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
                 <div v-show="isLoading" class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
                 <span v-if="isLoading">Processing...</span>
                 <span v-else>Save</span>
             </button>
+            
             <button @click="handleCexClick" type="button" class="inline-flex content-center items-center mt-3 ml-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Get CEX Details</button>
         </div>
     </form>
@@ -134,10 +136,9 @@ export default {
         async function handleCexClick() {
             try {
                 
-                //wait for the values to come back from the api call before setting them.
                 const result = await Swal.fire({
                     title: 'Are you sure?',
-                    text: 'You won\'t be able to revert this action!',
+                    text: 'This will replace the form values with values from Cex.',
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Yes',
@@ -147,12 +148,13 @@ export default {
                     reverseButtons: true
                 });
 
+                // If user clicks yes    
                 if (result.isConfirmed) {
+                    //wait for the values to come back from the api call before setting them.
                     await getCexItem(collectionItem.barcode);
                 }
 
-                
-                
+                // Only set values if there is data from Cex
                 if(cexItem?.value?.response?.data !== null){
                     collectionItem.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName; 
                     //trim white space and html tags
@@ -162,7 +164,6 @@ export default {
                                                 .replace(/\s{2,10}/g, ' '); 
                     cexErrorMessage.value = null;
 
-                    
                 }else{
                     //TODO: convert this to a flash message?
                     cexErrorMessage.value = 'Item not found. Please check the CEX Barcode/Product ID.';
@@ -173,7 +174,6 @@ export default {
             }
         }
         
-
         return { 
             categories, 
             collectionItem, 

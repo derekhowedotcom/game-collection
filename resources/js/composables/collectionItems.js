@@ -82,12 +82,15 @@ export default function useCollectionItems() {
         if(isLoading.value) return;
 
        isLoading.value =true
-       validationErrors.value = {}     
+       validationErrors.value = {}    
 
        let serializedCollectionItem = new FormData()
        for (let item in collectionItem){
             if(collectionItem.hasOwnProperty(item)){
-                serializedCollectionItem.append(item, collectionItem[item])
+                // Do not include thubnail if it's not a file object
+                if(!(item === 'thumbnail' && collectionItem[item] != '[object File]')){
+                    serializedCollectionItem.append(item, collectionItem[item])
+                }    
             }
        }
 

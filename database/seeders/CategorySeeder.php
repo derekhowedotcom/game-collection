@@ -80,6 +80,7 @@ class CategorySeeder extends Seeder
             'Xbox One Software',
             'Xbox Series Hardware',
             'Xbox Series Software',
+            'Other',
         ];
 
          foreach($categories as $category){
