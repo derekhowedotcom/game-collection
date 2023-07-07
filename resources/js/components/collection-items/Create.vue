@@ -1,7 +1,21 @@
 <template>
     <form @submit.prevent="storeCollectionItem(collectionItem)">
-        <!-- Barcode TODO: add validation and save to db -->
-        <div>
+        <!-- Thumbnail -->
+        <div class="mt-1">
+            <label for="thumbnail" class="block font-medium text-sm text-gray-700">
+                Thumbnail
+            </label>
+            <img :src="`${thumbnailUrl}`" alt="Placeholder Image" class="mt-2 mb-3 h-auto max-w-xs rounded-lg"/>
+            <input @change="onFileChange($event.target.files[0])" type="file" id="thumbnail" />
+            <div class="text-red-600 mt-1">
+                <div v-for="message in validationErrors?.thumbnail" :key="message">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Barcode -->
+        <div class="mt-4">
             <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
                 Barcode/Product ID
             </label>
@@ -56,19 +70,6 @@
             </div>
         </div>
 
-         <!-- Thumbnail -->
-         <div class="mt-4">
-            <label for="thumbnail" class="block font-medium text-sm text-gray-700">
-                Thumbnail
-            </label>
-            <input @change="collectionItem.thumbnail = $event.target.files[0]" type="file" id="thumbnail" />
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.thumbnail" :key="message">
-                    {{ message }}
-                </div>
-            </div>
-        </div>
-
         <!-- Buttons -->
         <div class="mt-4">
             <button @click="$router.push({ name: 'collection-items.index' })" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-red-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Cancel</button>
@@ -81,6 +82,7 @@
             <button @click="handleCexClick" type="button" class="inline-flex content-center items-center mt-3 ml-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Get CEX Details</button>
         </div>
     </form>
+    {{ collectionItem.cexThumbnail }}
     <!-- <modal @close="toggleModal" :modalActive="modalActive">
       <div class="modal-content">
             <h1>Barcode Scanner</h1>
@@ -106,9 +108,11 @@ export default {
             title: '',
             description: '',
             category_id: '',
-            thumbnail: ''
+            thumbnail: '',
+            cexThumbnail: ''
         })
         const cexErrorMessage = ref(null);
+        const thumbnailUrl = ref('/storage/images/collection-items/image-placeholder.jpg');
         const modalActive = ref(false);
         const toggleModal = () => {
             modalActive.value = !modalActive.value;
@@ -122,6 +126,14 @@ export default {
             getCategories()
             
         })
+
+        function onFileChange(target) {
+            collectionItem.thumbnail = target;
+
+            //create url to show image preview
+            thumbnailUrl.value = URL.createObjectURL(target);
+
+        }
 
 
         // const decodeText = ref('')
@@ -162,6 +174,7 @@ export default {
                                                 .replace(/<\/?[^>]+(>|$)/g, "")
                                                 .trim()
                                                 .replace(/\s{2,10}/g, ' '); 
+                    collectionItem.cexThumbnail = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
                     cexErrorMessage.value = null;
 
                 }else{
@@ -186,7 +199,9 @@ export default {
             cexItem, 
             getCexItem, 
             handleCexClick,
-            cexErrorMessage 
+            cexErrorMessage,
+            onFileChange,
+            thumbnailUrl
         }
     },
     components: {

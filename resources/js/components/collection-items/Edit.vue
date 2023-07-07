@@ -1,7 +1,21 @@
 <template>
     <form @submit.prevent="updateCollectionItem(collectionItem)">
+
+        <!-- Thumbnail -->
+        <div class="mt-4">
+            <label for="thumbnail" class="block font-medium text-sm text-gray-700">
+                Thumbnail 
+            </label>
+            <img :src="getThumbUrl()" alt="Placeholder Image" class="mt-2 mb-3 h-auto max-w-xs rounded-lg"/>
+            <input @change="onFileChange($event.target.files[0])" type="file" id="thumbnail" />
+            <div class="text-red-600 mt-1">
+                <div v-for="message in validationErrors?.thumbnail" :key="message">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
        
-         <!-- Barcode TODO: add validation and save to db -->
+         <!-- Barcode -->
          <div>
             <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
                 Barcode/Product ID
@@ -56,20 +70,6 @@
             </div>
         </div>
 
-         <!-- Thumbnail -->
-         <div class="mt-4">
-            <label for="thumbnail" class="block font-medium text-sm text-gray-700">
-                Thumbnail 
-            </label>
-            <input @change="collectionItem.thumbnail = $event.target.files[0]" type="file" id="thumbnail" />
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.thumbnail" :key="message">
-                    {{ message }}
-                </div>
-            </div>
-        </div>
-        
-
         <!-- Buttons -->
         <div class="mt-4">
 
@@ -96,7 +96,7 @@
 
 <script>
 
-import {onMounted, reactive, ref, computed } from "vue";
+import {onMounted, reactive, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 // import { StreamBarcodeReader } from "vue-barcode-reader";
 import useCex from '../../composables/cex'
@@ -106,12 +106,14 @@ import Swal from 'sweetalert2';
 
 export default {
     setup() {
-        const { categories, getCategories } = useCategories()
-        const { collectionItem, getCollectionItem, updateCollectionItem, validationErrors, isLoading } = useCollectionItems()
-        const { cexItem, getCexItem } = useCex()
+        const { categories, getCategories } = useCategories();
+        const { collectionItem, getCollectionItem, updateCollectionItem, validationErrors, isLoading } = useCollectionItems();
+        const { cexItem, getCexItem } = useCex();
         const cexErrorMessage = ref(null);
-        const decodeText = ref('')
+        const thumbnailUrl = ref(false);
+        const decodeText = ref('');
 
+        
         // function clickme (credentials) {
         //     this.text = 'billy'
         // alert('yoyoyoy')
@@ -137,7 +139,6 @@ export default {
         })
 
         async function handleCexClick() {
-            console.log(collectionItem.title);
             try {
                 const result = await Swal.fire({
                     title: 'Are you sure?',
@@ -172,7 +173,30 @@ export default {
                 cexErrorMessage.value = 'Please check the CEX Barcode/Product ID and try again.';
                 console.error(error);
             }
-        
+        }
+
+        function getThumbUrl() {
+            // if we already have a thumbnail in the db and the upload hasn't been changed use that
+            if(collectionItem.value.thumbnail && thumbnailUrl.value === false){
+                return '/storage/images/collection-items/' + collectionItem.value.thumbnail;
+            }
+
+            //if the upload has been changed use that image
+            if(thumbnailUrl.value){
+                return thumbnailUrl.value;
+            }
+            
+            //if no other images just use the placeholder
+            return '/storage/images/collection-items/image-placeholder.jpg';
+        }
+
+
+        function onFileChange(target) {
+            collectionItem.value.thumbnail = target;
+
+            //create url to show image preview
+            thumbnailUrl.value = URL.createObjectURL(target);
+
         }
         
         
@@ -189,7 +213,10 @@ export default {
             // onDecode, 
             cexItem, 
             handleCexClick,
-            cexErrorMessage
+            cexErrorMessage,
+            thumbnailUrl,
+            onFileChange,
+            getThumbUrl
         }
 
     },

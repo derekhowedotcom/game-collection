@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Http;
 
 class CexController extends Controller
 {
-
     private $baseCexUrl = null;
     protected $userAgent = null;
     
@@ -22,12 +21,11 @@ class CexController extends Controller
 
     public function getCexItemDetails($barcode = null): array
     {
-        
         try{  
             // If we have a barcode send the request
             if(!empty($barcode)){
                 $response = Http::withUserAgent($this->userAgent)
-                        ->get($this->baseCexUrl . '/' . $barcode . '/detail');
+                                ->get($this->baseCexUrl . '/' . $barcode . '/detail');
 
                 return $response->json();
             }
