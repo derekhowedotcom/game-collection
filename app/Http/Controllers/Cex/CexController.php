@@ -7,32 +7,39 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\JsonResponse;
 
 class CexController extends Controller
 {
-    private $baseCexUrl = null;
-    protected $userAgent = null;
-    
+    private mixed $baseCexUrl = null;
+    protected ?string $userAgent = null;
+
     public function __construct()
     {
         $this->baseCexUrl = env('CEX_API_DETAILS_URL');
         $this->userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0';
     }
 
-    public function getCexItemDetails($barcode = null): array
+    /**
+     * Api call to cex to get item information
+     *
+     * @param string|null $barcode
+     * @return JsonResponse
+     */
+    public function getCexItemDetails(string $barcode = null): jsonResponse
     {
-        try{  
+        try{
             // If we have a barcode send the request
             if(!empty($barcode)){
-                $response = Http::withUserAgent($this->userAgent)
-                                ->get($this->baseCexUrl . '/' . $barcode . '/detail');
+                $data = Http::withUserAgent($this->userAgent)
+                    ->get($this->baseCexUrl . '/' . $barcode . '/detail');
 
-                return $response->json();
+                return response()->json($data->json(), Response::HTTP_OK);
             }
 
             // No barcode fail and send errors back
             Log::error('Cex error -  No barcode sent');
-            return [
+            return response()->json([
                 'response' => [
                     'ack' => 'Failure',
                     'data' => '',
@@ -43,13 +50,13 @@ class CexController extends Controller
                     ],
                     'status' => Response::HTTP_BAD_REQUEST,
                 ]
-            ];
-            
+            ], Response::HTTP_BAD_REQUEST);
+
         }catch(\Exception $e) {
             Log::error('Cex error - ' . $e->getMessage());
-            return [
+            return response()->json([
                 'errors' => $e->getMessage()
-            ];
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
