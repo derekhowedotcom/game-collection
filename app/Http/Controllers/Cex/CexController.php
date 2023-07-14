@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Cex;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -11,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 
 class CexController extends Controller
 {
-    private mixed $baseCexUrl = null;
+    private mixed $baseCexUrl;
     protected ?string $userAgent = null;
 
     public function __construct()
@@ -59,4 +58,5 @@ class CexController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

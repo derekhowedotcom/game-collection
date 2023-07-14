@@ -17,7 +17,7 @@ use App\Http\Controllers\Cex\CexController;
 */
 
 //get cex details
-//TODO:
+//TODO: move this back inside group
 //**********************move this back inside group */
 Route::get('cex-item-details/{barcode?}', [CexController::class, 'getCexItemDetails']);
 
