@@ -10,42 +10,50 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreCollectionItemRequest;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\CollectionItemRepositoryInterface;
+use App\Http\Services\ImageService;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class CollectionItemController extends Controller
 {
     private CollectionItemRepositoryInterface $collectionItemRepository;
+    private ImageService $imageService;
 
-    public function __construct(CollectionItemRepositoryInterface $collectionItemRepository) 
+    public function __construct(CollectionItemRepositoryInterface $collectionItemRepository, ImageService $imageService)
     {
+        // Inject the collection item repository with DI
         $this->collectionItemRepository = $collectionItemRepository;
+
+        // Inject the image service with DI
+        $this->imageService = $imageService;
     }
 
     public function index()
     {
+        // Get filtered collection items
         $collectionItem = $this->collectionItemRepository->getFilteredCollectionItems();
+
+        // Return collection items as a resource
         return CollectionItemResource::collection($collectionItem);
     }
 
     public function store(StoreCollectionItemRequest $request)
     {
-        $this->authorize('collection-items.create'); 
+        // Does the user have the correct permission
+        $this->authorize('collection-items.create');
 
-        //validate fields
+        // Get validate fields
         $requestValues = $request->validated();
 
-        //TODO: Move to image service?
-        if ($request->hasFile('thumbnail')) {
-            //TODO: better file name using title ?
-            $filename = $requestValues['category_id']. '-' .$request->file('thumbnail')->getClientOriginalName();
-            $path = storage_path().'/app/public/images/collection-items/' . $filename;
+        // Handle the image upload
+        $requestValues = $this->imageService->processImage($request, $requestValues);
 
-            Image::make($request->thumbnail->getRealPath())->resize(300, 200)->save($path);
+        //get the image filename
+        $filename = $this->imageService->createImageName($request);
 
-            //overwrite thumbnail with the name ready to store in db    
-            $requestValues['thumbnail'] = $filename; 
-        }
-        
+        //save the small image
+        $this->imageService->saveSmallImage($filename);
+
+        // Create the collection item
         $collectionItem = $this->collectionItemRepository->createCollectionItem($requestValues);
 
         return new CollectionItemResource($collectionItem);
@@ -53,27 +61,16 @@ class CollectionItemController extends Controller
 
     public function update(CollectionItem $collectionItem, StoreCollectionItemRequest $request)
     {
-        
-        $this->authorize('collection-items.update'); 
+        // Does the user have the correct permission
+        $this->authorize('collection-items.update');
 
         //validate fields
         $requestValues = $request->validated();
 
-        //TODO: Move to image service?
-        if ($request->hasFile('thumbnail')) {
-            //TODO: better file name using title ?
-            $filename = $requestValues['category_id']. '-' .$request->file('thumbnail')->getClientOriginalName();
-            $path = storage_path().'/app/public/images/collection-items/' . $filename;
+        // Handle the image upload
+        $requestValues = $this->imageService->processImage($request, $requestValues);
 
-            Image::make($request->thumbnail->getRealPath())->resize(300, 200)->save($path);
-
-            //overwrite thumbnail with the name ready to store in db    
-            $requestValues['thumbnail'] = $filename;
-          
-        }
-
-        
-
+        // Update the collection item
         $collectionItem = $this->collectionItemRepository->updateCollectionItem($collectionItem->id, $requestValues);
 
         return new CollectionItemResource($collectionItem);
@@ -81,17 +78,21 @@ class CollectionItemController extends Controller
 
     public function show(CollectionItem $collectionItem)
     {
+        // Return a single collection item as a resource
         return new CollectionItemResource($collectionItem);
     }
 
     public function destroy(CollectionItem $collectionItem)
     {
-        $this->authorize('collection-items.delete');   
+        // Does the user have the correct permission
+        $this->authorize('collection-items.delete');
+
+        // Delete the collection item
         $this->collectionItemRepository->deleteCollectionItem($collectionItem->id);
+
+        // Delete the image
+        $this->imageService->deleteImage($collectionItem->thumbnail);
 
         return response()->noContent();
     }
-
-
-
 }
