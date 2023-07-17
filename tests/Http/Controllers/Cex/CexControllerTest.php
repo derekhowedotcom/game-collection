@@ -2,7 +2,6 @@
 
 namespace Tests\Http\Controllers\Cex;
 
-
 use App\Http\Controllers\Cex\CexController;
 use Illuminate\Http\Response;
 use Tests\TestCase;
