@@ -8,6 +8,11 @@
         <h1><span class="block font-medium text-sm text-gray-700">Title:</span></h1>
         <p><titleEditComponent :collectionItem="collectionItem" /></p>
     </div>
+    <!-- Date added  -->
+    <div class="mb-4">
+        <h1><span class="block font-medium text-sm text-gray-700">Date Added:</span></h1>
+        <p>{{ formatDate(collectionItem.created_at) }}</p>
+    </div>
     <!-- Description -->
     <div class="mb-4">
         <h1><span class="block font-medium text-sm text-gray-700">Description:</span></h1>
@@ -43,6 +48,7 @@ import useCategories from "../../composables/categories";
 import useCollectionItems from "../../composables/collectionItems";
 import { useAbility } from '@casl/vue'
 import titleEditComponent from '../ui/TitleEdit.vue'
+import { formatDate } from "../../helpers/dateHelpers";
 
 export default {
     setup() {
@@ -60,7 +66,8 @@ export default {
             categories,
             collectionItem,
             can,
-            deleteCollectionItem
+            deleteCollectionItem,
+            formatDate
         }
     },
     components: {

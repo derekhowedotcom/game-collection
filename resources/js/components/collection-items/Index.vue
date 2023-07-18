@@ -99,7 +99,6 @@
                         {{ collectionItem.id }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        
                         <titleLinkComponent :collectionItem="collectionItem" />
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
@@ -109,7 +108,7 @@
                         {{ collectionItem.description }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ collectionItem.created_at }}
+                        {{ formatDate(collectionItem.created_at) }}
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         <router-link v-if="can('collection-items.update')" :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">Edit</router-link>
@@ -131,6 +130,7 @@ import useCategories from '../../composables/categories'
 import { current } from 'tailwindcss/colors';
 import { useAbility } from '@casl/vue'
 import titleLinkComponent from '../ui/TitleLink.vue'
+import { formatDate } from "../../helpers/dateHelpers";
 
 export default {
     setup() {
@@ -147,80 +147,80 @@ export default {
         onMounted( () => {
             getCollectionItems(),
             getCategories()
-            
+
         })
         const updateOrdering = (column) => {
             orderColumn.value = column;
             orderDirection.value = (orderDirection.value === 'asc') ? 'desc' : 'asc';
             getCollectionItems(
-                1, 
+                1,
                 search_category.value,
                 search_id.value,
                 search_title.value,
-                search_description.value, 
+                search_description.value,
                 search_global.value,
-                orderColumn.value, 
+                orderColumn.value,
                 orderDirection.value
-            ); 
-            
+            );
+
         }
 
         watch(search_category, (current, previous) => {
             getCollectionItems(
-                1, 
-                current, 
+                1,
+                current,
                 search_id.value,
                 search_title.value,
-                search_description.value, 
+                search_description.value,
                 search_global.value,
             )
         })
 
         watch(search_id, (current, previous) => {
             getCollectionItems(
-                1, 
+                1,
                 search_category.value,
-                current, 
+                current,
                 search_title.value,
-                search_description.value, 
+                search_description.value,
                 search_global.value,
             )
         })
 
         watch(search_title, (current, previous) => {
             getCollectionItems(
-                1, 
+                1,
                 search_category.value,
                 search_id.value,
                 current,
-                search_description.value, 
+                search_description.value,
                 search_global.value,
             )
         })
 
         watch(search_description, (current, previous) => {
             getCollectionItems(
-                1, 
+                1,
                 search_category.value,
                 search_id.value,
                 search_title.value,
-                current, 
+                current,
                 search_global.value,
             )
         })
 
         watch(search_global, (current, previous) => {
             getCollectionItems(
-                1, 
+                1,
                 search_category.value,
                 search_id.value,
                 search_title.value,
-                search_description.value, 
-                current, 
+                search_description.value,
+                current,
             )
         })
 
-        return { 
+        return {
             collectionItems,
             getCollectionItems,
             deleteCollectionItem,
@@ -228,17 +228,18 @@ export default {
             search_category,
             search_id,
             search_title,
-            search_description, 
+            search_description,
             search_global,
             orderColumn,
             orderDirection,
             updateOrdering,
-            can 
+            can,
+            formatDate
         }
     },
     components: {
         titleLinkComponent
     }
-    
+
 }
 </script>
