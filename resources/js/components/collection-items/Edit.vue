@@ -74,6 +74,34 @@
             </div>
         </div>
 
+        <!-- Value -->
+        <div class="mt-4">
+            <label for="collectionItem-value" class="block font-medium text-sm text-gray-700">
+                Value
+            </label>
+            <input v-model="collectionItem.value" id="collectionItem-value" type="text"
+                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <div class="text-red-600 mt-1">
+                <div v-for="message in validationErrors?.value" :key="message">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Price Paid -->
+        <div class="mt-4">
+            <label for="collectionItem-pricePiad" class="block font-medium text-sm text-gray-700">
+                Price Paid
+            </label>
+            <input v-model="collectionItem.price_paid" id="collectionItem-pricePiad" type="text"
+                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <div class="text-red-600 mt-1">
+                <div v-for="message in validationErrors?.price_paid" :key="message">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+
         <!-- Buttons -->
         <div class="mt-4">
 
@@ -118,6 +146,7 @@ import useCex from '../../composables/cex'
 import useCategories from "../../composables/categories";
 import useCollectionItems from "../../composables/collectionItems";
 import Swal from 'sweetalert2';
+import {CEX_CATEGORY_MAPPER_ARRAY} from "../../constants/CexConstants";
 
 export default {
     setup() {
@@ -159,6 +188,22 @@ export default {
             getCategories()
         })
 
+        // Function that gets the cex category and matches it to the local category
+        function getCexCategory(cexCategory) {
+
+            let cexCategoryMatch = null;
+
+            // Find the category in the array
+            cexCategoryMatch = CEX_CATEGORY_MAPPER_ARRAY.find(category => category.name === cexCategory);
+
+            // If the category is found return the local category id
+            if(cexCategoryMatch){
+                return cexCategoryMatch.localCategoryId;
+            }
+
+            return null;
+        }
+
         async function handleCexClick() {
             try {
                 const result = await Swal.fire({
@@ -186,6 +231,10 @@ export default {
                                                 .replace(/<\/?[^>]+(>|$)/g, "")
                                                 .trim()
                                                 .replace(/\s{2,10}/g, ' ');
+
+                    collectionItem.value.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
+                    collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
+                    cexErrorMessage.value = null;
                 }else{
                     //TODO: convert this to a flash message?
                     cexErrorMessage.value = 'Item not found. Please check the CEX Barcode/Product ID.';

@@ -16,30 +16,30 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $categories = [
-            'Atari Jaguar Hardware', 
+            'Atari Jaguar Hardware',
             'Atari Jaguar Software',
-            'Atari Lynx Hardware', 
-            'Nintendo Lynx Software',
-            'Nintendo 3DS Hardware', 
-            'Nintendo 3DS Software', 
-            'Nintendo DS Hardware', 
-            'Nintendo DS Software', 
-            'Nintendo 64 Hardware', 
-            'Nintendo 64 Software', 
-            'Nintendo Entertainment System Hardware', 
-            'Nintendo Entertainment System Software', 
-            'Nintendo Game Boy Hardware', 
-            'Nintendo Game Boy Software', 
-            'Nintendo Gamecube Hardware', 
-            'Nintendo GameCube Software', 
-            'Nintendo Switch Hardware', 
-            'Nintendo Switch Software', 
-            'Nintendo Virtual Boy Hardware', 
-            'Nintendo Virtual Boy Software', 
-            'Nintendo Wii Hardware', 
-            'Nintendo Wii Software', 
-            'Nintendo Wii U Hardware', 
-            'Nintendo Wii U Software', 
+            'Atari Lynx Hardware',
+            'Atari Lynx Software',
+            'Nintendo 3DS Hardware',
+            'Nintendo 3DS Software',
+            'Nintendo DS Hardware',
+            'Nintendo DS Software',
+            'Nintendo 64 Hardware',
+            'Nintendo 64 Software',
+            'Nintendo Entertainment System Hardware',
+            'Nintendo Entertainment System Software',
+            'Nintendo Game Boy Hardware',
+            'Nintendo Game Boy Software',
+            'Nintendo Gamecube Hardware',
+            'Nintendo GameCube Software',
+            'Nintendo Switch Hardware',
+            'Nintendo Switch Software',
+            'Nintendo Virtual Boy Hardware',
+            'Nintendo Virtual Boy Software',
+            'Nintendo Wii Hardware',
+            'Nintendo Wii Software',
+            'Nintendo Wii U Hardware',
+            'Nintendo Wii U Software',
             'Sega Dreamcast Hardware',
             'Sega Dreamcast Software',
             'Sega Game Gear Hardware',
@@ -54,8 +54,8 @@ class CategorySeeder extends Seeder
             'Sega Mega Drive Software',
             'Sega Saturn Hardware',
             'Sega Saturn Software',
-            'Super Nintendo Hardware', 
-            'Super Nintendo Software', 
+            'Super Nintendo Hardware',
+            'Super Nintendo Software',
             'PlayStation 1 Hardware',
             'PlayStation 1 Software',
             'PlayStation 2 Hardware',
@@ -89,8 +89,8 @@ class CategorySeeder extends Seeder
                 'name' => $category,
             ]);
 
-         }   
-        
+         }
+
         //Category::factory(20)->create();
     }
 }

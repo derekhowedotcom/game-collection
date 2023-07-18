@@ -12,7 +12,7 @@ export default function useCollectionItems() {
 
     //get all collectionItems
     const getCollectionItems = async (
-        page = 1, 
+        page = 1,
         search_category = '',
         search_id = '',
         search_title = '',
@@ -21,14 +21,14 @@ export default function useCollectionItems() {
         order_column = 'title',
         order_direction = 'asc'
     ) => {
-        axios.get('/api/collection-items?page=' + page + 
+        axios.get('/api/collection-items?page=' + page +
             '&search_category=' + search_category +
             '&search_id=' + search_id +
             '&search_title=' + search_title +
             '&search_description=' + search_description +
             '&search_global=' + search_global +
             '&order_column=' + order_column +
-            '&order_direction=' + order_direction 
+            '&order_direction=' + order_direction
             )
             .then(response => {
                 collectionItems.value = response.data
@@ -37,7 +37,7 @@ export default function useCollectionItems() {
 
     //get one collectionItem
     const getCollectionItem = async (id) => {
-        
+
         axios.get('/api/collection-items/' + id)
             .then(response => {
                 collectionItem.value = response.data.data;
@@ -46,11 +46,12 @@ export default function useCollectionItems() {
 
     //store a new collectionItem
     const storeCollectionItem = async (collectionItem) => {
-        
+
         if(isLoading.value) return;
+        console.log(collectionItem);
 
        isLoading.value =true
-       validationErrors.value = {}     
+       validationErrors.value = {}
 
        let serializedCollectionItem = new FormData()
        for (let item in collectionItem){
@@ -69,7 +70,7 @@ export default function useCollectionItems() {
                 collectionItems.value = response.data
             })
             .catch(error => {
-                
+
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
                 }
@@ -82,7 +83,7 @@ export default function useCollectionItems() {
         if(isLoading.value) return;
 
        isLoading.value =true
-       validationErrors.value = {}    
+       validationErrors.value = {}
 
        let serializedCollectionItem = new FormData()
        for (let item in collectionItem){
@@ -90,7 +91,7 @@ export default function useCollectionItems() {
                 // Do not include thubnail if it's not a file object
                 if(!(item === 'thumbnail' && collectionItem[item] != '[object File]')){
                     serializedCollectionItem.append(item, collectionItem[item])
-                }    
+                }
             }
        }
 
@@ -104,7 +105,7 @@ export default function useCollectionItems() {
                 collectionItems.value = response.data
             })
             .catch(error => {
-                
+
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
                 }
@@ -112,7 +113,7 @@ export default function useCollectionItems() {
             .finally(() => isLoading.value = false)
     }
 
-    
+
 
     //delete
     const deleteCollectionItem = async (id) => {
@@ -149,7 +150,7 @@ export default function useCollectionItems() {
 
     }
 
-    return { 
+    return {
         collectionItems,
         collectionItem,
         getCollectionItems,
@@ -158,7 +159,7 @@ export default function useCollectionItems() {
         updateCollectionItem,
         deleteCollectionItem,
         validationErrors,
-        isLoading 
+        isLoading
     }
 
 }

@@ -6,8 +6,10 @@ use App\Models\CollectionItem;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectionItemResource;
 use Illuminate\Http\Request;
-//this is where the rules for the request is
+// This is where the rules for the request is
 use App\Http\Requests\StoreCollectionItemRequest;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\CollectionItemRepositoryInterface;
 use App\Http\Services\ImageService;
@@ -18,6 +20,10 @@ class CollectionItemController extends Controller
     private CollectionItemRepositoryInterface $collectionItemRepository;
     private ImageService $imageService;
 
+    /**
+     * @param CollectionItemRepositoryInterface $collectionItemRepository
+     * @param ImageService $imageService
+     */
     public function __construct(CollectionItemRepositoryInterface $collectionItemRepository, ImageService $imageService)
     {
         // Inject the collection item repository with DI
@@ -27,6 +33,9 @@ class CollectionItemController extends Controller
         $this->imageService = $imageService;
     }
 
+    /**
+     * @return AnonymousResourceCollection
+     */
     public function index()
     {
         // Get filtered collection items
@@ -36,6 +45,10 @@ class CollectionItemController extends Controller
         return CollectionItemResource::collection($collectionItem);
     }
 
+    /**
+     * @param StoreCollectionItemRequest $request
+     * @return CollectionItemResource
+     */
     public function store(StoreCollectionItemRequest $request)
     {
         // Does the user have the correct permission
@@ -44,14 +57,18 @@ class CollectionItemController extends Controller
         // Get validate fields
         $requestValues = $request->validated();
 
-        // Handle the image upload
-        $requestValues = $this->imageService->processImage($request, $requestValues);
+        // Handle the image upload if there is one
+        if($request->hasFile('thumbnail')){
 
-        //get the image filename
-        $filename = $this->imageService->createImageName($request);
+            // Handle the image upload
+            $requestValues = $this->imageService->processImage($request, $requestValues);
 
-        //save the small image
-        $this->imageService->saveSmallImage($filename);
+            //get the image filename
+            $filename = $this->imageService->createImageName($request);
+
+            //save the small image
+            $this->imageService->saveSmallImage($filename);
+        }
 
         // Create the collection item
         $collectionItem = $this->collectionItemRepository->createCollectionItem($requestValues);
@@ -59,6 +76,11 @@ class CollectionItemController extends Controller
         return new CollectionItemResource($collectionItem);
     }
 
+    /**
+     * @param CollectionItem $collectionItem
+     * @param StoreCollectionItemRequest $request
+     * @return CollectionItemResource
+     */
     public function update(CollectionItem $collectionItem, StoreCollectionItemRequest $request)
     {
         // Does the user have the correct permission
@@ -67,8 +89,18 @@ class CollectionItemController extends Controller
         //validate fields
         $requestValues = $request->validated();
 
-        // Handle the image upload
-        $requestValues = $this->imageService->processImage($request, $requestValues);
+        // Handle the image upload if there is one
+        if($request->hasFile('thumbnail')){
+
+            // Handle the image upload
+            $requestValues = $this->imageService->processImage($request, $requestValues);
+
+            //get the image filename
+            $filename = $this->imageService->createImageName($request);
+
+            //save the small image
+            $this->imageService->saveSmallImage($filename);
+        }
 
         // Update the collection item
         $collectionItem = $this->collectionItemRepository->updateCollectionItem($collectionItem->id, $requestValues);
@@ -76,12 +108,20 @@ class CollectionItemController extends Controller
         return new CollectionItemResource($collectionItem);
     }
 
+    /**
+     * @param CollectionItem $collectionItem
+     * @return CollectionItemResource
+     */
     public function show(CollectionItem $collectionItem)
     {
         // Return a single collection item as a resource
         return new CollectionItemResource($collectionItem);
     }
 
+    /**
+     * @param CollectionItem $collectionItem
+     * @return Response
+     */
     public function destroy(CollectionItem $collectionItem)
     {
         // Does the user have the correct permission

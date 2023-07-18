@@ -6,10 +6,6 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class ImageService
 {
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Process the image upload

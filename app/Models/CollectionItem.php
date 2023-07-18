@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class CollectionItem extends Model
 {
     use HasFactory;
-    
 
-    protected $fillable = ['title', 'description', 'barcode', 'thumbnail', 'category_id'];
+    protected $fillable = ['title', 'description', 'barcode', 'value', 'price_paid', 'thumbnail', 'category_id'];
 
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
+
 }
