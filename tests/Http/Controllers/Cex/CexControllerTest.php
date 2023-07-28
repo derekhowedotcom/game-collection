@@ -35,7 +35,6 @@ class CexControllerTest extends TestCase
                 'status' => 200,
                 'response' => [
                     'data' => [
-                        'boxart' => 'https://wss2.cex.uk.webuy.io/images/boxart/ps4gta5.jpg',
                         'category' => 'Gaming',
                         'categoryid' => 1,
                         'currency' => 'GBP',
@@ -47,7 +46,6 @@ class CexControllerTest extends TestCase
                         'superCatId' => 1,
                         'superCatName' => 'Gaming',
                         'title' => 'Grand Theft Auto V',
-                        'url' => 'https://uk.webuy.com/product-detail?id=5026555416986&categoryName=playstation4-software&superCatName=gaming&title=grand-theft-auto-v',
                         'weight' => 0.1,
                         'year' => 2014
                     ],
