@@ -19,7 +19,7 @@ class CexControllerTest extends TestCase
     {
         parent::setUp();
 
-//        $this->cexController = app()[CexController::class];
+        // Create a mock of the CexController
         $this->cexController = Mockery::mock(CexController::class);
 
         // GTA 5 PS4 Barcode
