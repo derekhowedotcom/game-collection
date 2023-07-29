@@ -28,6 +28,7 @@ class StoreCollectionItemRequest extends FormRequest
             'description' => 'required',
             'barcode' => 'nullable|string',
             'thumbnail' => 'nullable|sometimes|mimes:jpeg,png,jpg,gif',
+            'cex_image' => 'nullable',
             'category_id' => ['required', 'exists:categories,id'],
             'value' => 'nullable|numeric',
             'price_paid' => 'nullable|numeric',

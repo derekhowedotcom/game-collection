@@ -13,15 +13,15 @@
                 </div>
             </div>
         </div>
-
         <!-- Barcode -->
         <div class="mt-4">
             <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
                 Barcode/Product ID
             </label>
-            <input v-model="collectionItem.barcode" id="collectionItem-barcode" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <input v-model="collectionItem.barcode" id="collectionItem-barcode" type="text"
+                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             <div class="text-red-600 mt-1" v-if="cexErrorMessage">
-                    {{ cexErrorMessage }}
+                {{ cexErrorMessage }}
             </div>
             <!-- <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button> -->
         </div>
@@ -30,14 +30,14 @@
             <label for="collectionItem-title" class="block font-medium text-sm text-gray-700">
                 Title
             </label>
-            <input v-model="collectionItem.title" id="collectionItem-title" type="text" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <input v-model="collectionItem.title" id="collectionItem-title" type="text"
+                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             <div class="text-red-600 mt-1">
                 <div v-for="message in validationErrors?.title" :key="message">
                     {{ message }}
                 </div>
             </div>
         </div>
-
         <!-- Description -->
         <div class="mt-4">
             <label for="collectionItem-description" class="block font-medium text-sm text-gray-700">
@@ -50,7 +50,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Category -->
         <div class="mt-4">
             <label for="collectionItem-category" class="block font-medium text-sm text-gray-700">
@@ -69,7 +68,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Value -->
         <div class="mt-4">
             <label for="collectionItem-value" class="block font-medium text-sm text-gray-700">
@@ -83,7 +81,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Price Paid -->
         <div class="mt-4">
             <label for="collectionItem-pricePiad" class="block font-medium text-sm text-gray-700">
@@ -97,7 +94,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Buttons -->
         <div class="mt-4">
             <button @click="$router.push({ name: 'collection-items.index' })" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-red-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Cancel</button>
@@ -112,14 +108,12 @@
                                                                            d="M5 13l4 4L19 7"></path></svg>Save</span>
             </button>
 
-
             <button @click="handleCexClick" type="button"
                     class="inline-flex content-center items-center mt-3 ml-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
                 Get CEX Details
             </button>
         </div>
     </form>
-    {{ collectionItem.cexThumbnail }}
     <!-- <modal @close="toggleModal" :modalActive="modalActive">
       <div class="modal-content">
             <h1>Barcode Scanner</h1>
@@ -130,11 +124,11 @@
 
 <script>
 
-import { onMounted, reactive, ref } from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import useCategories from '../../composables/categories'
 import useCex from '../../composables/cex'
 import useCollectionItems from '../../composables/collectionItems'
-import { CEX_CATEGORY_MAPPER_ARRAY } from "../../constants/CexConstants";
+import {CEX_CATEGORY_MAPPER_ARRAY} from "../../constants/CexConstants";
 // import { StreamBarcodeReader } from "vue-barcode-reader";
 import Modal from "../Modal.vue";
 import Swal from 'sweetalert2';
@@ -147,7 +141,7 @@ export default {
             description: '',
             category_id: '',
             thumbnail: '',
-            cexThumbnail: '',
+            cex_image: '',
             cexCategory: null,
             value: '',
             price_paid: '',
@@ -188,8 +182,10 @@ export default {
             collectionItem.thumbnail = target;
 
             //create url to show image preview
-            thumbnailUrl.value = URL.createObjectURL(target);
-
+            if(target){
+                thumbnailUrl.value = URL.createObjectURL(target);
+                collectionItem.cex_image = '';
+            }
         }
 
         // const decodeText = ref('')
@@ -230,12 +226,11 @@ export default {
                                                 .replace(/<\/?[^>]+(>|$)/g, "")
                                                 .trim()
                                                 .replace(/\s{2,10}/g, ' ');
-                    collectionItem.cexThumbnail = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
+                    collectionItem.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
                     collectionItem.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
                     collectionItem.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
                     cexErrorMessage.value = null;
-
-
+                    thumbnailUrl.value = collectionItem.cex_image;
 
                 }else{
                     //TODO: convert this to a flash message?

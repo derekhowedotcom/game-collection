@@ -9,7 +9,7 @@ class CollectionItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'barcode', 'value', 'price_paid', 'thumbnail', 'category_id'];
+    protected $fillable = ['title', 'description', 'barcode', 'value', 'price_paid', 'thumbnail', 'cex_image', 'category_id'];
 
 
     public function category()

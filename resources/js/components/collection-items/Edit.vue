@@ -147,6 +147,7 @@ import useCategories from "../../composables/categories";
 import useCollectionItems from "../../composables/collectionItems";
 import Swal from 'sweetalert2';
 import {CEX_CATEGORY_MAPPER_ARRAY} from "../../constants/CexConstants";
+import {basename} from "../../helpers/fileHelpers";
 
 export default {
     setup() {
@@ -231,10 +232,13 @@ export default {
                                                 .replace(/<\/?[^>]+(>|$)/g, "")
                                                 .trim()
                                                 .replace(/\s{2,10}/g, ' ');
-
+                    collectionItem.value.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
                     collectionItem.value.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
                     collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
                     cexErrorMessage.value = null;
+
+                    thumbnailUrl.value = collectionItem.value.cex_image;
+
                 }else{
                     //TODO: convert this to a flash message?
                     cexErrorMessage.value = 'Item not found. Please check the CEX Barcode/Product ID.';
@@ -247,6 +251,11 @@ export default {
 
         function getThumbUrl() {
             // if we already have a thumbnail in the db and the upload hasn't been changed use that
+            // if(collectionItem.value.cex_image && thumbnailUrl.value === false){
+            //     return '/storage/images/collection-items/cex/' + basename(collectionItem.value.cex_image);
+            // }
+            // else
+
             if(collectionItem.value.thumbnail && thumbnailUrl.value === false){
                 return '/storage/images/collection-items/' + collectionItem.value.thumbnail;
             }
@@ -264,9 +273,12 @@ export default {
         function onFileChange(target) {
             collectionItem.value.thumbnail = target;
 
-            //create url to show image preview
-            thumbnailUrl.value = URL.createObjectURL(target);
 
+            //create url to show image preview
+            if(target){
+                thumbnailUrl.value = URL.createObjectURL(target);
+                collectionItem.value.cex_image = '';
+            }
         }
 
 

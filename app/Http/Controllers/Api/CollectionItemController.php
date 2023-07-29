@@ -13,24 +13,33 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\CollectionItemRepositoryInterface;
 use App\Http\Services\ImageService;
+use App\Http\Services\CexService;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class CollectionItemController extends Controller
 {
     private CollectionItemRepositoryInterface $collectionItemRepository;
     private ImageService $imageService;
+    private $cexService;
 
     /**
      * @param CollectionItemRepositoryInterface $collectionItemRepository
      * @param ImageService $imageService
      */
-    public function __construct(CollectionItemRepositoryInterface $collectionItemRepository, ImageService $imageService)
+    public function __construct(
+        CollectionItemRepositoryInterface $collectionItemRepository,
+        ImageService $imageService,
+        CexService $cexService
+    )
     {
         // Inject the collection item repository with DI
         $this->collectionItemRepository = $collectionItemRepository;
 
         // Inject the image service with DI
         $this->imageService = $imageService;
+
+        // Inject the cex service with DI
+        $this->cexService = $cexService;
     }
 
     /**
@@ -63,11 +72,20 @@ class CollectionItemController extends Controller
             // Handle the image upload
             $requestValues = $this->imageService->processImage($request, $requestValues);
 
-            //get the image filename
+            // Get the image filename
             $filename = $this->imageService->createImageName($request);
 
-            //save the small image
+            // Save the small image
             $this->imageService->saveSmallImage($filename);
+        }
+
+        // Download the cex image if there is one
+        if($requestValues['cex_image'] !== null || !empty($requestValues['cex_image'])){
+            // Download the cex image
+            $requestValues =  $this->cexService->downloadCexImage($requestValues);
+
+            // Save the cex small image
+            $this->cexService->saveSmallCexImage(basename($requestValues['cex_image']));
         }
 
         // Create the collection item
@@ -90,16 +108,38 @@ class CollectionItemController extends Controller
         $requestValues = $request->validated();
 
         // Handle the image upload if there is one
+//        if($request->hasFile('thumbnail')){
+//
+//            // Handle the image upload
+//            $requestValues = $this->imageService->processImage($request, $requestValues);
+//
+//            //get the image filename
+//            $filename = $this->imageService->createImageName($request);
+//
+//            //save the small image
+//            $this->imageService->saveSmallImage($filename);
+//        }
+
+        // Handle the image upload if there is one
         if($request->hasFile('thumbnail')){
 
             // Handle the image upload
             $requestValues = $this->imageService->processImage($request, $requestValues);
 
-            //get the image filename
+            // Get the image filename
             $filename = $this->imageService->createImageName($request);
 
-            //save the small image
+            // Save the small image
             $this->imageService->saveSmallImage($filename);
+        }
+
+        // Download the cex image if there is one
+        if($requestValues['cex_image'] !== null || !empty($requestValues['cex_image'])){
+            // Download the cex image
+            $requestValues =  $this->cexService->downloadCexImage($requestValues);
+
+            // Save the cex small image
+            $this->cexService->saveSmallCexImage(basename($requestValues['cex_image']));
         }
 
         // Update the collection item

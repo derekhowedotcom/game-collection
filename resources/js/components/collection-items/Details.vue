@@ -1,7 +1,8 @@
 <template>
     <!-- Image -->
     <div class="mb-4">
-        <img :src="`/storage/images/collection-items/${collectionItem.thumbnail}`" alt="" />
+
+        <img width="300" :src="`/storage/images/collection-items/${ collectionItem.thumbnail }`" alt="" />
     </div>
     <!-- Title -->
     <div class="mb-4">
@@ -49,6 +50,7 @@ import useCollectionItems from "../../composables/collectionItems";
 import { useAbility } from '@casl/vue'
 import titleEditComponent from '../ui/TitleEdit.vue'
 import { formatDate } from "../../helpers/dateHelpers";
+import { basename } from "../../helpers/fileHelpers";
 
 export default {
     setup() {
@@ -62,12 +64,16 @@ export default {
             getCategories()
         })
 
+
+
         return {
             categories,
             collectionItem,
             can,
             deleteCollectionItem,
-            formatDate
+            formatDate,
+            basename
+
         }
     },
     components: {

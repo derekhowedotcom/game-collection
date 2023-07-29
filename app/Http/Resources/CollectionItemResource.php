@@ -23,6 +23,7 @@ class CollectionItemResource extends JsonResource
             'price_paid' => $this->price_paid,
             'description' => $this->description,
             'thumbnail' => $this->thumbnail,
+            'cex_image' => $this->cex_image,
             'barcode' => $this->barcode,
             'created_at' => $this->created_at->toDateString()
         ];

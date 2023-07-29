@@ -25,7 +25,6 @@
                         <input v-model="search_description" type="text" class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Filter by Description">
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left"></th>
-                    <th class="px-6 py-3 bg-gray-50 text-left"></th>
                 </tr>
                 <tr>
                     <th class="px-6 py-3 bg-gray-50 text-left">
@@ -68,9 +67,6 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Category</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">description</span>
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-left">
 <!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Created at</span>-->
                         <div class="flex flex-row items-center justify-between cursor-pointer" @click="updateOrdering('created_at')">
                             <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider" :class="{ 'font-bold text-blue-600': orderColumn === 'created_at' }">
@@ -89,31 +85,38 @@
                         </div>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        Actions
+
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Actions</span>
                     </th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200 divide-solid">
                     <tr v-for="collectionItem in collectionItems.data" :key="collectionItem.id">
-                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ collectionItem.id }}
+                    <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                        <router-link v-if="collectionItem.thumbnail"
+                                     :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }"><img
+                            :src="`/storage/images/collection-items/small/${collectionItem.thumbnail}`" width="50" alt=""/></router-link>
+                        <router-link v-else
+                                     :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }"><img
+                            src="/storage/images/collection-items/small/image-placeholder.jpg" width="50" alt=""/></router-link>
+
                     </td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                    <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         <titleLinkComponent :collectionItem="collectionItem" />
                     </td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                    <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ collectionItem.category }}
                     </td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ collectionItem.description }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                    <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ formatDate(collectionItem.created_at) }}
                     </td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        <router-link v-if="can('collection-items.update')" :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">Edit</router-link>
-                        <a href="#"  v-if="can('collection-items.delete')" @click.prevent="deleteCollectionItem(collectionItem.id)" class="ml-2">Delete</a>
-                    </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                            <router-link v-if="can('collection-items.update')"
+                                         :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">Edit
+                            </router-link>
+                            <a href="#" v-if="can('collection-items.delete')"
+                               @click.prevent="deleteCollectionItem(collectionItem.id)" class="ml-2">Delete</a>
+                        </td>
                 </tr>
                 </tbody>
             </table>
@@ -131,8 +134,10 @@ import { current } from 'tailwindcss/colors';
 import { useAbility } from '@casl/vue'
 import titleLinkComponent from '../ui/TitleLink.vue'
 import { formatDate } from "../../helpers/dateHelpers";
+import {basename} from "../../helpers/fileHelpers";
 
 export default {
+    methods: {basename},
     setup() {
         const search_category = ref('')
         const search_id = ref('')
@@ -234,7 +239,8 @@ export default {
             orderDirection,
             updateOrdering,
             can,
-            formatDate
+            formatDate,
+            basename
         }
     },
     components: {
