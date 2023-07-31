@@ -2,38 +2,24 @@
     <div class="overflow-hidden overflow-x-auto p-1 bg-white border-gray-200">
         <div class="min-w-full align-middle">
             <div class="mb-4 grid lg:grid-cols-4 gap-4">
-                <input v-model="search_global" type="text" placeholder="Search..."
-                       class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+<!--                <input v-model="search_global" type="text" placeholder="Search everything..."-->
+<!--                       class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">-->
+                <input v-model="search_title" type="text"
+                       class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                       placeholder="Search Title...">
+
+            </div>
+            <div class="mb-4 grid lg:grid-cols-4 gap-4">
+                <select v-model="search_category"
+                        class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="" selected>-- All Categories --</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                        {{ category.name }}
+                    </option>
+                </select>
             </div>
             <table class="min-w-full divide-y divide-gray-200 border mb-4">
                 <thead>
-                <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-left">
-                        <input v-model="search_id" type="text"
-                               class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                               placeholder="Filter by ID">
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-left">
-                        <input v-model="search_title" type="text"
-                               class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                               placeholder="Filter by Title">
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-left">
-                        <select v-model="search_category"
-                                class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            <option value="" selected>-- All Categories --</option>
-                            <option v-for="category in categories" :key="category.id" :value="category.id">
-                                {{ category.name }}
-                            </option>
-                        </select>
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-left">
-                        <input v-model="search_description" type="text"
-                               class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                               placeholder="Filter by Description">
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-left"></th>
-                </tr>
                 <tr>
                     <th class="px-6 py-3 bg-gray-50 text-left">
                         <div class="flex flex-row items-center justify-between cursor-pointer"
@@ -78,31 +64,6 @@
                         <span
                             class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Category</span>
                     </th>
-                    <th class="px-6 py-3 bg-gray-50 text-left">
-                        <!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Created at</span>-->
-                        <div class="flex flex-row items-center justify-between cursor-pointer"
-                             @click="updateOrdering('created_at')">
-                            <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                                 :class="{ 'font-bold text-blue-600': orderColumn === 'created_at' }">
-                                Created at
-                            </div>
-                            <div class="select-none">
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'created_at',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'created_at',
-                                }">&uarr;</span>
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'desc' && orderColumn === 'created_at',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'created_at',
-                                }">&darr;</span>
-                            </div>
-                        </div>
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-left">
-
-                        <span
-                            class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Actions</span>
-                    </th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200 divide-solid">
@@ -123,16 +84,6 @@
                     </td>
                     <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ collectionItem.category }}
-                    </td>
-                    <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        {{ formatDate(collectionItem.created_at) }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        <router-link v-if="can('collection-items.update')"
-                                     :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">Edit
-                        </router-link>
-                        <a href="#" v-if="can('collection-items.delete')"
-                           @click.prevent="deleteCollectionItem(collectionItem.id)" class="ml-2">Delete</a>
                     </td>
                 </tr>
                 </tbody>
