@@ -136,7 +136,6 @@
         </div>
     </form>
 </template>
-
 <script>
 
 import {onMounted, reactive, ref, computed, watch } from "vue";
@@ -153,7 +152,7 @@ export default {
     setup() {
         const { categories, getCategories } = useCategories();
         const {
-            collectionItem,
+            collectionItem = ref(''),
             getCollectionItem,
             updateCollectionItem,
             validationErrors,
@@ -165,11 +164,6 @@ export default {
         const decodeText = ref('');
 
 
-        // function clickme (credentials) {
-        //     this.text = 'billy'
-        // alert('yoyoyoy')
-        // }
-
         // function onLoaded (loaded){
         //     console.log(loaded)
 
@@ -179,9 +173,7 @@ export default {
 
         // }
 
-        // const text2 = computed(() => {
-        //     return text
-        //     })
+
 
         const route = useRoute()
         onMounted(() => {
@@ -273,7 +265,6 @@ export default {
         function onFileChange(target) {
             collectionItem.value.thumbnail = target;
 
-
             //create url to show image preview
             if(target){
                 thumbnailUrl.value = URL.createObjectURL(target);
@@ -288,10 +279,8 @@ export default {
             validationErrors,
             isLoading,
             // decodeText,
-            // text2,
             updateCollectionItem,
             // StreamBarcodeReader,
-            // clickme,
             // onDecode,
             cexItem,
             handleCexClick,

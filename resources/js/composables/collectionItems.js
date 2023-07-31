@@ -80,6 +80,7 @@ export default function useCollectionItems() {
 
     //update a collectionItem
     const updateCollectionItem = async (collectionItem) => {
+        console.log(collectionItem);
         if(isLoading.value) return;
 
        isLoading.value =true
@@ -87,9 +88,14 @@ export default function useCollectionItems() {
 
        let serializedCollectionItem = new FormData()
        for (let item in collectionItem){
+           console.log(collectionItem[item]);
             if(collectionItem.hasOwnProperty(item)){
                 // Do not include thubnail if it's not a file object
                 if(!(item === 'thumbnail' && collectionItem[item] != '[object File]')){
+                    // If the value is null, set it to empty string because FormData will treat null as a string
+                    if(collectionItem[item] === null){
+                        collectionItem[item] = '';
+                    }
                     serializedCollectionItem.append(item, collectionItem[item])
                 }
             }

@@ -2,19 +2,25 @@
     <div class="overflow-hidden overflow-x-auto p-1 bg-white border-gray-200">
         <div class="min-w-full align-middle">
             <div class="mb-4 grid lg:grid-cols-4 gap-4">
-                <input v-model="search_global" type="text" placeholder="Search..." class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <input v-model="search_global" type="text" placeholder="Search..."
+                       class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             </div>
             <table class="min-w-full divide-y divide-gray-200 border mb-4">
                 <thead>
                 <tr>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        <input v-model="search_id" type="text" class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Filter by ID">
+                        <input v-model="search_id" type="text"
+                               class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                               placeholder="Filter by ID">
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        <input v-model="search_title" type="text" class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Filter by Title">
+                        <input v-model="search_title" type="text"
+                               class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                               placeholder="Filter by Title">
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        <select v-model="search_category" class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <select v-model="search_category"
+                                class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             <option value="" selected>-- All Categories --</option>
                             <option v-for="category in categories" :key="category.id" :value="category.id">
                                 {{ category.name }}
@@ -22,15 +28,18 @@
                         </select>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        <input v-model="search_description" type="text" class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Filter by Description">
+                        <input v-model="search_description" type="text"
+                               class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                               placeholder="Filter by Description">
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left"></th>
                 </tr>
                 <tr>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-<!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">ID</span>-->
-                        <div class="flex flex-row items-center justify-between cursor-pointer" @click="updateOrdering('id')">
-                            <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider" :class="{ 'font-bold text-blue-600': orderColumn === 'id' }">
+                        <div class="flex flex-row items-center justify-between cursor-pointer"
+                             @click="updateOrdering('id')">
+                            <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                 :class="{ 'font-bold text-blue-600': orderColumn === 'id' }">
                                 ID
                             </div>
                             <div class="select-none">
@@ -46,9 +55,11 @@
                         </div>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-<!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Title</span>-->
-                        <div class="flex flex-row items-center justify-between cursor-pointer" @click="updateOrdering('title')">
-                            <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider" :class="{ 'font-bold text-blue-600': orderColumn === 'title' }">
+                        <!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Title</span>-->
+                        <div class="flex flex-row items-center justify-between cursor-pointer"
+                             @click="updateOrdering('title')">
+                            <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                 :class="{ 'font-bold text-blue-600': orderColumn === 'title' }">
                                 Title
                             </div>
                             <div class="select-none">
@@ -64,12 +75,15 @@
                         </div>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Category</span>
+                        <span
+                            class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Category</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-<!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Created at</span>-->
-                        <div class="flex flex-row items-center justify-between cursor-pointer" @click="updateOrdering('created_at')">
-                            <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider" :class="{ 'font-bold text-blue-600': orderColumn === 'created_at' }">
+                        <!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Created at</span>-->
+                        <div class="flex flex-row items-center justify-between cursor-pointer"
+                             @click="updateOrdering('created_at')">
+                            <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                 :class="{ 'font-bold text-blue-600': orderColumn === 'created_at' }">
                                 Created at
                             </div>
                             <div class="select-none">
@@ -86,23 +100,26 @@
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
 
-                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Actions</span>
+                        <span
+                            class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Actions</span>
                     </th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200 divide-solid">
-                    <tr v-for="collectionItem in collectionItems.data" :key="collectionItem.id">
+                <tr v-for="collectionItem in collectionItems.data" :key="collectionItem.id">
                     <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         <router-link v-if="collectionItem.thumbnail"
                                      :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }"><img
-                            :src="`/storage/images/collection-items/small/${collectionItem.thumbnail}`" width="50" alt=""/></router-link>
+                            :src="`/storage/images/collection-items/small/${collectionItem.thumbnail}`" width="50"
+                            alt=""/></router-link>
                         <router-link v-else
                                      :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }"><img
-                            src="/storage/images/collection-items/small/image-placeholder.jpg" width="50" alt=""/></router-link>
+                            src="/storage/images/collection-items/small/image-placeholder.jpg" width="50" alt=""/>
+                        </router-link>
 
                     </td>
                     <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                        <titleLinkComponent :collectionItem="collectionItem" />
+                        <titleLinkComponent :collectionItem="collectionItem"/>
                     </td>
                     <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ collectionItem.category }}
@@ -110,30 +127,31 @@
                     <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         {{ formatDate(collectionItem.created_at) }}
                     </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                            <router-link v-if="can('collection-items.update')"
-                                         :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">Edit
-                            </router-link>
-                            <a href="#" v-if="can('collection-items.delete')"
-                               @click.prevent="deleteCollectionItem(collectionItem.id)" class="ml-2">Delete</a>
-                        </td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                        <router-link v-if="can('collection-items.update')"
+                                     :to="{ name: 'collection-items.edit', params: { id: collectionItem.id } }">Edit
+                        </router-link>
+                        <a href="#" v-if="can('collection-items.delete')"
+                           @click.prevent="deleteCollectionItem(collectionItem.id)" class="ml-2">Delete</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
-            <Pagination :data="collectionItems" @pagination-change-page="page => getCollectionItems(page, selectedCategory)" />
+            <Pagination :data="collectionItems"
+                        @pagination-change-page="page => getCollectionItems(page, selectedCategory)"/>
         </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-import { ref, onMounted, watch } from 'vue'
+import {ref, onMounted, watch} from 'vue'
 import useCollectionItems from '../../composables/collectionItems'
 import useCategories from '../../composables/categories'
-import { current } from 'tailwindcss/colors';
-import { useAbility } from '@casl/vue'
+import {current} from 'tailwindcss/colors';
+import {useAbility} from '@casl/vue'
 import titleLinkComponent from '../ui/TitleLink.vue'
-import { formatDate } from "../../helpers/dateHelpers";
+import {formatDate} from "../../helpers/dateHelpers";
 import {basename} from "../../helpers/fileHelpers";
 
 export default {
@@ -146,12 +164,12 @@ export default {
         const search_global = ref('')
         const orderColumn = ref('title')
         const orderDirection = ref('desc')
-        const { collectionItems, getCollectionItems, deleteCollectionItem } = useCollectionItems()
-        const { categories, getCategories } = useCategories()
-        const { can } = useAbility()
-        onMounted( () => {
+        const {collectionItems, getCollectionItems, deleteCollectionItem} = useCollectionItems()
+        const {categories, getCategories} = useCategories()
+        const {can} = useAbility()
+        onMounted(() => {
             getCollectionItems(),
-            getCategories()
+                getCategories()
 
         })
         const updateOrdering = (column) => {
