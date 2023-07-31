@@ -41,3 +41,7 @@
 .pagination .page-item.active .sr-only {
     @apply hidden
 }
+
+.sr-only {
+    @apply hidden
+}

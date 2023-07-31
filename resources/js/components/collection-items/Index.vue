@@ -22,23 +22,7 @@
                 <thead>
                 <tr>
                     <th class="px-6 py-3 bg-gray-50 text-left">
-                        <div class="flex flex-row items-center justify-between cursor-pointer"
-                             @click="updateOrdering('id')">
-                            <div class="leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                                 :class="{ 'font-bold text-blue-600': orderColumn === 'id' }">
-                                ID
-                            </div>
-                            <div class="select-none">
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'id',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'id',
-                                }">&uarr;</span>
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'desc' && orderColumn === 'id',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'id',
-                                }">&darr;</span>
-                            </div>
-                        </div>
+                        &nbsp;
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left">
                         <!--                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Title</span>-->
@@ -88,8 +72,10 @@
                 </tr>
                 </tbody>
             </table>
-            <Pagination :data="collectionItems"
-                        @pagination-change-page="page => getCollectionItems(page, selectedCategory)"/>
+            <div class="flex justify-center items-center">
+                <Pagination :data="collectionItems"
+                            @pagination-change-page="page => getCollectionItems(page, selectedCategory)"/>
+            </div>
         </div>
     </div>
 </template>
@@ -218,3 +204,5 @@ export default {
 
 }
 </script>
+
+
