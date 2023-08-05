@@ -1,6 +1,9 @@
 import axios from 'axios'
 import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
+import useCollectionItemCount from "./collectionItemCounts";
+import useCollectionItemCounts from "./collectionItemCounts";
+
 
 export default function useCollectionItems() {
     const collectionItems = ref({})
@@ -9,7 +12,9 @@ export default function useCollectionItems() {
     const validationErrors = ref({})
     const isLoading = ref(false)
     const swal = inject('$swal')
-
+    const { collectionItemCounts, getCollectionItemCounts } = useCollectionItemCounts({
+        categoryNames: 'hardware,software,other',
+    })
     //get all collectionItems
     const getCollectionItems = async (
         page = 1,
@@ -33,6 +38,9 @@ export default function useCollectionItems() {
             .then(response => {
                 collectionItems.value = response.data
             })
+
+
+
     }
 
     //get one collectionItem
@@ -44,7 +52,7 @@ export default function useCollectionItems() {
             })
     }
 
-    //store a new collectionItem
+    // Store a new collectionItem
     const storeCollectionItem = async (collectionItem) => {
 
         if(isLoading.value) return;
@@ -62,12 +70,16 @@ export default function useCollectionItems() {
 
         axios.post('/api/collection-items', serializedCollectionItem)
             .then(response => {
+                getCollectionItemCounts();
                 router.push({ name: 'collection-items.index' })
                 swal({
                     icon: 'success',
                     title: 'CollectionItem saved successfully'
                 })
                 collectionItems.value = response.data
+
+
+
             })
             .catch(error => {
 
@@ -76,9 +88,10 @@ export default function useCollectionItems() {
                 }
             })
             .finally(() => isLoading.value = false)
+
     }
 
-    //update a collectionItem
+    // Update a collectionItem
     const updateCollectionItem = async (collectionItem) => {
         console.log(collectionItem);
         if(isLoading.value) return;
@@ -88,7 +101,6 @@ export default function useCollectionItems() {
 
        let serializedCollectionItem = new FormData()
        for (let item in collectionItem){
-           console.log(collectionItem[item]);
             if(collectionItem.hasOwnProperty(item)){
                 // Do not include thubnail if it's not a file object
                 if(!(item === 'thumbnail' && collectionItem[item] != '[object File]')){
@@ -119,9 +131,7 @@ export default function useCollectionItems() {
             .finally(() => isLoading.value = false)
     }
 
-
-
-    //delete
+    // Delete a collectionItem
     const deleteCollectionItem = async (id) => {
         swal({
             title: 'Are you sure?',
@@ -134,27 +144,27 @@ export default function useCollectionItems() {
             timerProgressBar: true,
             reverseButtons: true
         })
-            .then(result => {
-                if (result.isConfirmed) {
-                    axios.delete('/api/collection-items/' + id)
-                        .then(response => {
-                            getCollectionItems()
-                            router.push({name: 'collection-items.index'})
-                            swal({
-                                icon: 'success',
-                                title: 'CollectionItem deleted successfully'
-                            })
+        .then(result => {
+            if (result.isConfirmed) {
+                axios.delete('/api/collection-items/' + id)
+                    .then(response => {
+                        getCollectionItems()
+                        router.push({name: 'collection-items.index'})
+                        swal({
+                            icon: 'success',
+                            title: 'CollectionItem deleted successfully'
                         })
-                        .catch(error => {
-                            swal({
-                                icon: 'error',
-                                title: 'Something went wrong'
-                            })
+                    })
+                    .catch(error => {
+                        swal({
+                            icon: 'error',
+                            title: 'Something went wrong'
                         })
-                }
-            })
-
+                    })
+            }
+        })
     }
+
 
     return {
         collectionItems,
@@ -164,8 +174,13 @@ export default function useCollectionItems() {
         storeCollectionItem,
         updateCollectionItem,
         deleteCollectionItem,
+        collectionItemCounts,
         validationErrors,
         isLoading
     }
 
 }
+
+
+
+

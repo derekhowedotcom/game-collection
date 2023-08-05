@@ -2,7 +2,7 @@
     <form @submit.prevent="storeCollectionItem(collectionItem)">
         <!-- Thumbnail -->
         <div class="mt-1">
-            <label for="thumbnail" class="block font-medium text-sm text-gray-700">
+            <label for="thumbnail" class="block font-bold text-sm text-gray-700">
                 Thumbnail
             </label>
             <img :src="`${thumbnailUrl}`" alt="Placeholder Image" class="mt-2 mb-3 h-auto max-w-xs rounded-lg"/>

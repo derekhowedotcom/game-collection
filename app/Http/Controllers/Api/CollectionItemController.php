@@ -45,7 +45,7 @@ class CollectionItemController extends Controller
     /**
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         // Get filtered collection items
         $collectionItem = $this->collectionItemRepository->getFilteredCollectionItems();
@@ -99,26 +99,13 @@ class CollectionItemController extends Controller
      * @param StoreCollectionItemRequest $request
      * @return CollectionItemResource
      */
-    public function update(CollectionItem $collectionItem, StoreCollectionItemRequest $request)
+    public function update(CollectionItem $collectionItem, StoreCollectionItemRequest $request): CollectionItemResource
     {
         // Does the user have the correct permission
         $this->authorize('collection-items.update');
 
         //validate fields
         $requestValues = $request->validated();
-
-        // Handle the image upload if there is one
-//        if($request->hasFile('thumbnail')){
-//
-//            // Handle the image upload
-//            $requestValues = $this->imageService->processImage($request, $requestValues);
-//
-//            //get the image filename
-//            $filename = $this->imageService->createImageName($request);
-//
-//            //save the small image
-//            $this->imageService->saveSmallImage($filename);
-//        }
 
         // Handle the image upload if there is one
         if($request->hasFile('thumbnail')){
@@ -152,17 +139,34 @@ class CollectionItemController extends Controller
      * @param CollectionItem $collectionItem
      * @return CollectionItemResource
      */
-    public function show(CollectionItem $collectionItem)
+    public function show(CollectionItem $collectionItem): CollectionItemResource
     {
         // Return a single collection item as a resource
         return new CollectionItemResource($collectionItem);
     }
 
     /**
+     * Get collection item count based on category name like
+     * @param $categoryName
+     * @return int
+     */
+    public function countForCategoryNameLike(String $categoryName)
+    {
+        // Get collection item count
+        return $this->collectionItemRepository->getTotalCountForCategoryNameLike($categoryName);
+    }
+
+    public function multiCountForCategoryNameLike($categoryNames)
+    {
+        // Get collection item count array
+        return $this->collectionItemRepository->getCountsForCategoryNamesLike($categoryNames);
+    }
+
+    /**
      * @param CollectionItem $collectionItem
      * @return Response
      */
-    public function destroy(CollectionItem $collectionItem)
+    public function destroy(CollectionItem $collectionItem): Response
     {
         // Does the user have the correct permission
         $this->authorize('collection-items.delete');

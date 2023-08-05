@@ -104,10 +104,10 @@ export default {
         const {collectionItems, getCollectionItems, deleteCollectionItem} = useCollectionItems()
         const {categories, getCategories} = useCategories()
         const {can} = useAbility()
+
         onMounted(() => {
             getCollectionItems(),
                 getCategories()
-
         })
         const updateOrdering = (column) => {
             orderColumn.value = column;

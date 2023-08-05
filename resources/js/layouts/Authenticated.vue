@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-200">
-        <nav class="flex items-center justify-between flex-wrap border-b border-gray-100 p-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  
+        <nav class="flex items-center justify-between flex-wrap border-b border-gray-100 p-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center flex-shrink-0 text-white mr-6   ">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
@@ -11,7 +11,7 @@ viewBox="0 0 58 58" style="enable-background:new 0 0 316 316;" xml:space="preser
 c0-2.475,2.025-4.5,4.5-4.5h0c2.475,0,4.5,2.025,4.5,4.5V20c0,2.2,1.8,4,4,4h0c2.2,0,4-1.8,4-4V1"/>
 <path style="fill:#546A79;" d="M54.016,58H3.984C2.336,58,1,56.664,1,55.016V31.984C1,30.336,2.336,29,3.984,29h50.032
 C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
-<polygon style="fill:#38454F;stroke:#CBD4D8;stroke-width:2;stroke-miterlimit:10;" points="17,41 14,41 14,38 9,38 9,41 6,41 6,46 
+<polygon style="fill:#38454F;stroke:#CBD4D8;stroke-width:2;stroke-miterlimit:10;" points="17,41 14,41 14,38 9,38 9,41 6,41 6,46
 9,46 9,49 14,49 14,46 17,46 "/>
 <rect x="41" y="46" style="fill:#DD352E;stroke:#CBD4D8;stroke-width:2;stroke-miterlimit:10;" width="4" height="4"/>
 <rect x="49" y="46" style="fill:#DD352E;stroke:#CBD4D8;stroke-width:2;stroke-miterlimit:10;" width="4" height="4"/>
@@ -51,7 +51,7 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
 <g>
 </g>
 </svg>      </a>
-                
+
                 </div>
             </div>
             <!--Mobile menu button-->
@@ -86,10 +86,19 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
         <!-- Page Heading -->
         <header class="bg-white shadow text-center">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-bold text-xl text-gray-800 leading-tight">
                     {{ currentPagetitle }}
+                    <h3 class="font-semibold text-xs text-gray-800 leading-tight">
+                        Hardware: {{collectionItemCounts?.hardware}}</h3>
+                    <h3 class="font-semibold text-xs text-gray-800 leading-tight">
+                        Software: {{collectionItemCounts?.software}}</h3>
+                    <h3 class="font-semibold text-xs text-gray-800 leading-tight">
+                        Other: {{collectionItemCounts?.other}}</h3>
+                    <h3 class="font-bold text-xs text-gray-800 leading-tight">
+                        Total: {{collectionItemCounts?.total}}</h3>
                 </h2>
             </div>
+
         </header>
 
         <!-- Page Content -->
@@ -108,25 +117,41 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
 </template>
 
 <script>
-import { ref } from 'vue';
+import {onMounted, ref, watch, watchEffect} from 'vue';
 import useAuth from '../composables/auth';
 import { useAbility } from '@casl/vue'
+import useCollectionItemCounts from '../composables/collectionItemCounts'
 
 export default {
     setup(){
         const { user, processing, logout } = useAuth()
         const { can } = useAbility()
+        const { collectionItemCounts, getCollectionItemCounts } = useCollectionItemCounts({
+            categoryNames: 'hardware,software,other',
+        })
+
+        onMounted(() => {
+            getCollectionItemCounts()
+        })
 
         //show/hide mobile menu
         let showMenu = ref(false);
         const toggleNav = () => (showMenu.value = !showMenu.value);
 
-        return { user, processing, logout, can, showMenu, toggleNav }
+        return {
+            user,
+            processing,
+            logout,
+            can,
+            showMenu,
+            toggleNav,
+            collectionItemCounts
+        }
     },
     computed: {
         currentPagetitle() {
             return this.$route.meta.title
         }
-    }    
+    }
 }
 </script>
