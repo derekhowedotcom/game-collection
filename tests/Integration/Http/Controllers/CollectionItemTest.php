@@ -191,10 +191,10 @@ class CollectionItemTest extends TestCase
     }
 
     /**
-     * A test to check that collection item categories can be counted from the database
+     * A test to check that collection items with categories can be counted from the database
      * @return void
      */
-    public function test_collection_item_categories_can_be_counted_from_database()
+    public function test_collection_items_with_categories_can_be_counted_from_database()
     {
         /* Arrange */
         // Find a user to act as
@@ -219,7 +219,7 @@ class CollectionItemTest extends TestCase
      * A test to check that multiple collection item categories can be counted from the database
      * @return void
      */
-    public function test_collection_item_multiple_categories_can_be_counted_from_database()
+    public function test_collection_items_with_multiple_categories_can_be_counted_from_database()
     {
         /* Arrange */
         // Find a user to act as
@@ -233,7 +233,7 @@ class CollectionItemTest extends TestCase
 
         /* Act */
         // Count the item to the using the collection item controller
-        $collectionItemCount = $this->underTest->multiCountForCategoryNameLike('Hardware');
+        $collectionItemCount = $this->underTest->multiCountForCategoryNameLike('Software,Hardware');
 
         /* Assert */
         // Check that the item has been counted from the database and is greater than or equal to 1 (due to the item created above + random seeder data)
@@ -259,7 +259,7 @@ class CollectionItemTest extends TestCase
 
         /* Assert */
         // Check that the collection has 10 items or more
-        $this->assertGreaterThanOrEqual(10, $collectionItemFromDb->count());
+        $this->assertEquals(10, $collectionItemFromDb->count());
         $this->assertInstanceOf(AnonymousResourceCollection::class, $collectionItemFromDb);
         foreach ($collectionItemFromDb->collection as $collectionItem) {
             $this->assertInstanceOf(CollectionItemResource::class, $collectionItem);

@@ -20,7 +20,7 @@ class CollectionItemController extends Controller
 {
     private CollectionItemRepositoryInterface $collectionItemRepository;
     private ImageService $imageService;
-    private $cexService;
+    private CexService $cexService;
 
     /**
      * @param CollectionItemRepositoryInterface $collectionItemRepository
