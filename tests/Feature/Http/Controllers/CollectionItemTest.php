@@ -19,12 +19,14 @@ class CollectionItemTest extends TestCase
     use DatabaseTransactions;
 
     protected CollectionItemController $collectionItemController;
+    protected User $user;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->underTest = app()[CollectionItemController::class];
+        $this->user = User::find(1);
     }
 
     /**
@@ -35,8 +37,7 @@ class CollectionItemTest extends TestCase
     {
         /* Arrange */
         // Find a user to act as
-        $user = User::find(1);
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         // Create collection item data
         $data = [
