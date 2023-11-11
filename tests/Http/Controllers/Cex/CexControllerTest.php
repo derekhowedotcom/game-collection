@@ -3,6 +3,7 @@
 namespace Tests\Http\Controllers\Cex;
 
 use App\Http\Controllers\Cex\CexController;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Mockery;
@@ -12,6 +13,7 @@ use Mockery\MockInterface;
 
 class CexControllerTest extends TestCase
 {
+    use WithoutMiddleware;
 
     protected String $barcode;
     protected cexController $cexController;
@@ -26,6 +28,9 @@ class CexControllerTest extends TestCase
         $this->barcode = '5026555416986';
     }
 
+    /**
+     * @return void
+     */
     public function test_get_cex_item_details_with_barcode()
     {
         // Set up some mock data

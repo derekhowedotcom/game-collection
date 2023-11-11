@@ -21,7 +21,7 @@ class StoreCollectionItemRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'title' => 'required',
@@ -35,7 +35,7 @@ class StoreCollectionItemRequest extends FormRequest
         ];
     }
 
-    public function attributes()
+    public function attributes(): array
     {
         return ['category_id' => 'category'];
     }

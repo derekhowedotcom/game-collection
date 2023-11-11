@@ -18,27 +18,25 @@ use App\Http\Controllers\Cex\CexController;
 |
 */
 
-//get cex details
-//TODO: move this back inside group
-//**********************move this back inside group */
-Route::get('cex-item-details/{barcode?}', [CexController::class, 'getCexItemDetails']);
-
-Route::get('collection-items/count/{category_name?}', [CollectionItemController::class, 'countForCategoryNameLike']);
-Route::get('collection-items/multi-count/{category_names?}', [CollectionItemController::class, 'multiCountForCategoryNameLike']);
-
-
 Route::group(['middleware' => 'auth:sanctum'], function(){
-    //This is an extra route needed for updates to images due to put not supporting form data
+
+    // This is an extra route needed for updates to images due to put not supporting form data
     Route::post('collection-items/{collection_item}', [CollectionItemController::class, 'update']);
     Route::apiResource('collection-items', CollectionItemController::class);
     Route::get('categories', [CategoryController::class, 'index']);
 
+    // Get collection item counts
+    Route::get('collection-items/count/{category_name?}', [CollectionItemController::class, 'countForCategoryNameLike']);
+    Route::get('collection-items/multi-count/{category_names?}', [CollectionItemController::class, 'multiCountForCategoryNameLike']);
 
+    // Get cex details
+    Route::get('cex-item-details/{barcode?}', [CexController::class, 'getCexItemDetails']);
 
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
+    // Get user roles
     Route::get('abilities', function(Request $request) {
         return $request->user()->roles()->with('permissions')
             ->get()
