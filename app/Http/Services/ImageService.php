@@ -71,16 +71,18 @@ class ImageService
      */
     public function deleteImage($filename): void
     {
-        // Delete the image
-        $path = storage_path().'/app/public/images/collection-items/' . $filename;
-        if (file_exists($path)) {
-            unlink($path);
-        }
+        // Delete the image if there is a filename
+        if ($filename) {
+            $path = storage_path() . '/app/public/images/collection-items/' . $filename;
+            if (file_exists($path)) {
+                unlink($path);
+            }
 
-        // Delete the small image
-        $thumbnailPath = storage_path().'/app/public/images/collection-items/small/' . $filename;
-        if (file_exists($thumbnailPath)) {
-            unlink($thumbnailPath);
+            // Delete the small image
+            $thumbnailPath = storage_path() . '/app/public/images/collection-items/small/' . $filename;
+            if (file_exists($thumbnailPath)) {
+                unlink($thumbnailPath);
+            }
         }
     }
 }

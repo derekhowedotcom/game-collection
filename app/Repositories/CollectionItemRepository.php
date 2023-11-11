@@ -111,7 +111,7 @@ class CollectionItemRepository implements CollectionItemRepositoryInterface
         return CollectionItem::findOrFail($collectionItemId);
    }
 
-    public function deleteCollectionItem($collectionItem)
+    public function deleteCollectionItem($collectionItem): void
     {
         CollectionItem::destroy($collectionItem);
     }

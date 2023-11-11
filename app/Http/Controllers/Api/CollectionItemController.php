@@ -147,7 +147,7 @@ class CollectionItemController extends Controller
 
     /**
      * Get collection item count based on category name like
-     * @param $categoryName
+     * @param String $categoryName
      * @return int
      */
     public function countForCategoryNameLike(String $categoryName)

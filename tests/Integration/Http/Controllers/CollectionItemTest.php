@@ -4,11 +4,13 @@ namespace Tests\Integration\Http\Controllers;
 
 use App\Http\Controllers\Api\CollectionItemController;
 use App\Http\Requests\StoreCollectionItemRequest;
+use App\Http\Resources\CollectionItemResource;
 use App\Models\CollectionItem;
 use App\Models\User;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Tests\TestCase;
 
 // Integration tests are used to test the integration between different parts of the application e.g. db and controller
@@ -126,6 +128,148 @@ class CollectionItemTest extends TestCase
         ]);
     }
 
+    /**
+     * A test to check that collection items can be deleted from the database
+     * @return void
+     * @throws BindingResolutionException
+     */
+    public function test_collection_item_can_be_deleted_from_database()
+    {
+        /* Arrange */
+        // Find a user to act as
+        $this->actingAs($this->user);
+
+        // Create a collection item ready to delete later
+        CollectionItem::Create($this->defaultItemData[0]);
+
+        // Find the collection item to delete last inserted into the database
+        $collectionItem = CollectionItem::orderBy('id', 'desc')->first();
+
+        /* Act */
+        // Delete the item to the using the collection item controller
+        $this->underTest->destroy($collectionItem);
+
+        /* Assert */
+        // Check that the item has been deleted from the database
+        $this->assertDatabaseMissing('collection_items', [
+            'title' => 'Grand Theft Auto V (5)',
+            'description' => 'One of the biggest events of the last console generation, Grand Theft Auto V is a masterpiece of game design.',
+            'barcode' => '123456789',
+            'value' => 10.00,
+            'price_paid' => 5.00,
+            'thumbnail' => null,
+            'cex_image' => null,
+            'category_id' => 1
+        ]);
+    }
+
+    /**
+     * A test to check that collection items can be retrieved from the database
+     * @return void
+     */
+    public function test_collection_item_can_be_retrieved_from_database()
+    {
+        /* Arrange */
+        // Find a user to act as
+        $this->actingAs($this->user);
+
+        // Create a collection item ready to retrieve later
+        CollectionItem::Create($this->defaultItemData[0]);
+
+        // Find the collection item to retrieve last inserted into the database
+        $collectionItem = CollectionItem::orderBy('id', 'desc')->first();
+
+        /* Act */
+        // Retrieve the item to the using the collection item controller
+        $collectionItemFromDb = $this->underTest->show($collectionItem);
+
+        /* Assert */
+        // Check that the item has been retrieved from the database and is a collection item resource
+        $this->assertInstanceOf(CollectionItemResource::class, $collectionItemFromDb);
+        $this->assertEquals($this->defaultItemData[0]['title'], $collectionItemFromDb->title);
+        $this->assertEquals($this->defaultItemData[0]['description'], $collectionItemFromDb->description);
+    }
+
+    /**
+     * A test to check that collection item categories can be counted from the database
+     * @return void
+     */
+    public function test_collection_item_categories_can_be_counted_from_database()
+    {
+        /* Arrange */
+        // Find a user to act as
+        $this->actingAs($this->user);
+
+        // Create a collection item ready to count later
+        CollectionItem::Create($this->defaultItemData[0]);
+
+        // Find the collection item to count last inserted into the database
+        $collectionItem = CollectionItem::orderBy('id', 'desc')->first();
+
+        /* Act */
+        // Count the item to the using the collection item controller
+        $collectionItemCount = $this->underTest->countForCategoryNameLike('Hardware');
+
+        /* Assert */
+        // Check that the item has been counted from the database and is greater than or equal to 1 (due to the item created above + random seeder data)
+        $this->assertGreaterThanOrEqual(1, $collectionItemCount);
+    }
+
+    /**
+     * A test to check that multiple collection item categories can be counted from the database
+     * @return void
+     */
+    public function test_collection_item_multiple_categories_can_be_counted_from_database()
+    {
+        /* Arrange */
+        // Find a user to act as
+        $this->actingAs($this->user);
+
+        // Create a collection item ready to count later
+        CollectionItem::Create($this->defaultItemData[0]);
+
+        // Find the collection item to count last inserted into the database
+        $collectionItem = CollectionItem::orderBy('id', 'desc')->first();
+
+        /* Act */
+        // Count the item to the using the collection item controller
+        $collectionItemCount = $this->underTest->multiCountForCategoryNameLike('Hardware');
+
+        /* Assert */
+        // Check that the item has been counted from the database and is greater than or equal to 1 (due to the item created above + random seeder data)
+        $this->assertGreaterThanOrEqual(1, $collectionItemCount);
+    }
+
+    /**
+     * A test to check that filtered collection items can be retrieved from the database
+     * @return void
+     */
+    public function test_filtered_collection_items_can_be_retrieved_from_database()
+    {
+        /* Arrange */
+        // Find a user to act as
+        $this->actingAs($this->user);
+
+        // Create a collection item ready to retrieve later
+        CollectionItem::Factory()->count(10)->create();
+
+        /* Act */
+        // Retrieve the items from the database using the collection item controller
+        $collectionItemFromDb = $this->underTest->index();
+
+        /* Assert */
+        // Check that the collection has 10 items or more
+        $this->assertGreaterThanOrEqual(10, $collectionItemFromDb->count());
+        $this->assertInstanceOf(AnonymousResourceCollection::class, $collectionItemFromDb);
+        foreach ($collectionItemFromDb->collection as $collectionItem) {
+            $this->assertInstanceOf(CollectionItemResource::class, $collectionItem);
+        }
+    }
+
+    /**
+     * Build test data to use in the tests
+     * @return void
+     */
     private function buildTestData()
     {
         // Create array to store both items
@@ -156,5 +300,4 @@ class CollectionItemTest extends TestCase
             ]
         ];
     }
-
 }
