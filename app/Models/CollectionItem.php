@@ -10,8 +10,18 @@ class CollectionItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'barcode', 'value', 'price_paid', 'thumbnail', 'cex_image', 'category_id'];
-
+    protected $fillable = [
+        'title',
+        'description',
+        'barcode',
+        'value',
+        'price_paid',
+        'boxed',
+        'thumbnail',
+        'cex_image',
+        'category_id',
+        'rarity_id'
+    ];
 
     public function category(): BelongsTo
     {

@@ -18,15 +18,14 @@ use App\Http\Controllers\Cex\CexController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('rarities', [RarityController::class, 'index']);
 
 Route::group(['middleware' => 'auth:sanctum'], function(){
 
-    // This is an extra route needed for updates to images due to put not supporting form data
+// This is an extra route needed for updates to images due to put not supporting form data
     Route::post('collection-items/{collection_item}', [CollectionItemController::class, 'update']);
     Route::apiResource('collection-items', CollectionItemController::class);
     Route::get('categories', [CategoryController::class, 'index']);
-
+    Route::get('rarities', [RarityController::class, 'index']);
 
     // Get collection item counts
     Route::get('collection-items/count/{category_name?}', [CollectionItemController::class, 'countForCategoryNameLike']);

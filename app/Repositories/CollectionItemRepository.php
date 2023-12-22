@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\CollectionItemRepositoryInterface;
 use App\Models\CollectionItem;
 
+
 class CollectionItemRepository implements CollectionItemRepositoryInterface
 {
    public function getFilteredCollectionItems()
@@ -19,7 +20,7 @@ class CollectionItemRepository implements CollectionItemRepositoryInterface
             $orderDirection = 'asc';
         }
 
-        $collectionItem = CollectionItem::with('category')
+        $collectionItem = CollectionItem::with('category', 'rarity')
             ->when(request('search_category'), function($query){
                 $query->where('category_id', request('search_category'));
             })
