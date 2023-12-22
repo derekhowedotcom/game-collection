@@ -19,6 +19,7 @@ class CollectionItemResource extends JsonResource
             'title' => $this->title,
             'category_id' => $this->category_id,
             'category' => $this->category->name,
+            'rarity_id' => $this->rarity_id,
             'value' => $this->value,
             'price_paid' => $this->price_paid,
             'description' => $this->description,

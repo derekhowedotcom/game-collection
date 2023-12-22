@@ -47,7 +47,7 @@ class CollectionItemTest extends TestCase
         $this->actingAs($this->user);
 
         // Create collection item data
-       $data = $this->defaultItemData[0];
+        $data = $this->defaultItemData[0];
 
         // create store collection item request
         $request = StoreCollectionItemRequest::create(
@@ -108,7 +108,9 @@ class CollectionItemTest extends TestCase
         );
 
         // Set the validator on the request
-        $request->setValidator(app()['validator']->make($updateData, $request->rules(), $request->messages(), $request->attributes()));
+        $request->setValidator(
+            app()['validator']->make($updateData, $request->rules(), $request->messages(), $request->attributes())
+        );
 
         /* Act */
         // Update the item to the using the collection item controller

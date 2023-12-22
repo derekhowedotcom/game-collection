@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\CollectionItemRepositoryInterface;
 use App\Repositories\CollectionItemRepository;
+use App\Interfaces\RarityRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,7 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(CollectionItemRepositoryInterface::class, CollectionItemRepository::class);
+        $this->app->bind(RarityRepositoryInterface::class, RarityRepository::class);
     }
 
     /**

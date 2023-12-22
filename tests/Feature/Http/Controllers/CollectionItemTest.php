@@ -50,7 +50,8 @@ class CollectionItemTest extends TestCase
             'cex_image' => null,
             'created_at' => now(),
             'updated_at' => now(),
-            'category_id' => 1
+            'category_id' => 1,
+            //'rarity_id' => 1,
         ];
 
         /* Act */
@@ -67,7 +68,8 @@ class CollectionItemTest extends TestCase
             'price_paid' => 5.00,
             'thumbnail' => '1-thumbnail.jpg',
             'cex_image' => null,
-            'category_id' => 1
+            'category_id' => 1,
+            //'rarity_id' => 1,
         ]);
 
     }

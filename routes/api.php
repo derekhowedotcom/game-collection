@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CollectionItemController;
+use App\Http\Controllers\Api\RarityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Role;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Cex\CexController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('rarities', [RarityController::class, 'index']);
 
 Route::group(['middleware' => 'auth:sanctum'], function(){
 
@@ -24,6 +26,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('collection-items/{collection_item}', [CollectionItemController::class, 'update']);
     Route::apiResource('collection-items', CollectionItemController::class);
     Route::get('categories', [CategoryController::class, 'index']);
+
 
     // Get collection item counts
     Route::get('collection-items/count/{category_name?}', [CollectionItemController::class, 'countForCategoryNameLike']);

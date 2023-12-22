@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('collection_items', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained();
+        Schema::create('rarities', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -25,9 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('collection_items', function (Blueprint $table) {
-            $table->dropForeign('collection_items_category_id_foreign'); // Drop the foreign key constraint
-            $table->dropColumn('category_id'); // Drop the `category_id` column
-        });
+        Schema::dropIfExists('rarities');
     }
 };
