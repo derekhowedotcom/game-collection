@@ -25,6 +25,11 @@ class CollectionItemFactory extends Factory
             'title' => $this->faker->text(20),
             'description' => $this->faker->paragraphs(5, true),
             'category_id' => $categoryIds->random(),
+            'value' => $this->faker->randomFloat(2, 0, 1000),
+            'price_paid' => $this->faker->randomFloat(2, 0, 1000),
+            'barcode' => $this->faker->ean13(),
+            // Make boxed 1 or 0
+            'boxed' => $this->faker->boolean(50),
             // Make rarity_id null or random
             'rarity_id' => $this->faker->boolean(50) ? $rarityIds->random() : null,
         ];
