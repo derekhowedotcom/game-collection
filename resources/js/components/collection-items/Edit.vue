@@ -14,7 +14,7 @@
             </div>
         </div>
          <!-- Barcode -->
-        <div>
+        <div class="mt-4">
             <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
                 Barcode/Product ID
             </label>
@@ -65,6 +65,24 @@
             </select>
             <div class="text-red-600 mt-1">
                 <div v-for="message in validationErrors?.category_id" :key="message">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+        <!-- Rarity -->
+        <div class="mt-4">
+            <label for="collectionItem-rarity" class="block font-medium text-sm text-gray-700">
+                Rarity
+            </label>
+            <select v-model="collectionItem.rarity_id" id="collectionItem-rarity"
+                    class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="" selected>-- Choose Rarity --</option>
+                <option v-for="rarity in rarities" :value="rarity.id" :key="rarity.id" >
+                    {{ rarity.name }}
+                </option>
+            </select>
+            <div class="text-red-600 mt-1">
+                <div v-for="message in validationErrors?.rarity_id" :key="message">
                     {{ message }}
                 </div>
             </div>
@@ -151,160 +169,104 @@
         </div>
     </form>
 </template>
-<script>
 
-import {onMounted, reactive, ref, computed, watch } from "vue";
+<script setup>
+import { onMounted, reactive, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
-// import { StreamBarcodeReader } from "vue-barcode-reader";
-import useCex from '../../composables/cex'
+import useCex from '../../composables/cex';
 import useCategories from "../../composables/categories";
+import useRarities from '../../composables/rarities';
 import useCollectionItems from "../../composables/collectionItems";
 import Swal from 'sweetalert2';
-import {CEX_CATEGORY_MAPPER_ARRAY} from "../../constants/CexConstants";
-import {basename} from "../../helpers/fileHelpers";
+import { getCexCategory } from "../../helpers/cexHelpers";
 
-export default {
-    setup() {
-        const { categories, getCategories } = useCategories();
-        const {
-            collectionItem = ref(''),
-            getCollectionItem,
-            updateCollectionItem,
-            validationErrors,
-            isLoading
-        } = useCollectionItems();
-        const { cexItem, getCexItem } = useCex();
-        const cexErrorMessage = ref(null);
-        const thumbnailUrl = ref(false);
-        const decodeText = ref('');
+const { categories, getCategories } = useCategories();
+const { rarities, getRarities } = useRarities();
+const {
+    collectionItem = ref(''),
+    getCollectionItem,
+    updateCollectionItem,
+    validationErrors,
+    isLoading
+} = useCollectionItems();
+const { cexItem, getCexItem } = useCex();
+const cexErrorMessage = ref(null);
+const thumbnailUrl = ref(false);
 
+const route = useRoute()
+onMounted(() => {
+    getCollectionItem(route.params.id)
+    getCategories()
+    getRarities()
+})
 
-        // function onLoaded (loaded){
-        //     console.log(loaded)
+async function handleCexClick() {
+    try {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will replace the form values with values from Cex.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            confirmButtonColor: '#22c55e',
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true
+        });
 
-        // }
-        // function onDecode (result) {
-        //     decodeText.value = result
-
-        // }
-
-
-
-        const route = useRoute()
-        onMounted(() => {
-            getCollectionItem(route.params.id)
-            getCategories()
-        })
-
-        // Function that gets the cex category and matches it to the local category
-        function getCexCategory(cexCategory) {
-
-            let cexCategoryMatch = null;
-
-            // Find the category in the array
-            cexCategoryMatch = CEX_CATEGORY_MAPPER_ARRAY.find(category => category.name === cexCategory);
-
-            // If the category is found return the local category id
-            if(cexCategoryMatch){
-                return cexCategoryMatch.localCategoryId;
-            }
-
-            return null;
+        // If user clicks yes
+        if (result.isConfirmed) {
+            //wait for the values to come back from the api call before setting them.
+            await getCexItem(collectionItem.value.barcode);
         }
 
-        async function handleCexClick() {
-            try {
-                const result = await Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'This will replace the form values with values from Cex.',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    confirmButtonColor: '#22c55e',
-                    timer: 20000,
-                    timerProgressBar: true,
-                    reverseButtons: true
-                });
+        if(cexItem?.value?.response?.data !== null){
+            collectionItem.value.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName;
+            //trim white space and html tags
+            collectionItem.value.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
+                                        .replace(/<\/?[^>]+(>|$)/g, "")
+                                        .trim()
+                                        .replace(/\s{2,10}/g, ' ');
+            collectionItem.value.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
+            collectionItem.value.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
+            collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
+            cexErrorMessage.value = null;
 
-                // If user clicks yes
-                if (result.isConfirmed) {
-                    //wait for the values to come back from the api call before setting them.
-                    await getCexItem(collectionItem.value.barcode);
-                }
+            thumbnailUrl.value = collectionItem.value.cex_image;
 
-                if(cexItem?.value?.response?.data !== null){
-                    collectionItem.value.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName;
-                    //trim white space and html tags
-                    collectionItem.value.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
-                                                .replace(/<\/?[^>]+(>|$)/g, "")
-                                                .trim()
-                                                .replace(/\s{2,10}/g, ' ');
-                    collectionItem.value.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
-                    collectionItem.value.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
-                    collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
-                    cexErrorMessage.value = null;
-
-                    thumbnailUrl.value = collectionItem.value.cex_image;
-
-                }else{
-                    //TODO: convert this to a flash message?
-                    cexErrorMessage.value = 'Item not found. Please check the CEX Barcode/Product ID.';
-                }
-            } catch (error) {
-                cexErrorMessage.value = 'Please check the CEX Barcode/Product ID and try again.';
-                console.error(error);
-            }
+        }else{
+            //TODO: convert this to a flash message?
+            cexErrorMessage.value = 'Item not found. Please check the CEX Barcode/Product ID.';
         }
-
-        function getThumbUrl() {
-            // if we already have a thumbnail in the db and the upload hasn't been changed use that
-            // if(collectionItem.value.cex_image && thumbnailUrl.value === false){
-            //     return '/storage/images/collection-items/cex/' + basename(collectionItem.value.cex_image);
-            // }
-            // else
-
-            if(collectionItem.value.thumbnail && thumbnailUrl.value === false){
-                return '/storage/images/collection-items/' + collectionItem.value.thumbnail;
-            }
-
-            //if the upload has been changed use that image
-            if(thumbnailUrl.value){
-                return thumbnailUrl.value;
-            }
-
-            //if no other images just use the placeholder
-            return '/storage/images/collection-items/image-placeholder.jpg';
-        }
-
-
-        function onFileChange(target) {
-            collectionItem.value.thumbnail = target;
-
-            //create url to show image preview
-            if(target){
-                thumbnailUrl.value = URL.createObjectURL(target);
-                collectionItem.value.cex_image = '';
-            }
-        }
-
-
-        return {
-            categories,
-            collectionItem,
-            validationErrors,
-            isLoading,
-            // decodeText,
-            updateCollectionItem,
-            // StreamBarcodeReader,
-            // onDecode,
-            cexItem,
-            handleCexClick,
-            cexErrorMessage,
-            thumbnailUrl,
-            onFileChange,
-            getThumbUrl
-        }
-
-    },
+    } catch (error) {
+        cexErrorMessage.value = 'Please check the CEX Barcode/Product ID and try again.';
+        console.error(error);
+    }
 }
+
+function getThumbUrl() {
+
+    if(collectionItem.value.thumbnail && thumbnailUrl.value === false){
+        return '/storage/images/collection-items/' + collectionItem.value.thumbnail;
+    }
+
+    //if the upload has been changed use that image
+    if(thumbnailUrl.value){
+        return thumbnailUrl.value;
+    }
+
+    //if no other images just use the placeholder
+    return '/storage/images/collection-items/image-placeholder.jpg';
+}
+
+function onFileChange(target) {
+    collectionItem.value.thumbnail = target;
+
+    //create url to show image preview
+    if(target){
+        thumbnailUrl.value = URL.createObjectURL(target);
+        collectionItem.value.cex_image = '';
+    }
+}
+
 </script>

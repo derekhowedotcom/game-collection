@@ -3,6 +3,11 @@
     <div class="mb-4">
         <img width="300" :src="`/storage/images/collection-items/${ collectionItem.thumbnail }`" alt="" />
     </div>
+    <!-- Barcode -->
+    <div v-if="collectionItem.barcode" class="mb-4">
+        <h1><span class="block font-medium text-sm text-gray-700">Barcode:</span></h1>
+        <p>{{ collectionItem.barcode }}</p>
+    </div>
     <!-- Title -->
     <div class="mb-4">
         <h1><span class="block font-medium text-sm text-gray-700">Title:</span></h1>
@@ -38,6 +43,11 @@
         <h1><span class="block font-medium text-sm text-gray-700">Price Paid:</span></h1>
         <p>&pound;{{ collectionItem.price_paid }}</p>
     </div>
+    <!-- Boxed -->
+    <div class="mb-4">
+        <h1><span class="block font-medium text-sm text-gray-700">Boxed:</span></h1>
+        <p>{{ boxedText }}</p>
+    </div>
     <!-- Buttons -->
     <div class="mt-4">
         <router-link class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" v-if="can('collection-items.update')" :to="{ name: 'collection-items.edit', params: { id: this.$route.params.id } }"><svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>Edit</router-link>
@@ -46,40 +56,33 @@
     </div>
 </template>
 
-<script>
-import {onMounted, reactive } from "vue";
-import { useRoute } from "vue-router";
-import useCategories from "../../composables/categories";
-import useCollectionItems from "../../composables/collectionItems";
-import { useAbility } from '@casl/vue'
-import titleEditComponent from '../ui/TitleEdit.vue'
-import { formatDate } from "../../helpers/dateHelpers";
-import { basename } from "../../helpers/fileHelpers";
 
-export default {
-    setup() {
-        const { categories, getCategories } = useCategories()
-        const { collectionItem, getCollectionItem, deleteCollectionItem } = useCollectionItems()
-        const route = useRoute()
-        const { can } = useAbility()
+<script setup>
+import { computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import useCategories from '../../composables/categories';
+import useCollectionItems from '../../composables/collectionItems';
+import { useAbility } from '@casl/vue';
+import titleEditComponent from '../ui/TitleEdit.vue';
+import { formatDate } from '../../helpers/dateHelpers';
+import { basename } from '../../helpers/fileHelpers';
 
-        onMounted(() => {
-            getCollectionItem(route.params.id)
-            getCategories()
-        })
+// Extract composables
+const { categories, getCategories } = useCategories();
+const { collectionItem, getCollectionItem, deleteCollectionItem } = useCollectionItems();
 
-        return {
-            categories,
-            collectionItem,
-            can,
-            deleteCollectionItem,
-            formatDate,
-            basename
+// Get route and abilities
+const route = useRoute();
+const { can } = useAbility();
 
-        }
-    },
-    components: {
-        titleEditComponent
-    }
-}
+// On mount actions
+onMounted(() => {
+    getCollectionItem(route.params.id);
+    getCategories();
+});
+
+// Computed properties
+const boxedText = computed(() => {
+    return collectionItem.value.boxed === 1 ? 'Yes' : 'No';
+});
 </script>

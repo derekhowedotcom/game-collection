@@ -55,6 +55,7 @@
             <label for="collectionItem-category" class="block font-medium text-sm text-gray-700">
                 Category
             </label>
+            {{ collectionItem.category_id}}
             <select v-model="collectionItem.category_id" id="collectionItem-category"
                     class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="" selected>-- Choose category --</option>
@@ -167,30 +168,12 @@ import useCategories from '../../composables/categories';
 import useRarities from '../../composables/rarities';
 import useCex from '../../composables/cex';
 import useCollectionItems from '../../composables/collectionItems';
-import { CEX_CATEGORY_MAPPER_ARRAY } from '../../constants/CexConstants';
-// import { StreamBarcodeReader } from "vue-barcode-reader";
 import Modal from '../Modal.vue';
 import Swal from 'sweetalert2';
-
-// Define props (if any)
-defineProps({
-    // ... any props
-});
+import { getCexCategory } from "../../helpers/cexHelpers";
 
 // Declare reactive state and functions
-const collectionItem = reactive({
-    barcode: '',
-    title: '',
-    description: '',
-    category_id: '',
-    rarity_id: '',
-    thumbnail: '',
-    cex_image: '',
-    cexCategory: null,
-    value: '',
-    price_paid: '',
-    boxed: '0',
-});
+const collectionItem = ref('');
 const cexErrorMessage = ref(null);
 const thumbnailUrl = ref('/storage/images/collection-items/image-placeholder.jpg');
 const modalActive = ref(false);
@@ -208,46 +191,33 @@ const { cexItem, getCexItem } = useCex();
 onMounted(() => {
     getCategories();
     getRarities();
+    collectionItem.value = {
+        barcode: '',
+        title: '',
+        description: '',
+        category_id: '',
+        rarity_id: '',
+        thumbnail: '',
+        cex_image: '',
+        cexCategory: null,
+        value: '',
+        price_paid: '',
+        boxed: '0',
+    };
 });
 
-// Function that gets the cex category and matches it to the local category
-function getCexCategory(cexCategory) {
-
-    let cexCategoryMatch = null;
-
-    // Find the category in the array
-    cexCategoryMatch = CEX_CATEGORY_MAPPER_ARRAY.find(category => category.name === cexCategory);
-
-    // If the category is found return the local category id
-    if(cexCategoryMatch){
-        return cexCategoryMatch.localCategoryId;
-    }
-
-    return null;
-}
-
 function onFileChange(target) {
-    collectionItem.thumbnail = target;
+    collectionItem.value.thumbnail = target;
 
     //create url to show image preview
     if(target){
         thumbnailUrl.value = URL.createObjectURL(target);
-        collectionItem.cex_image = '';
+        collectionItem.value.cex_image = '';
     }
 }
 
-// const decodeText = ref('')
-
-// function onDecode (result) {
-//             //display the result from barcode scan
-//             // collectionItem.barcode.value = result
-//             //close the modal
-//             toggleModal()
-//         }
-
 async function handleCexClick() {
     try {
-
         const result = await Swal.fire({
             title: 'Are you sure?',
             text: 'This will replace the form values with values from Cex.',
@@ -263,22 +233,26 @@ async function handleCexClick() {
         // If user clicks yes
         if (result.isConfirmed) {
             //wait for the values to come back from the api call before setting them.
-            await getCexItem(collectionItem.barcode);
+            await getCexItem(collectionItem.value.barcode);
         }
 
         // Only set values if there is data from Cex
         if(cexItem?.value?.response?.data !== null){
-            collectionItem.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName;
+            collectionItem.value.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName;
             //trim white space and html tags
-            collectionItem.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
+            collectionItem.value.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
                                         .replace(/<\/?[^>]+(>|$)/g, "")
                                         .trim()
                                         .replace(/\s{2,10}/g, ' ');
-            collectionItem.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
-            collectionItem.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
-            collectionItem.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
+            collectionItem.value.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
+            collectionItem.value.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
+            collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
+            // If we could not find a category try the search using categoryFriendlyName
+            if(collectionItem.value.category_id === null){
+                collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryFriendlyName);
+            }
             cexErrorMessage.value = null;
-            thumbnailUrl.value = collectionItem.cex_image;
+            thumbnailUrl.value = collectionItem.value.cex_image;
 
         }else{
             //TODO: convert this to a flash message?
