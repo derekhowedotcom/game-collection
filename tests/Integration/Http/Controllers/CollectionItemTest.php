@@ -126,7 +126,9 @@ class CollectionItemTest extends TestCase
             'price_paid' => 60.00,
             'thumbnail' => null,
             'cex_image' => null,
-            'category_id' => 48
+            'category_id' => 48,
+            'rarity_id' => 1,
+            'boxed' => 1
         ]);
     }
 
@@ -161,7 +163,9 @@ class CollectionItemTest extends TestCase
             'price_paid' => 5.00,
             'thumbnail' => null,
             'cex_image' => null,
-            'category_id' => 1
+            'category_id' => 1,
+            'rarity_id' => 1,
+            'boxed' => 1
         ]);
     }
 
@@ -286,7 +290,9 @@ class CollectionItemTest extends TestCase
                 'cex_image' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-                'category_id' => 1
+                'category_id' => 1,
+                'rarity_id' => 1,
+                'boxed' => 1
             ],
             [
                 'title' => 'Grand Theft Auto V (5)',
@@ -298,7 +304,9 @@ class CollectionItemTest extends TestCase
                 'cex_image' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-                'category_id' => 1
+                'category_id' => 1,
+                'rarity_id' => 1,
+                'boxed' => 1
             ]
         ];
     }

@@ -22,10 +22,7 @@ class CollectionItemResource extends JsonResource
             'category_id' => $this->category_id,
             'category' => $this->category->name,
             'rarity_id' => $this->rarity_id,
-            // This is a nested relationship and needed to handle if the rarity is not loaded or is null
-            'rarity' => $this->whenLoaded('rarity', function() {
-                return $this->rarity->name;
-            }),
+            'rarity' => $this->rarity->name ?? null,
             'value' => $this->value,
             'price_paid' => $this->price_paid,
             'boxed' => $this->boxed,

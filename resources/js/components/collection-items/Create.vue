@@ -68,6 +68,24 @@
                 </div>
             </div>
         </div>
+        <!-- Rarity -->
+        <div class="mt-4">
+            <label for="collectionItem-rarity" class="block font-medium text-sm text-gray-700">
+                Rarity
+            </label>
+            <select v-model="collectionItem.rarity_id" id="collectionItem-rarity"
+                    class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="" selected>-- Choose Rarity --</option>
+                <option v-for="rarity in rarities" :value="rarity.id" :key="rarity.id" >
+                    {{ rarity.name }}
+                </option>
+            </select>
+            <div class="text-red-600 mt-1">
+                <div v-for="message in validationErrors?.rarity_id" :key="message">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
         <!-- Value -->
         <div class="mt-4">
             <label for="collectionItem-value" class="block font-medium text-sm text-gray-700">
@@ -90,6 +108,27 @@
                    class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             <div class="text-red-600 mt-1">
                 <div v-for="message in validationErrors?.price_paid" :key="message">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+        <!-- Boxed -->
+        <div class="mt-4">
+            <label class="block font-medium text-sm text-gray-700">
+                Boxed
+            </label>
+            <div class="mt-2">
+                <label class="inline-flex items-center">
+                    <input type="radio" v-model="collectionItem.boxed" value="1" class="form-radio">
+                    <span class="ml-2">Yes</span>
+                </label>
+                <label class="inline-flex items-center ml-4">
+                    <input type="radio" v-model="collectionItem.boxed" value="0" class="form-radio">
+                    <span class="ml-2">No</span>
+                </label>
+            </div>
+            <div class="text-red-600 mt-1">
+                <div v-for="message in validationErrors?.boxed" :key="message">
                     {{ message }}
                 </div>
             </div>
@@ -122,146 +161,133 @@
     </modal> -->
 </template>
 
-<script>
-
-import {onMounted, reactive, ref} from 'vue'
-import useCategories from '../../composables/categories'
-import useCex from '../../composables/cex'
-import useCollectionItems from '../../composables/collectionItems'
-import {CEX_CATEGORY_MAPPER_ARRAY} from "../../constants/CexConstants";
+<script setup>
+import { onMounted, reactive, ref } from 'vue';
+import useCategories from '../../composables/categories';
+import useRarities from '../../composables/rarities';
+import useCex from '../../composables/cex';
+import useCollectionItems from '../../composables/collectionItems';
+import { CEX_CATEGORY_MAPPER_ARRAY } from '../../constants/CexConstants';
 // import { StreamBarcodeReader } from "vue-barcode-reader";
-import Modal from "../Modal.vue";
+import Modal from '../Modal.vue';
 import Swal from 'sweetalert2';
 
-export default {
-    setup() {
-        const collectionItem = reactive({
-            barcode: '',
-            title: '',
-            description: '',
-            category_id: '',
-            thumbnail: '',
-            cex_image: '',
-            cexCategory: null,
-            value: '',
-            price_paid: '',
-        })
-        const cexErrorMessage = ref(null);
-        const thumbnailUrl = ref('/storage/images/collection-items/image-placeholder.jpg');
-        const modalActive = ref(false);
-        const toggleModal = () => {
-            modalActive.value = !modalActive.value;
-        };
-        const { categories, getCategories } = useCategories()
-        const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems()
-        const { cexItem, getCexItem } = useCex()
+// Define props (if any)
+defineProps({
+    // ... any props
+});
 
+// Declare reactive state and functions
+const collectionItem = reactive({
+    barcode: '',
+    title: '',
+    description: '',
+    category_id: '',
+    rarity_id: '',
+    thumbnail: '',
+    cex_image: '',
+    cexCategory: null,
+    value: '',
+    price_paid: '',
+    boxed: '0',
+});
+const cexErrorMessage = ref(null);
+const thumbnailUrl = ref('/storage/images/collection-items/image-placeholder.jpg');
+const modalActive = ref(false);
+const toggleModal = () => {
+    modalActive.value = !modalActive.value;
+};
 
-        onMounted( () => {
-            getCategories()
+// Extract composables
+const { categories, getCategories } = useCategories();
+const { rarities, getRarities } = useRarities();
+const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems();
+const { cexItem, getCexItem } = useCex();
 
-        })
+// On mount actions
+onMounted(() => {
+    getCategories();
+    getRarities();
+});
 
-        // Function that gets the cex category and matches it to the local category
-        function getCexCategory(cexCategory) {
+// Function that gets the cex category and matches it to the local category
+function getCexCategory(cexCategory) {
 
-            let cexCategoryMatch = null;
+    let cexCategoryMatch = null;
 
-            // Find the category in the array
-            cexCategoryMatch = CEX_CATEGORY_MAPPER_ARRAY.find(category => category.name === cexCategory);
+    // Find the category in the array
+    cexCategoryMatch = CEX_CATEGORY_MAPPER_ARRAY.find(category => category.name === cexCategory);
 
-            // If the category is found return the local category id
-            if(cexCategoryMatch){
-                return cexCategoryMatch.localCategoryId;
-            }
-
-            return null;
-        }
-
-        function onFileChange(target) {
-            collectionItem.thumbnail = target;
-
-            //create url to show image preview
-            if(target){
-                thumbnailUrl.value = URL.createObjectURL(target);
-                collectionItem.cex_image = '';
-            }
-        }
-
-        // const decodeText = ref('')
-
-        // function onDecode (result) {
-        //             //display the result from barcode scan
-        //             // collectionItem.barcode.value = result
-        //             //close the modal
-        //             toggleModal()
-        //         }
-
-        async function handleCexClick() {
-            try {
-
-                const result = await Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'This will replace the form values with values from Cex.',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    confirmButtonColor: '#22c55e',
-                    timer: 20000,
-                    timerProgressBar: true,
-                    reverseButtons: true
-                });
-
-                // If user clicks yes
-                if (result.isConfirmed) {
-                    //wait for the values to come back from the api call before setting them.
-                    await getCexItem(collectionItem.barcode);
-                }
-
-                // Only set values if there is data from Cex
-                if(cexItem?.value?.response?.data !== null){
-                    collectionItem.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName;
-                    //trim white space and html tags
-                    collectionItem.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
-                                                .replace(/<\/?[^>]+(>|$)/g, "")
-                                                .trim()
-                                                .replace(/\s{2,10}/g, ' ');
-                    collectionItem.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
-                    collectionItem.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
-                    collectionItem.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
-                    cexErrorMessage.value = null;
-                    thumbnailUrl.value = collectionItem.cex_image;
-
-                }else{
-                    //TODO: convert this to a flash message?
-                    cexErrorMessage.value = 'Item not found. Please check the CEX Barcode/Product ID.';
-                }
-            } catch (error) {
-                cexErrorMessage.value = 'Please check the CEX Barcode/Product ID and try again.';
-                console.error(error);
-            }
-        }
-
-        return {
-            categories,
-            collectionItem,
-            storeCollectionItem,
-            validationErrors,
-            isLoading,
-            //onDecode,
-            modalActive,
-            toggleModal,
-            cexItem,
-            getCexItem,
-            handleCexClick,
-            cexErrorMessage,
-            onFileChange,
-            thumbnailUrl
-        }
-    },
-    components: {
-        Modal
+    // If the category is found return the local category id
+    if(cexCategoryMatch){
+        return cexCategoryMatch.localCategoryId;
     }
 
+    return null;
 }
+
+function onFileChange(target) {
+    collectionItem.thumbnail = target;
+
+    //create url to show image preview
+    if(target){
+        thumbnailUrl.value = URL.createObjectURL(target);
+        collectionItem.cex_image = '';
+    }
+}
+
+// const decodeText = ref('')
+
+// function onDecode (result) {
+//             //display the result from barcode scan
+//             // collectionItem.barcode.value = result
+//             //close the modal
+//             toggleModal()
+//         }
+
+async function handleCexClick() {
+    try {
+
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will replace the form values with values from Cex.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            confirmButtonColor: '#22c55e',
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true
+        });
+
+        // If user clicks yes
+        if (result.isConfirmed) {
+            //wait for the values to come back from the api call before setting them.
+            await getCexItem(collectionItem.barcode);
+        }
+
+        // Only set values if there is data from Cex
+        if(cexItem?.value?.response?.data !== null){
+            collectionItem.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName;
+            //trim white space and html tags
+            collectionItem.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
+                                        .replace(/<\/?[^>]+(>|$)/g, "")
+                                        .trim()
+                                        .replace(/\s{2,10}/g, ' ');
+            collectionItem.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
+            collectionItem.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
+            collectionItem.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
+            cexErrorMessage.value = null;
+            thumbnailUrl.value = collectionItem.cex_image;
+
+        }else{
+            //TODO: convert this to a flash message?
+            cexErrorMessage.value = 'Item not found. Please check the CEX Barcode/Product ID.';
+        }
+    } catch (error) {
+        cexErrorMessage.value = 'Please check the CEX Barcode/Product ID and try again.';
+        console.error(error);
+    }
+}
+
 </script>

@@ -38,9 +38,6 @@ export default function useCollectionItems() {
             .then(response => {
                 collectionItems.value = response.data
             })
-
-
-
     }
 
     //get one collectionItem
@@ -77,8 +74,6 @@ export default function useCollectionItems() {
                     title: 'CollectionItem saved successfully'
                 })
                 collectionItems.value = response.data
-
-
 
             })
             .catch(error => {

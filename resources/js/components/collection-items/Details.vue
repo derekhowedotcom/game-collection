@@ -1,7 +1,6 @@
 <template>
     <!-- Image -->
     <div class="mb-4">
-
         <img width="300" :src="`/storage/images/collection-items/${ collectionItem.thumbnail }`" alt="" />
     </div>
     <!-- Title -->
@@ -23,6 +22,11 @@
     <div class="mb-4">
         <h1><span class="block font-medium text-sm text-gray-700">Category:</span></h1>
         <p>{{ collectionItem.category }}</p>
+    </div>
+    <!-- Rarity -->
+    <div class="mb-4">
+        <h1><span class="block font-medium text-sm text-gray-700">Rarity:</span></h1>
+        <p>{{ collectionItem.rarity }}</p>
     </div>
     <!-- Value -->
     <div class="mb-4" v-if="collectionItem.value">
@@ -63,8 +67,6 @@ export default {
             getCollectionItem(route.params.id)
             getCategories()
         })
-
-
 
         return {
             categories,

@@ -1,6 +1,5 @@
 <template>
     <form @submit.prevent="updateCollectionItem(collectionItem)">
-
         <!-- Thumbnail -->
         <div class="mt-4">
             <label for="thumbnail" class="block font-medium text-sm text-gray-700">
@@ -14,7 +13,6 @@
                 </div>
             </div>
         </div>
-
          <!-- Barcode -->
         <div>
             <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
@@ -40,7 +38,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Description -->
         <div class="mt-4">
             <label for="collectionItem-description" class="block font-medium text-sm text-gray-700">
@@ -54,7 +51,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Category -->
         <div class="mt-4">
             <label for="collectionItem-category" class="block font-medium text-sm text-gray-700">
@@ -73,7 +69,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Value -->
         <div class="mt-4">
             <label for="collectionItem-value" class="block font-medium text-sm text-gray-700">
@@ -87,7 +82,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Price Paid -->
         <div class="mt-4">
             <label for="collectionItem-pricePiad" class="block font-medium text-sm text-gray-700">
@@ -97,6 +91,27 @@
                    class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             <div class="text-red-600 mt-1">
                 <div v-for="message in validationErrors?.price_paid" :key="message">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+        <!-- Boxed -->
+        <div class="mt-4">
+            <label class="block font-medium text-sm text-gray-700">
+                Boxed
+            </label>
+            <div class="mt-2">
+                <label class="inline-flex items-center">
+                    <input type="radio" v-model="collectionItem.boxed" value="1" class="form-radio">
+                    <span class="ml-2">Yes</span>
+                </label>
+                <label class="inline-flex items-center ml-4">
+                    <input type="radio" v-model="collectionItem.boxed" value="0" class="form-radio">
+                    <span class="ml-2">No</span>
+                </label>
+            </div>
+            <div class="text-red-600 mt-1">
+                <div v-for="message in validationErrors?.boxed" :key="message">
                     {{ message }}
                 </div>
             </div>
