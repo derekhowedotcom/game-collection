@@ -27,16 +27,13 @@
         </div>
         <!-- Title -->
         <div class="mt-4">
-            <label for="collectionItem-title" class="block font-medium text-sm text-gray-700">
-                Title
-            </label>
-            <input v-model="collectionItem.title" id="collectionItem-title" type="text"
-                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.title" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+            <collection-item-text-input
+                v-model:value="collectionItem.title"
+                :label="'Title'"
+                :id="'collectionItem-title'"
+                :validation-errors="validationErrors"
+                @update:value="(newValue) => updateCollectionItem('title', newValue)"
+            />
         </div>
         <!-- Description -->
         <div class="mt-4">
@@ -55,7 +52,6 @@
             <label for="collectionItem-category" class="block font-medium text-sm text-gray-700">
                 Category
             </label>
-            {{ collectionItem.category_id}}
             <select v-model="collectionItem.category_id" id="collectionItem-category"
                     class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="" selected>-- Choose category --</option>
@@ -136,7 +132,10 @@
         </div>
         <!-- Buttons -->
         <div class="mt-4">
-            <button @click="$router.push({ name: 'collection-items.index' })" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-red-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Cancel</button>
+            <button @click="$router.push({ name: 'collection-items.index' })" type="button"
+                    class="inline-flex content-center items-center mt-3 px-3 py-2 bg-red-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
+                Cancel
+            </button>
             <button :disabled="isLoading"
                     class="inline-flex items-center ml-3 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded ml-2 disabled:opacity-75 disabled:cursor-not-allowed">
                 <div v-show="isLoading"
@@ -171,6 +170,7 @@ import useCollectionItems from '../../composables/collectionItems';
 import Modal from '../Modal.vue';
 import Swal from 'sweetalert2';
 import { getCexCategory } from "../../helpers/cexHelpers";
+import CollectionItemTextInput from "../ui/CollectionItemTextInput.vue";
 
 // Declare reactive state and functions
 const collectionItem = ref('');
@@ -215,6 +215,10 @@ function onFileChange(target) {
         collectionItem.value.cex_image = '';
     }
 }
+
+const updateCollectionItem = (fieldName, newValue) => {
+    collectionItem.value.fieldName = newValue;
+};
 
 async function handleCexClick() {
     try {
