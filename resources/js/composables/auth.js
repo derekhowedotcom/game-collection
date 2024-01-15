@@ -46,7 +46,10 @@ export default function useAuth() {
         user.email = response.data.email
         localStorage.setItem('loggedIn', JSON.stringify(true))
         await getAbilities()
-        await router.push({ name: 'collection-items.index' })
+        //only redirect if the user is coming from the login page
+        if (router.currentRoute.value.name === 'login') {
+            await router.push({ name: 'collection-items.index' })
+        }
     }
 
     const getUser = () => {

@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import AuthenticatedLayout from '../layouts/Authenticated.vue';
 import GuestLayout from '../layouts/Guest.vue';
@@ -24,11 +24,11 @@ const routes = [
         redirect: { name: 'login' },
         component: GuestLayout,
         children:[
-            { 
-                path: '/login', 
+            {
+                path: '/login',
                 name: 'login',
                 component: Login,
-               
+
             },
         ]
     },
@@ -36,34 +36,38 @@ const routes = [
         component: AuthenticatedLayout,
         beforeEnter: auth,
         children:[
-            { 
-                path: '/collection-items', 
+            {
+                path: '/collection-items',
                 name: 'collection-items.index',
                 component: CollectionItemsIndex,
                 meta: { title: 'Collection' }
             },
-            { 
-                path: '/collection-items/create', 
-                name: 'collection-items.create', 
+            {
+                path: '/collection-items/create',
+                name: 'collection-items.create',
                 component: CollectionItemsCreate,
                 meta: { title: 'Add New Collection Item' }
             },
-            { 
-                path: '/collection-items/details/:id', 
-                name: 'collection-items.details', 
+            {
+                path: '/collection-items/details/:id',
+                name: 'collection-items.details',
                 component: CollectionItemsDetails,
                 meta: { title: 'Details Collection Item' }
             },
-            { 
-                path: '/collection-items/edit/:id', 
-                name: 'collection-items.edit', 
+            {
+                path: '/collection-items/edit/:id',
+                name: 'collection-items.edit',
                 component: CollectionItemsEdit,
                 meta: { title: 'Edit Collection Item' }
             },
         ]
     },
-    
+
 ]
+
+// stop the router from always pushing to the index route when the page is refreshed
+// https://stackoverflow.com/questions/64834496/vue-router-redirecting-to-the-wrong-route-on-page-refresh
+
 
 export default createRouter ({
     history: createWebHistory(),

@@ -15,14 +15,15 @@
         </div>
          <!-- Barcode -->
         <div class="mt-4">
-            <label for="collectionItem-barcode" class="block font-medium text-sm text-gray-700">
-                Barcode/Product ID
-            </label>
-            <input v-model="collectionItem.barcode" id="collectionItem-barcode" type="text"
-                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            <div class="text-red-600 mt-1" v-if="cexErrorMessage">
-                {{ cexErrorMessage }}
-            </div>
+            <collection-item-text-input
+                    v-model:value="collectionItem.barcode"
+                    :label="'Barcode/Product ID'"
+                    :id="'collectionItem-barcode'"
+                    :field-name="'barcode'"
+                    :validation-errors="validationErrors"
+                    :other-error-message="cexErrorMessage"
+                    @update:value="(newValue) => updateCollectionItem('barcode', newValue)"
+            />
             <!-- <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button> -->
         </div>
         <!-- Title -->
@@ -179,6 +180,7 @@ import useRarities from '../../composables/rarities';
 import useCollectionItems from "../../composables/collectionItems";
 import Swal from 'sweetalert2';
 import { getCexCategory } from "../../helpers/cexHelpers";
+import CollectionItemTextInput from "../ui/CollectionItemTextInput.vue";
 
 const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
