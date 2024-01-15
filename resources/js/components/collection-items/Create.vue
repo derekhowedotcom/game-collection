@@ -99,24 +99,16 @@
         </div>
         <!-- Boxed -->
         <div class="mt-4">
-            <label class="block font-medium text-sm text-gray-700">
-                Boxed
-            </label>
-            <div class="mt-2">
-                <label class="inline-flex items-center">
-                    <input type="radio" v-model="collectionItem.boxed" value="1" class="form-radio">
-                    <span class="ml-2">Yes</span>
-                </label>
-                <label class="inline-flex items-center ml-4">
-                    <input type="radio" v-model="collectionItem.boxed" value="0" class="form-radio">
-                    <span class="ml-2">No</span>
-                </label>
-            </div>
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.boxed" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+            <collection-item-radio
+                    v-model:value="collectionItem.boxed"
+                    :id="'collectionItem-boxed'"
+                    :value="collectionItem.boxed"
+                    :categories="boxedOptions"
+                    :label="'Boxed'"
+                    :field-name="'boxed'"
+                    :validation-errors="validationErrors"
+                    @update:value="(newValue) => updateCollectionItem('boxed', newValue)"
+            />
         </div>
         <!-- Buttons -->
         <div class="mt-4">
@@ -161,6 +153,7 @@ import { getCexCategory } from "../../helpers/cexHelpers";
 import CollectionItemTextInput from "../ui/CollectionItemTextInput.vue";
 import CollectionItemTextArea from "../ui/CollectionItemTextArea.vue";
 import CollectionItemSelect from "../ui/CollectionItemSelect.vue";
+import CollectionItemRadio from "../ui/CollectionItemRadio.vue";
 
 // Declare reactive state and functions
 const collectionItem = ref('');
@@ -176,6 +169,10 @@ const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
 const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems();
 const { cexItem, getCexItem } = useCex();
+const boxedOptions = [
+    { id: 1, name: 'Yes' },
+    { id: 0, name: 'No' },
+];
 
 // On mount actions
 onMounted(() => {
