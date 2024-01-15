@@ -21,6 +21,7 @@
                     :id="'collectionItem-barcode'"
                     :field-name="'barcode'"
                     :validation-errors="validationErrors"
+                    :other-error-message="cexErrorMessage"
                     @update:value="(newValue) => updateCollectionItem('barcode', newValue)"
             />
             <!-- <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button> -->
@@ -102,7 +103,7 @@
             <collection-item-radio
                     v-model:value="collectionItem.boxed"
                     :id="'collectionItem-boxed'"
-                    :value="collectionItem.boxed"
+                    :value="collectionItem.boxed.toInteger()"
                     :categories="boxedOptions"
                     :label="'Boxed'"
                     :field-name="'boxed'"
@@ -112,21 +113,8 @@
         </div>
         <!-- Buttons -->
         <div class="mt-4">
-            <button @click="$router.push({ name: 'collection-items.index' })" type="button"
-                    class="inline-flex content-center items-center mt-3 px-3 py-2 bg-red-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
-                Cancel
-            </button>
-            <button :disabled="isLoading"
-                    class="inline-flex items-center ml-3 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded ml-2 disabled:opacity-75 disabled:cursor-not-allowed">
-                <div v-show="isLoading"
-                     class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
-                <span v-if="isLoading">Processing...</span>
-                <span v-else><svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                  xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round"
-                                                                           stroke-linejoin="round" stroke-width="2"
-                                                                           d="M5 13l4 4L19 7"></path></svg>Save</span>
-            </button>
-
+            <Collection-item-cancel-button @click="$router.push({ name: 'collection-items.index' })">Cancel</Collection-item-cancel-button>
+            <Collection-item-save-button :is-loading="isLoading"></Collection-item-save-button>
             <button @click="handleCexClick" type="button"
                     class="inline-flex content-center items-center mt-3 ml-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
                 Get CEX Details
@@ -154,10 +142,26 @@ import CollectionItemTextInput from "../ui/CollectionItemTextInput.vue";
 import CollectionItemTextArea from "../ui/CollectionItemTextArea.vue";
 import CollectionItemSelect from "../ui/CollectionItemSelect.vue";
 import CollectionItemRadio from "../ui/CollectionItemRadio.vue";
+import CollectionItemCancelButton from "../ui/CollectionItemCancelButton.vue";
+import CollectionItemSaveButton from "../ui/CollectionItemSaveButton.vue";
+
+
 
 // Declare reactive state and functions
-const collectionItem = ref('');
-const cexErrorMessage = ref(null);
+const collectionItem = ref({
+    barcode: '',
+    title: '',
+    description: '',
+    category_id: '',
+    rarity_id: '',
+    thumbnail: '',
+    cex_image: '',
+    cexCategory: null,
+    value: '',
+    price_paid: '',
+    boxed: 0,
+});
+const cexErrorMessage = ref('');
 const thumbnailUrl = ref('/storage/images/collection-items/image-placeholder.jpg');
 const modalActive = ref(false);
 const toggleModal = () => {
@@ -189,7 +193,7 @@ onMounted(() => {
         cexCategory: null,
         value: '',
         price_paid: '',
-        boxed: '0',
+        boxed: 0,
     };
 });
 
@@ -242,7 +246,7 @@ async function handleCexClick() {
             if(collectionItem.value.category_id === null){
                 collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryFriendlyName);
             }
-            cexErrorMessage.value = null;
+            cexErrorMessage.value = '';
             thumbnailUrl.value = collectionItem.value.cex_image;
 
         }else{

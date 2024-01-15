@@ -7,7 +7,7 @@
   required: true,
 },
   value: {
-  type: String,
+  type: [String, Number],
   required: true,
 },
   categories: {
@@ -59,9 +59,7 @@ watch(toRef(props,'value'),  (newValue) => {
         :value="category.id"
         v-model="inputValue"
         class="form-radio"
-        @blur="updateValue(inputValue)"
-        @keydown="updateValue(inputValue)"
-        @mousedown="updateValue(inputValue)"
+        @change="updateValue(inputValue)"
     >
     <label :for="id + '-' + category.id" class="inline-flex items-center ml-3 mr-2">
       {{ category.name }}

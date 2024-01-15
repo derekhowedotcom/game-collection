@@ -7,7 +7,7 @@ const props = defineProps({
         required: true,
     },
     value: {
-        type: String,
+        type: [String, Number],
         required: true,
         default: '',
     },
@@ -18,6 +18,10 @@ const props = defineProps({
     validationErrors: {
         type: Object,
         required: true,
+    },
+    otherErrorMessage: {
+        type: String,
+        required: false,
     },
     label: {
         type: String,
@@ -58,5 +62,8 @@ watch(toRef(props,'value'),  (newValue) => {
         <div v-for="message in validationErrors[fieldName]" :key="message">
             {{ message }}
         </div>
+    </div>
+    <div class="text-red-600 mt-1" v-if="otherErrorMessage && otherErrorMessage.length > 0">
+        {{ otherErrorMessage }}
     </div>
 </template>
