@@ -114,13 +114,11 @@
         <!-- Buttons -->
         <div class="mt-4">
             <Collection-item-cancel-button @click="$router.push({ name: 'collection-items.index' })">Cancel</Collection-item-cancel-button>
-            <Collection-item-save-button :is-loading="isLoading"></Collection-item-save-button>
-            <button @click="handleCexClick" type="button"
-                    class="inline-flex content-center items-center mt-3 ml-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
-                Get CEX Details
-            </button>
+            <Collection-item-save-button :is-loading="isLoading">Save</Collection-item-save-button>
+            <Collection-item-primary-button @click="handleCexClick">Get CEX Details</Collection-item-primary-button>
         </div>
     </form>
+    <!-- TODO: Fix this -->
     <!-- <modal @close="toggleModal" :modalActive="modalActive">
       <div class="modal-content">
             <h1>Barcode Scanner</h1>
@@ -144,6 +142,7 @@ import CollectionItemSelect from "../ui/CollectionItemSelect.vue";
 import CollectionItemRadio from "../ui/CollectionItemRadio.vue";
 import CollectionItemCancelButton from "../ui/CollectionItemCancelButton.vue";
 import CollectionItemSaveButton from "../ui/CollectionItemSaveButton.vue";
+import CollectionItemPrimaryButton from "../ui/CollectionItemPrimaryButton.vue";
 
 
 
