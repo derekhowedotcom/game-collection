@@ -101,6 +101,15 @@ class CollectionItemRepository implements CollectionItemRepositoryInterface
           return CollectionItem::where('category_id', $categoryId)->sum('value');
     }
 
+    // Get total value of collection items and total value of amount spent
+    public function getTotalValueAndAmountSpent(): array
+    {
+          return [
+              'totalValue' => CollectionItem::sum('value'),
+              'totalAmountSpent' => CollectionItem::sum('price_paid')
+          ];
+    }
+
    public function createCollectionItem(array $collectionItemDetails)
    {
         return CollectionItem::create($collectionItemDetails);

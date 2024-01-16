@@ -48,9 +48,9 @@ watch(toRef(props,'value'),  (newValue) => {
 </script>
 
 <template>
-<label :for="id" class="block font-medium text-sm text-gray-700">
+<span class="block font-medium text-sm text-gray-700">
   {{ label }}
-</label>
+</span>
 <div class="mt-2">
   <div v-for="category in categories" :key="category.id" class="inline-flex items-center">
     <input

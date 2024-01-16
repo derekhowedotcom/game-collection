@@ -75,5 +75,29 @@ class CollectionItemTest extends TestCase
         ]);
 
     }
+
+    /**
+     * A test to make sure we can get the value and amount spent on the total collection
+     * @return void
+     */
+    public function test_can_get_value_and_amount_spent_on_collection()
+    {
+        /* Arrange */
+        // Find a user to act as
+        $this->actingAs($this->user);
+
+        /* Act */
+        // Get the value and amount spent on the total collection
+        $response = $this->get('/api/collection-items/value-and-amount-spent');
+
+        /* Assert */
+        // Check that the response is correct
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'totalValue',
+            'totalAmountSpent'
+        ]);
+    }
+
 }
 

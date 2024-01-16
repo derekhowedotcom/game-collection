@@ -87,7 +87,7 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
         <header class="bg-white shadow text-center">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 <h2 class="font-bold text-xl text-gray-800 leading-tight">
-                    {{ currentPagetitle }}
+                    {{ currentPageTitle }}
                     <h3 class="font-semibold text-xs text-gray-800 leading-tight">
                         Hardware: {{collectionItemCounts?.hardware}}</h3>
                     <h3 class="font-semibold text-xs text-gray-800 leading-tight">
@@ -95,10 +95,13 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
                     <h3 class="font-semibold text-xs text-gray-800 leading-tight">
                         Other: {{collectionItemCounts?.other}}</h3>
                     <h3 class="font-bold text-xs text-gray-800 leading-tight">
-                        Total: {{collectionItemCounts?.total}}</h3>
+                        Total collection items: {{collectionItemCounts?.total}}</h3>
+                  <h3 class="font-bold text-xs text-gray-800 leading-tight">
+                    Total Value: &pound;{{ formatCurrency(collectionItemValueAndAmountSpent?.totalValue) }}</h3>
+                  <h3 class="font-bold text-xs text-gray-800 leading-tight">
+                    Total Spent: &pound;{{ formatCurrency(collectionItemValueAndAmountSpent?.totalAmountSpent) }}</h3>
                 </h2>
             </div>
-
         </header>
 
         <!-- Page Content -->
@@ -116,42 +119,39 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
     </div>
 </template>
 
-<script>
-import {onMounted, ref, watch, watchEffect} from 'vue';
+<script setup>
+import {computed, onMounted, ref} from 'vue';
 import useAuth from '../composables/auth';
 import { useAbility } from '@casl/vue'
+import { useRoute } from "vue-router";
 import useCollectionItemCounts from '../composables/collectionItemCounts'
+import { formatCurrency } from '../helpers/numberHelpers'
 
-export default {
-    setup(){
-        const { user, processing, logout } = useAuth()
-        const { can } = useAbility()
-        const { collectionItemCounts, getCollectionItemCounts } = useCollectionItemCounts({
-            categoryNames: 'hardware,software,other',
-        })
+const { user, processing, logout } = useAuth()
+const { can } = useAbility()
+const {
+  collectionItemCounts,
+  getCollectionItemCounts,
+  collectionItemValueAndAmountSpent,
+  getCollectionItemValueAndAmountSpent
+} = useCollectionItemCounts({
+  categoryNames: 'hardware,software,other',
+})
 
-        onMounted(() => {
-            getCollectionItemCounts()
-        })
+// Get the current route
+const route = useRoute()
 
-        //show/hide mobile menu
-        let showMenu = ref(false);
-        const toggleNav = () => (showMenu.value = !showMenu.value);
+onMounted(() => {
+    getCollectionItemCounts()
+    getCollectionItemValueAndAmountSpent()
+})
 
-        return {
-            user,
-            processing,
-            logout,
-            can,
-            showMenu,
-            toggleNav,
-            collectionItemCounts
-        }
-    },
-    computed: {
-        currentPagetitle() {
-            return this.$route.meta.title
-        }
-    }
-}
+//show/hide mobile menu
+const showMenu = ref(false);
+// Toggle mobile menu
+const toggleNav = () => (showMenu.value = !showMenu.value);
+// Get current page title
+const currentPageTitle = computed(() => route.meta.title);
+
+
 </script>

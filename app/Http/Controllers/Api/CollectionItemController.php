@@ -163,6 +163,15 @@ class CollectionItemController extends Controller
     }
 
     /**
+     * @return array
+     */
+    public function valueAndAmountSpent() : array
+    {
+        // Get total value and amount spent
+        return $this->collectionItemRepository->getTotalValueAndAmountSpent();
+    }
+
+    /**
      * @param CollectionItem $collectionItem
      * @return Response
      */

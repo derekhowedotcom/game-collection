@@ -272,6 +272,27 @@ class CollectionItemTest extends TestCase
         }
     }
 
+    // A test to check the correct values for value and amount spent are returned
+    public function test_correct_value_and_amount_spent_is_returned()
+    {
+        /* Arrange */
+        // Find a user to act as
+        $this->actingAs($this->user);
+
+        // Create a collection item ready to retrieve later
+        CollectionItem::Factory()->count(10)->create();
+
+        /* Act */
+        // Retrieve the items from the database using the collection item controller
+        $valueAndAmountSpent = $this->underTest->valueAndAmountSpent();
+
+        /* Assert */
+        // Check that the correct values are returned
+        $this->assertIsArray($valueAndAmountSpent);
+        $this->assertArrayHasKey('totalValue', $valueAndAmountSpent);
+        $this->assertArrayHasKey('totalAmountSpent', $valueAndAmountSpent);
+    }
+
     /**
      * Build test data to use in the tests
      * @return void

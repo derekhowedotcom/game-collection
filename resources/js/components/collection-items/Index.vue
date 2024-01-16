@@ -18,7 +18,7 @@
                     </option>
                 </select>
             </div>
-            <table class="min-w-full divide-y divide-gray-200 border mb-4">
+            <table class="min-w-full divide-y divide-gray-200 border mb-4" v-if="collectionItems.data.length > 0">
                 <thead>
                 <tr>
                     <th class="px-6 py-3 bg-gray-50 text-left">
@@ -72,6 +72,11 @@
                 </tr>
                 </tbody>
             </table>
+            <div v-else class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+                <div class="flex justify-center items-center">
+                    <div class="text-gray-500">No collection items found.</div>
+                </div>
+            </div>
             <div class="flex justify-center items-center">
                 <Pagination :data="collectionItems"
                             @pagination-change-page="page => getCollectionItems(page, selectedCategory)"/>
@@ -80,129 +85,111 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import axios from 'axios';
-import {ref, onMounted, watch} from 'vue'
-import useCollectionItems from '../../composables/collectionItems'
-import useCategories from '../../composables/categories'
-import {current} from 'tailwindcss/colors';
-import {useAbility} from '@casl/vue'
-import titleLinkComponent from '../ui/TitleLink.vue'
-import {formatDate} from "../../helpers/dateHelpers";
-import {basename} from "../../helpers/fileHelpers";
+import { ref, onMounted, watch } from 'vue';
+import useCollectionItems from '../../composables/collectionItems';
+import useCategories from '../../composables/categories';
+import { current } from 'tailwindcss/colors';
+import { useAbility } from '@casl/vue';
+import titleLinkComponent from '../ui/TitleLink.vue';
+import { formatDate } from '../../helpers/dateHelpers';
+import { basename } from '../../helpers/fileHelpers';
+import useCollectionItemCounts from '../../composables/collectionItemCounts';
 
-export default {
-    methods: {basename},
-    setup() {
-        const search_category = ref('')
-        const search_id = ref('')
-        const search_title = ref('')
-        const search_description = ref('')
-        const search_global = ref('')
-        const orderColumn = ref('title')
-        const orderDirection = ref('desc')
-        const {collectionItems, getCollectionItems, deleteCollectionItem} = useCollectionItems()
-        const {categories, getCategories} = useCategories()
-        const {can} = useAbility()
+const search_category = ref('');
+const search_id = ref('');
+const search_title = ref('');
+const search_description = ref('');
+const search_global = ref('');
+const orderColumn = ref('title');
+const orderDirection = ref('desc');
 
-        onMounted(() => {
-            getCollectionItems(),
-                getCategories()
-        })
-        const updateOrdering = (column) => {
-            orderColumn.value = column;
-            orderDirection.value = (orderDirection.value === 'asc') ? 'desc' : 'asc';
-            getCollectionItems(
-                1,
-                search_category.value,
-                search_id.value,
-                search_title.value,
-                search_description.value,
-                search_global.value,
-                orderColumn.value,
-                orderDirection.value
-            );
+const { collectionItems, getCollectionItems, deleteCollectionItem } = useCollectionItems();
+const { categories, getCategories } = useCategories();
+const { can } = useAbility();
 
-        }
+const {
+  collectionItemValueAndAmountSpent,
+  getCollectionItemValueAndAmountSpent,
+} = useCollectionItemCounts({});
 
-        watch(search_category, (current, previous) => {
-            getCollectionItems(
-                1,
-                current,
-                search_id.value,
-                search_title.value,
-                search_description.value,
-                search_global.value,
-            )
-        })
+onMounted(() => {
+  getCollectionItems();
+  getCategories();
+  getCollectionItemValueAndAmountSpent();
+});
 
-        watch(search_id, (current, previous) => {
-            getCollectionItems(
-                1,
-                search_category.value,
-                current,
-                search_title.value,
-                search_description.value,
-                search_global.value,
-            )
-        })
+const updateOrdering = (column) => {
+  orderColumn.value = column;
+  orderDirection.value = orderDirection.value === 'asc' ? 'desc' : 'asc';
+  getCollectionItems(
+      1,
+      search_category.value,
+      search_id.value,
+      search_title.value,
+      search_description.value,
+      search_global.value,
+      orderColumn.value,
+      orderDirection.value
+  );
+};
 
-        watch(search_title, (current, previous) => {
-            getCollectionItems(
-                1,
-                search_category.value,
-                search_id.value,
-                current,
-                search_description.value,
-                search_global.value,
-            )
-        })
+watch(search_category, (current, previous) => {
+  getCollectionItems(
+      1,
+      current,
+      search_id.value,
+      search_title.value,
+      search_description.value,
+      search_global.value
+  );
+});
 
-        watch(search_description, (current, previous) => {
-            getCollectionItems(
-                1,
-                search_category.value,
-                search_id.value,
-                search_title.value,
-                current,
-                search_global.value,
-            )
-        })
+watch(search_id, (current, previous) => {
+    getCollectionItems(
+        1,
+        search_category.value,
+        current,
+        search_title.value,
+        search_description.value,
+        search_global.value,
+    )
+})
 
-        watch(search_global, (current, previous) => {
-            getCollectionItems(
-                1,
-                search_category.value,
-                search_id.value,
-                search_title.value,
-                search_description.value,
-                current,
-            )
-        })
+watch(search_title, (current, previous) => {
+    getCollectionItems(
+        1,
+        search_category.value,
+        search_id.value,
+        current,
+        search_description.value,
+        search_global.value,
+    )
+})
 
-        return {
-            collectionItems,
-            getCollectionItems,
-            deleteCollectionItem,
-            categories,
-            search_category,
-            search_id,
-            search_title,
-            search_description,
-            search_global,
-            orderColumn,
-            orderDirection,
-            updateOrdering,
-            can,
-            formatDate,
-            basename
-        }
-    },
-    components: {
-        titleLinkComponent
-    }
+watch(search_description, (current, previous) => {
+    getCollectionItems(
+        1,
+        search_category.value,
+        search_id.value,
+        search_title.value,
+        current,
+        search_global.value,
+    )
+})
 
-}
+watch(search_global, (current, previous) => {
+    getCollectionItems(
+        1,
+        search_category.value,
+        search_id.value,
+        search_title.value,
+        search_description.value,
+        current,
+    )
+})
+
 </script>
 
 
