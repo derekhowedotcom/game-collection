@@ -18,7 +18,7 @@
                     </option>
                 </select>
             </div>
-            <table class="min-w-full divide-y divide-gray-200 border mb-4" v-if="collectionItems.data.length > 0">
+            <table class="min-w-full divide-y divide-gray-200 border mb-4" v-if="collectionItems.data && collectionItems.data.length > 0">
                 <thead>
                 <tr>
                     <th class="px-6 py-3 bg-gray-50 text-left">
