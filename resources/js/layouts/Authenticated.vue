@@ -4,7 +4,7 @@
             <div class="flex items-center flex-shrink-0 text-white mr-6   ">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="/">
+<router-link :to="{ name: 'collection-items.index' }" class="flex items-center flex-shrink-0 text-white mr-6">
                         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 viewBox="0 0 58 58" style="enable-background:new 0 0 316 316;" xml:space="preserve" class="w-14 h-14 fill-current text-gray-500">
 <path style="fill:none;stroke:#38454F;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;" d="M19,31V13.5
@@ -50,7 +50,8 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
 </g>
 <g>
 </g>
-</svg>      </a>
+</svg>
+</router-link>
 
                 </div>
             </div>

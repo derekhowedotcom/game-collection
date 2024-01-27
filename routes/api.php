@@ -19,8 +19,10 @@ use App\Http\Controllers\Cex\CexController;
 |
 */
 
-
 Route::group(['middleware' => 'auth:sanctum'], function(){
+
+    // Get collection item values and price paid
+    Route::get('collection-items/value-and-amount-spent', [CollectionItemController::class, 'valueAndAmountSpent']);
 
 // This is an extra route needed for updates to images due to put not supporting form data
     Route::post('collection-items/{collection_item}', [CollectionItemController::class, 'update']);
@@ -31,9 +33,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     // Get collection item counts
     Route::get('collection-items/count/{category_name?}', [CollectionItemController::class, 'countForCategoryNameLike']);
     Route::get('collection-items/multi-count/{category_names?}', [CollectionItemController::class, 'multiCountForCategoryNameLike']);
-
-    // Get collection item values and price paid
-    Route::get('collection-items/value-and-amount-spent', [CollectionItemController::class, 'valueAndAmountSpent']);
 
     // Get cex details
     Route::get('cex-item-details/{barcode?}', [CexController::class, 'getCexItemDetails']);

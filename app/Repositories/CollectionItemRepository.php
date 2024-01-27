@@ -104,6 +104,7 @@ class CollectionItemRepository implements CollectionItemRepositoryInterface
     // Get total value of collection items and total value of amount spent
     public function getTotalValueAndAmountSpent(): array
     {
+
           return [
               'totalValue' => CollectionItem::sum('value'),
               'totalAmountSpent' => CollectionItem::sum('price_paid')

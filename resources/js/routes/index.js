@@ -35,11 +35,8 @@ const routes = [
     {
         component: AuthenticatedLayout,
         beforeEnter: auth,
-        //if the user is logged in and they try to go to the root route, redirect them to the collection items index
-
         path: '/',
         redirect: { name: 'collection-items.index' },
-
         children:[
             {
                 path: '/collection-items',
