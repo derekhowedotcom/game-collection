@@ -1,14 +1,14 @@
 <script setup>
   import { ref, toRef, watch } from 'vue';
 
-  const props = defineProps({
+
+const props = defineProps({
   id: {
   type: String,
   required: true,
 },
   value: {
   type: [String, Number],
-  required: true,
 },
   categories: {
   type: Array,

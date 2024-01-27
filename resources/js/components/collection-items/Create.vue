@@ -58,7 +58,7 @@
                     value="collectionItem.category_id"
                     :categories="categories"
                     :label="'Category'"
-                    :field-name="'category'"
+                    :field-name="'category_id'"
                     :validation-errors="validationErrors"
                     @update:value="(newValue) => updateCollectionItem('category', newValue)"
             />
@@ -104,7 +104,7 @@
                     v-model:value="collectionItem.boxed"
                     :id="'collectionItem-boxed'"
                     :value="collectionItem.boxed.toInteger()"
-                    :categories="boxedOptions"
+                    :categories="BOXED_OPTIONS"
                     :label="'Boxed'"
                     :field-name="'boxed'"
                     :validation-errors="validationErrors"
@@ -118,7 +118,7 @@
             <Collection-item-primary-button @click="handleCexClick">Get CEX Details</Collection-item-primary-button>
         </div>
     </form>
-    <!-- TODO: Fix this -->
+    <!-- TODO: Fix move this to a component -->
     <!-- <modal @close="toggleModal" :modalActive="modalActive">
       <div class="modal-content">
             <h1>Barcode Scanner</h1>
@@ -172,10 +172,7 @@ const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
 const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems();
 const { cexItem, getCexItem } = useCex();
-const boxedOptions = [
-    { id: 1, name: 'Yes' },
-    { id: 0, name: 'No' },
-];
+import { BOXED_OPTIONS } from "../../constants/collectionConstants";
 
 // On mount actions
 onMounted(() => {

@@ -8,7 +8,6 @@ const props = defineProps({
     },
     value: {
         type: [String, Number],
-        required: true,
         default: '',
     },
     fieldName: {

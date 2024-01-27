@@ -15,125 +15,93 @@
         </div>
          <!-- Barcode -->
         <div class="mt-4">
-            <collection-item-text-input
-                    v-model:value="collectionItem.barcode"
-                    :label="'Barcode/Product ID'"
-                    :id="'collectionItem-barcode'"
-                    :field-name="'barcode'"
-                    :validation-errors="validationErrors"
-                    :other-error-message="cexErrorMessage"
-                    @update:value="(newValue) => updateCollectionItem('barcode', newValue)"
-            />
+          <collection-item-text-input
+              v-model:value="collectionItem.barcode"
+              :label="'Barcode/Product ID'"
+              :id="'collectionItem-barcode'"
+              :field-name="'barcode'"
+              :validation-errors="validationErrors"
+              :other-error-message="cexErrorMessage"
+          />
             <!-- <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button> -->
         </div>
         <!-- Title -->
         <div class="mt-4">
-            <label for="collectionItem-title" class="block font-medium text-sm text-gray-700">
-                Title
-            </label>
-            <input v-model="collectionItem.title" id="collectionItem-title" type="text"
-                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.title" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+          <collection-item-text-input
+              v-model:value="collectionItem.title"
+              :label="'Title'"
+              :id="'collectionItem-title'"
+              :value="collectionItem?.title"
+              :field-name="'title'"
+              :validation-errors="validationErrors"
+          />
         </div>
         <!-- Description -->
         <div class="mt-4">
-            <label for="collectionItem-description" class="block font-medium text-sm text-gray-700">
-                Description
-            </label>
-            <textarea v-model="collectionItem.description" id="collectionItem-description"
-                      class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.description" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+          <collection-item-text-area
+              v-model:value="collectionItem.description"
+              :label="'Description'"
+              :id="'collectionItem-description'"
+              :value="collectionItem.description"
+              :field-name="'description'"
+              :validation-errors="validationErrors"
+          />
         </div>
         <!-- Category -->
         <div class="mt-4">
-            <label for="collectionItem-category" class="block font-medium text-sm text-gray-700">
-                Category
-            </label>
-            <select v-model="collectionItem.category_id" id="collectionItem-category"
-                    class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <option value="" selected>-- Choose category --</option>
-                <option v-for="category in categories" :value="category.id" :key="category.id">
-                    {{ category.name }}
-                </option>
-            </select>
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.category_id" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+          <collection-item-select
+              v-model:value="collectionItem.category_id"
+              id="collectionItem-category"
+              value="collectionItem.category_id"
+              :categories="categories"
+              :label="'Category'"
+              :field-name="'category'"
+              :validation-errors="validationErrors"
+          />
         </div>
         <!-- Rarity -->
         <div class="mt-4">
-            <label for="collectionItem-rarity" class="block font-medium text-sm text-gray-700">
-                Rarity
-            </label>
-            <select v-model="collectionItem.rarity_id" id="collectionItem-rarity"
-                    class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <option value="" selected>-- Choose Rarity --</option>
-                <option v-for="rarity in rarities" :value="rarity.id" :key="rarity.id" >
-                    {{ rarity.name }}
-                </option>
-            </select>
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.rarity_id" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+          <collection-item-select
+              v-model:value="collectionItem.rarity_id"
+              id="collectionItem-rarity"
+              value="collectionItem.rarity_id"
+              :categories="rarities"
+              :label="'Rarity'"
+              :field-name="'rarity_id'"
+              :validation-errors="validationErrors"
+          />
         </div>
         <!-- Value -->
         <div class="mt-4">
-            <label for="collectionItem-value" class="block font-medium text-sm text-gray-700">
-                Value
-            </label>
-            <input v-model="collectionItem.value" id="collectionItem-value" type="text"
-                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.value" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+          <collection-item-text-input
+              v-model:value="collectionItem.value"
+              :label="'Value'"
+              :id="'collectionItem-value'"
+              :field-name="'value'"
+              :validation-errors="validationErrors"
+          />
         </div>
         <!-- Price Paid -->
         <div class="mt-4">
-            <label for="collectionItem-pricePiad" class="block font-medium text-sm text-gray-700">
-                Price Paid
-            </label>
-            <input v-model="collectionItem.price_paid" id="collectionItem-pricePiad" type="text"
-                   class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.price_paid" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+          <collection-item-text-input
+              v-model:value="collectionItem.price_paid"
+              :label="'Price Paid'"
+              :id="'collectionItem-pricePiad'"
+              :field-name="'price_paid'"
+              :validation-errors="validationErrors"
+          />
         </div>
         <!-- Boxed -->
         <div class="mt-4">
-            <label class="block font-medium text-sm text-gray-700">
-                Boxed
-            </label>
-            <div class="mt-2">
-                <label class="inline-flex items-center">
-                    <input type="radio" v-model="collectionItem.boxed" value="1" class="form-radio">
-                    <span class="ml-2">Yes</span>
-                </label>
-                <label class="inline-flex items-center ml-4">
-                    <input type="radio" v-model="collectionItem.boxed" value="0" class="form-radio">
-                    <span class="ml-2">No</span>
-                </label>
-            </div>
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.boxed" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+          <collection-item-radio
+              v-model:value="collectionItem.boxed"
+              :id="'collectionItem-boxed'"
+
+              :categories="BOXED_OPTIONS"
+              :label="'Boxed'"
+              :field-name="'boxed'"
+              :validation-errors="validationErrors"
+          />
         </div>
 
         <!-- Buttons -->
@@ -181,6 +149,10 @@ import useCollectionItems from "../../composables/collectionItems";
 import Swal from 'sweetalert2';
 import { getCexCategory } from "../../helpers/cexHelpers";
 import CollectionItemTextInput from "../ui/CollectionItemTextInput.vue";
+import CollectionItemTextArea from "../ui/CollectionItemTextArea.vue";
+import CollectionItemSelect from "../ui/CollectionItemSelect.vue";
+import CollectionItemRadio from "../ui/CollectionItemRadio.vue";
+import { BOXED_OPTIONS } from "../../constants/collectionConstants";
 
 const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
@@ -232,6 +204,10 @@ async function handleCexClick() {
             collectionItem.value.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
             collectionItem.value.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
             collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
+          // If we could not find a category try the search using categoryFriendlyName
+          if(collectionItem.value.category_id === null){
+            collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryFriendlyName);
+          }
             cexErrorMessage.value = null;
 
             thumbnailUrl.value = collectionItem.value.cex_image;

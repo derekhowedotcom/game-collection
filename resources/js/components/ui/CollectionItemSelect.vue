@@ -8,7 +8,6 @@ const props = defineProps({
   },
   value: {
     type: [String, Number],
-    required: true,
     default: '',
   },
   categories: {
@@ -29,8 +28,6 @@ const props = defineProps({
   },
 });
 
-
-
 const emit = defineEmits(['update:value', 'blur', 'keydown']);
 
 // Reactive reference for input value
@@ -46,7 +43,8 @@ function updateValue(newValue) {
 
 //watch for if value is changed and update the v-model value
 watch(toRef(props,'value'),  (newValue) => {
-    inputValue.value = newValue;
+  // Clear if null
+  inputValue.value = newValue === null ? '' : newValue;
 });
 </script>
 
@@ -64,4 +62,9 @@ watch(toRef(props,'value'),  (newValue) => {
       {{ category.name }}
     </option>
     </select>
+  <div class="text-red-600 mt-1">
+    <div v-for="message in validationErrors[fieldName]" :key="message">
+      {{ message }}
+    </div>
+  </div>
 </template>
