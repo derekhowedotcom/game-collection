@@ -10,7 +10,7 @@
 }
 
 .pagination .page-item {
-    @apply text-blue-600 hover:bg-blue-500 hover:text-white
+    @apply text-blue-600 hover:bg-gray-700 hover:text-white
 }
 
 .pagination .page-item.pagination-page-nav {
@@ -35,7 +35,7 @@
 }
 
 .pagination .page-item.active {
-    @apply text-white bg-blue-500
+    @apply text-white bg-gray-600
 }
 
 .pagination .page-item.active .sr-only {

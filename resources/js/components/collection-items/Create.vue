@@ -22,7 +22,6 @@
                     :field-name="'barcode'"
                     :validation-errors="validationErrors"
                     :other-error-message="cexErrorMessage"
-                    @update:value="(newValue) => updateCollectionItem('barcode', newValue)"
             />
             <!-- <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button> -->
         </div>
@@ -35,7 +34,6 @@
                 :value="collectionItem?.title"
                 :field-name="'title'"
                 :validation-errors="validationErrors"
-                @update:value="(newValue) => updateCollectionItem('title', newValue)"
             />
         </div>
         <!-- Description -->
@@ -47,7 +45,6 @@
                     :value="collectionItem.description"
                     :field-name="'description'"
                     :validation-errors="validationErrors"
-                    @update:value="(newValue) => updateCollectionItem('description', newValue)"
             />
         </div>
         <!-- Category -->
@@ -60,7 +57,6 @@
                     :label="'Category'"
                     :field-name="'category_id'"
                     :validation-errors="validationErrors"
-                    @update:value="(newValue) => updateCollectionItem('category', newValue)"
             />
         </div>
         <!-- Rarity -->
@@ -73,7 +69,6 @@
                     :label="'Rarity'"
                     :field-name="'rarity'"
                     :validation-errors="validationErrors"
-                    @update:value="(newValue) => updateCollectionItem('rarity', newValue)"
             />
         </div>
         <!-- Value -->
@@ -84,7 +79,6 @@
                     :id="'collectionItem-value'"
                     :field-name="'value'"
                     :validation-errors="validationErrors"
-                    @update:value="(newValue) => updateCollectionItem('value', newValue)"
             />
         </div>
         <!-- Price Paid -->
@@ -95,7 +89,6 @@
                     :id="'collectionItem-pricePiad'"
                     :field-name="'price_paid'"
                     :validation-errors="validationErrors"
-                    @update:value="(newValue) => updateCollectionItem('price_paid', newValue)"
             />
         </div>
         <!-- Boxed -->
@@ -108,7 +101,6 @@
                     :label="'Boxed'"
                     :field-name="'boxed'"
                     :validation-errors="validationErrors"
-                    @update:value="(newValue) => updateCollectionItem('boxed', newValue)"
             />
         </div>
         <!-- Buttons -->
