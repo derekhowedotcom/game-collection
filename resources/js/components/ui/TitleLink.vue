@@ -2,20 +2,16 @@
     <router-link class="router-link" :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }">{{ collectionItem.title }}</router-link>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
-import { useAbility } from '@casl/vue'
+import { useAbility } from '@casl/vue';
 
-export default {
-    setup(){            
-        const { can } = useAbility()
-        return {  can }
-    },
-    props: { 
-        collectionItem: Object 
-    },
-    
-}
+const { can } = useAbility();
+
+// Declare props directly within setup
+const props = defineProps({
+  collectionItem: Object,
+});
 </script>
 
 <style scoped>
