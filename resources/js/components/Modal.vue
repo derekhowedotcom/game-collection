@@ -8,26 +8,31 @@
             <slot />
             <div class="flex items-center w-full">
                 <button @click="close" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Close</button>
-            </div>    
+            </div>
         </div>
         </transition>
       </div>
     </transition>
   </template>
-  
-  <script>
-  export default {
-    props: ["modalActive"],
-    setup(props, { emit }) {
-      const close = () => {
-        emit("close");
-      };
 
-      return { close };
-    },
-  };
+<script setup>
+import { ref } from 'vue';
+
+const props = defineProps({
+  modalActive: {
+    type: Boolean,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['close']);
+
+const close = () => {
+  emit('close');
+};
 </script>
-  
+
+
 <style scoped>
 .modal-animation-enter-active,
 .modal-animation-leave-active {
@@ -51,7 +56,7 @@
     transform: scale(0.8);
 }
 .modal {
-    
+
     background-color: rgba(37, 36, 36, 0.9);
 }
 .modal-inner {
@@ -63,7 +68,7 @@ i {
     position: absolute;
     top: 15px;
     right: 15px;
-}    
+}
 i:hover {
     color: crimson;
 }

@@ -23,7 +23,11 @@
                     :validation-errors="validationErrors"
                     :other-error-message="cexErrorMessage"
             />
-            <!-- <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button> -->
+          <button @click="toggleModal" type="button"
+                  class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
+            Scan Barcode
+          </button>
+
         </div>
         <!-- Title -->
         <div class="mt-4">
@@ -111,12 +115,12 @@
         </div>
     </form>
     <!-- TODO: Fix move this to a component -->
-    <!-- <modal @close="toggleModal" :modalActive="modalActive">
+     <modal @close="toggleModal" :modalActive="modalActive">
       <div class="modal-content">
             <h1>Barcode Scanner</h1>
-            <StreamBarcodeReader @decode='onDecode' @loaded='onLoaded'></StreamBarcodeReader>
+
         </div>
-    </modal> -->
+    </modal>
 </template>
 
 <script setup>
