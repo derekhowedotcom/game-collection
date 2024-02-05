@@ -42,34 +42,31 @@ const routes = [
                 path: '/collection-items',
                 name: 'collection-items.index',
                 component: CollectionItemsIndex,
-                meta: { title: 'Collection' }
+                meta: { title: 'Collection', breadcrumb: 'Collection' }
+
             },
             {
                 path: '/collection-items/create',
                 name: 'collection-items.create',
                 component: CollectionItemsCreate,
-                meta: { title: 'Add New Collection Item' }
+                meta: { title: 'Add New Collection Item', breadcrumb: 'Add New Collection Item' }
             },
             {
                 path: '/collection-items/details/:id',
                 name: 'collection-items.details',
                 component: CollectionItemsDetails,
-                meta: { title: 'Details Collection Item' }
+                meta: { title: 'Details Collection Item', breadcrumb: 'Details Collection Item' }
             },
             {
                 path: '/collection-items/edit/:id',
                 name: 'collection-items.edit',
                 component: CollectionItemsEdit,
-                meta: { title: 'Edit Collection Item' }
+                meta: { title: 'Edit Collection Item', breadcrumb: 'Edit Collection Item' }
             },
         ]
     },
 
 ]
-
-// stop the router from always pushing to the index route when the page is refreshed
-// https://stackoverflow.com/questions/64834496/vue-router-redirecting-to-the-wrong-route-on-page-refresh
-
 
 export default createRouter ({
     history: createWebHistory(),

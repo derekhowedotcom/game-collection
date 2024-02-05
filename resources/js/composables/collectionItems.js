@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import useCollectionItemCount from "./collectionItemCounts";
 import useCollectionItemCounts from "./collectionItemCounts";
+
 
 
 export default function useCollectionItems() {
@@ -12,7 +12,7 @@ export default function useCollectionItems() {
     const validationErrors = ref({})
     const isLoading = ref(false)
     const swal = inject('$swal')
-    const { collectionItemCounts, getCollectionItemCounts } = useCollectionItemCounts({
+    const { collectionItemCounts, getCollectionItemCounts, getCollectionItemValueAndAmountSpent } = useCollectionItemCounts({
         categoryNames: 'hardware,software,other',
     })
     //get all collectionItems
@@ -68,7 +68,12 @@ export default function useCollectionItems() {
         axios.post('/api/collection-items', serializedCollectionItem)
             .then(response => {
                 getCollectionItemCounts();
-                router.push({ name: 'collection-items.index' })
+                getCollectionItemValueAndAmountSpent();
+                //redirect to the index page
+                //router.push({ name: 'collection-items.index' })
+
+                // redirect to the details page of the item just created
+                router.push({ name: 'collection-items.details', params: { id: response.data.data.id } })
                 swal({
                     icon: 'success',
                     title: 'CollectionItem saved successfully'
@@ -110,7 +115,10 @@ export default function useCollectionItems() {
 
         axios.post('/api/collection-items/' + collectionItem.id, serializedCollectionItem)
             .then(response => {
-                router.push({ name: 'collection-items.index' })
+                //router.push({ name: 'collection-items.index' })
+
+                // redirect to the details page of the item just updated
+                router.push({ name: 'collection-items.details', params: { id: response.data.data.id } })
                 swal({
                     icon: 'success',
                     title: 'CollectionItem saved successfully'

@@ -62,7 +62,8 @@ const close = () => {
 .modal-inner {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       background-color: #fff;
-      padding: 64px 16px;
+      padding: 15px 15px;
+      border-radius: 15px;
 }
 i {
     position: absolute;

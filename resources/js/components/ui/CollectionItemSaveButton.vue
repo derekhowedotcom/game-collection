@@ -7,6 +7,8 @@ defineProps({
 });
 
 defineEmits(['click']);
+
+import { SVG_TICK } from "../../constants/svgConstants";
 </script>
 <template>
   <button
@@ -18,10 +20,7 @@ defineEmits(['click']);
          class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
     <span v-if="isLoading">Processing...</span>
     <span v-else>
-      <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-           xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-      </svg>
+      <span v-html="SVG_TICK"></span>
       <slot></slot>
     </span>
   </button>

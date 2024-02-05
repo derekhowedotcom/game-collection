@@ -14,21 +14,25 @@
             </div>
         </div>
         <!-- Barcode -->
-        <div class="mt-4">
-            <collection-item-text-input
-                    v-model:value="collectionItem.barcode"
-                    :label="'Barcode/Product ID'"
-                    :id="'collectionItem-barcode'"
-                    :field-name="'barcode'"
-                    :validation-errors="validationErrors"
-                    :other-error-message="cexErrorMessage"
-            />
-          <button @click="toggleModal" type="button"
-                  class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
-            Scan Barcode
-          </button>
-
-        </div>
+      <div class="mt-4">
+        <collection-item-text-input
+            v-model:value="collectionItem.barcode"
+            :label="'Barcode/Product ID'"
+            :id="'collectionItem-barcode'"
+            :field-name="'barcode'"
+            :validation-errors="validationErrors"
+            :other-error-message="cexErrorMessage"
+        >
+          <template #afterInput>
+            <button @click="toggleModal" title="Scan Barcode" type="button"
+                    class="inline-flex content-center items-center px-3 py-2 bg-transparent text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
+                  <span class="w-8">
+                  <span v-html="SVG_BARCODE"></span>
+                  </span>
+            </button>
+          </template>
+        </collection-item-text-input>
+      </div>
         <!-- Title -->
         <div class="mt-4">
             <collection-item-text-input
@@ -114,11 +118,10 @@
             <Collection-item-primary-button @click="handleCexClick">Get CEX Details</Collection-item-primary-button>
         </div>
     </form>
-    <!-- TODO: Fix move this to a component -->
      <modal @close="toggleModal" :modalActive="modalActive">
       <div class="modal-content">
-            <h1>Barcode Scanner</h1>
-
+            <h2 class="font-bold text-xl text-gray-800 leading-tight text-center">Scan Barcode</h2>
+            <barcode-scanner @barcodeFound="barcodeFoundHandler" :startBarcodeScanner="modalActive" ></barcode-scanner>
         </div>
     </modal>
 </template>
@@ -139,8 +142,9 @@ import CollectionItemRadio from "../ui/CollectionItemRadio.vue";
 import CollectionItemCancelButton from "../ui/CollectionItemCancelButton.vue";
 import CollectionItemSaveButton from "../ui/CollectionItemSaveButton.vue";
 import CollectionItemPrimaryButton from "../ui/CollectionItemPrimaryButton.vue";
-
-
+import { BOXED_OPTIONS } from "../../constants/collectionConstants";
+import BarcodeScanner from "../ui/BarcodeScanner.vue";
+import { SVG_BARCODE } from "../../constants/svgConstants";
 
 // Declare reactive state and functions
 const collectionItem = ref({
@@ -163,12 +167,13 @@ const toggleModal = () => {
     modalActive.value = !modalActive.value;
 };
 
+
 // Extract composables
 const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
 const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems();
 const { cexItem, getCexItem } = useCex();
-import { BOXED_OPTIONS } from "../../constants/collectionConstants";
+
 
 // On mount actions
 onMounted(() => {
@@ -251,4 +256,26 @@ async function handleCexClick() {
     }
 }
 
+function barcodeFoundHandler(code) {
+  // Use the scanned barcode data to update the collection item
+  collectionItem.value.barcode = code.code;
+  // Close the modal
+  toggleModal();
+
+  // Show sweet alert to let user know the barcode was scanned
+  Swal.fire({
+    title: 'Barcode Scanned',
+    text: `Barcode: ${code.code}`,
+    icon: 'success',
+    showConfirmButton: false,
+    timer: 2000,
+  });
+}
+
 </script>
+
+<style scoped>
+  .modal-content{
+    padding:10px
+  }
+</style>

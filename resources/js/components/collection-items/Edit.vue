@@ -22,8 +22,16 @@
               :field-name="'barcode'"
               :validation-errors="validationErrors"
               :other-error-message="cexErrorMessage"
-          />
-            <!-- <button @click="toggleModal" type="button" class="inline-flex content-center items-center mt-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">Scan Barcode</button> -->
+          >
+            <template #afterInput>
+              <button @click="toggleModal" title="Scan Barcode" type="button"
+                      class="inline-flex content-center items-center px-3 py-2 bg-transparent text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
+                  <span class="w-8">
+                    <span v-html="SVG_BARCODE"></span>
+                  </span>
+              </button>
+            </template>
+          </collection-item-text-input>
         </div>
         <!-- Title -->
         <div class="mt-4">
@@ -106,30 +114,19 @@
 
         <!-- Buttons -->
         <div class="mt-4">
-
-            <!-- <div class="mt-4 mb-4 w-96">
-                    <p @click="clickme">here</p>
-                    <StreamBarcodeReader
-                @decode="onDecode"
-                @loaded="onLoaded"
-
-            ></StreamBarcodeReader>
-             Barcode - {{ decodeText }}
-
-            </div> -->
             <button @click="$router.push({ name: 'collection-items.index' })" type="button"
                     class="inline-flex content-center items-center mt-3 px-3 py-2 bg-red-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
                 Cancel
             </button>
             <button :disabled="isLoading"
                     class="inline-flex items-center ml-3 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded ml-2 disabled:opacity-75 disabled:cursor-not-allowed">
-                <div v-show="isLoading"
-                     class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
-                <span v-if="isLoading">Processing...</span>
-                <span v-else><svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                  xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round"
-                                                                           stroke-linejoin="round" stroke-width="2"
-                                                                           d="M5 13l4 4L19 7"></path></svg>Save</span>
+              <div v-show="isLoading"
+                   class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
+              <span v-if="isLoading">Processing...</span>
+              <span v-else>
+                    <span v-html="SVG_TICK"></span>
+                    Save
+                  </span>
             </button>
             <button @click="handleCexClick" type="button"
                     class="inline-flex content-center items-center mt-3 ml-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
@@ -137,6 +134,12 @@
             </button>
         </div>
     </form>
+    <modal @close="toggleModal" :modalActive="modalActive">
+      <div class="modal-content">
+        <h2 class="font-bold text-xl text-gray-800 leading-tight text-center">Scan Barcode</h2>
+        <barcode-scanner @barcodeFound="barcodeFoundHandler" :startBarcodeScanner="modalActive" ></barcode-scanner>
+      </div>
+    </modal>
 </template>
 
 <script setup>
@@ -153,6 +156,9 @@ import CollectionItemTextArea from "../ui/CollectionItemTextArea.vue";
 import CollectionItemSelect from "../ui/CollectionItemSelect.vue";
 import CollectionItemRadio from "../ui/CollectionItemRadio.vue";
 import { BOXED_OPTIONS } from "../../constants/collectionConstants";
+import BarcodeScanner from "../ui/BarcodeScanner.vue";
+import Modal from "../Modal.vue";
+import {SVG_BARCODE, SVG_TICK} from "../../constants/svgConstants";
 
 const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
@@ -166,6 +172,10 @@ const {
 const { cexItem, getCexItem } = useCex();
 const cexErrorMessage = ref(null);
 const thumbnailUrl = ref(false);
+const modalActive = ref(false);
+const toggleModal = () => {
+  modalActive.value = !modalActive.value;
+};
 
 const route = useRoute()
 onMounted(() => {
@@ -245,6 +255,22 @@ function onFileChange(target) {
         thumbnailUrl.value = URL.createObjectURL(target);
         collectionItem.value.cex_image = '';
     }
+}
+
+function barcodeFoundHandler(code) {
+  // Use the scanned barcode data to update the collection item
+  collectionItem.value.barcode = code.code;
+  // Close the modal
+  toggleModal();
+
+  // Show sweet alert to let user know the barcode was scanned
+  Swal.fire({
+    title: 'Barcode Scanned',
+    text: `Barcode: ${code.code}`,
+    icon: 'success',
+    showConfirmButton: false,
+    timer: 2000,
+  });
 }
 
 </script>
