@@ -13,10 +13,9 @@
             <div class="block lg:hidden">
                 <button @click="toggleNav" class="flex items-center px-3 py-2 border rounded text-grey-900 border-grey-900 hover:text-grey hover:border-grey">
                   <span v-html="SVG_MOBILE_MENU"></span>
-
                 </button>
             </div>
-            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto sm:flex" :class="showMenu ? '' : 'hidden'">
+            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto lg:flex" :class="showMenu ? '' : 'hidden'">
                 <div class="text-sm lg:flex-grow mt-9">
                     <router-link :to="{ name: 'collection-items.index' }" active-class="font-bold" class="block mt-4 lg:inline-block lg:mt-0 lg:mr-5 px-1 pt-1 text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out text-center">
                         Collection
@@ -25,9 +24,8 @@
                         New Collection Item
                     </router-link>
                     <a href="#" @click="logout" active-class="font-bold" class="lg:hidden block mt-4 lg:inline-block lg:mt-0 px-1 pt-1  text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out text-center">Logout</a>
-
                 </div>
-                <div class="flex items-center mt-5 hidden sm:flex">
+                <div class="flex items-center mt-5 hidden lg:flex">
                     <div>
                         <div>Hi, {{ user.name }}</div>
                         <div class="text-sm text-gray-500">{{ user.email }}</div>

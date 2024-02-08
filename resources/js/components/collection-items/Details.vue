@@ -1,8 +1,22 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
     <!-- Image -->
-    <div class="mb-4">
+    <div class="mb-4 flex items-center justify-center md:justify-start">
         <img width="300" :src="`/storage/images/collection-items/${ collectionItem.thumbnail }`" alt="" />
     </div>
+    <!-- Retailers -->
+  <div class="mb-4 flex items-center justify-center md:justify-start">
+    <a :href="`https://www.ebay.co.uk/sch/i.html?_nkw=${ collectionItem.barcode || collectionItem.title }`"
+       :title="`eBay - ${ collectionItem.title }`" target="_blank">
+      <span class="block w-20 mr-4" v-html="SVG_EBAY_LOGO"></span>
+    </a>
+    <a v-if="collectionItem.barcode" :href="`https://uk.webuy.com/product-detail/?id=${ collectionItem.barcode }`"
+       :title="`Cex - ${ collectionItem.title }`" target="_blank">
+      <span class="block w-20" v-html="SVG_CEX_LOGO"></span>
+    </a>
+   <a v-else :href="`https://uk.webuy.com/search?stext=${ collectionItem.title }`" target="_blank">
+      <span class="block w-20" v-html="SVG_CEX_LOGO"></span>
+    </a>
+  </div>
     <!-- Barcode -->
     <div v-if="collectionItem.barcode" class="mb-4">
         <h1><span class="block font-medium text-sm text-gray-700">Barcode:</span></h1>
@@ -75,7 +89,7 @@ import titleEditComponent from '../ui/TitleEdit.vue';
 import { formatDate } from '../../helpers/dateHelpers';
 import { basename } from '../../helpers/fileHelpers';
 import { formatCurrency } from '../../helpers/numberHelpers'
-import {SVG_DELETE, SVG_EDIT} from "../../constants/svgConstants";
+import {SVG_DELETE, SVG_EDIT, SVG_EBAY_LOGO, SVG_CEX_LOGO} from "../../constants/svgConstants";
 
 // Extract composables
 const { categories, getCategories } = useCategories();

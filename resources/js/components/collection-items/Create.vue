@@ -1,18 +1,22 @@
 <template>
     <form @submit.prevent="storeCollectionItem(collectionItem)">
         <!-- Thumbnail -->
-        <div class="mt-1">
-            <label for="thumbnail" class="block font-bold text-sm text-gray-700">
-                Thumbnail
-            </label>
-            <img :src="`${thumbnailUrl}`" alt="Placeholder Image" class="mt-2 mb-3 h-auto max-w-xs rounded-lg"/>
-            <input @change="onFileChange($event.target.files[0])" type="file" id="thumbnail" />
-            <div class="text-red-600 mt-1">
-                <div v-for="message in validationErrors?.thumbnail" :key="message">
-                    {{ message }}
-                </div>
-            </div>
+      <div class="mt-1">
+        <div class="flex items-center justify-center md:justify-start">
+        <label for="thumbnail" class="block font-bold text-sm text-gray-700">
+          Thumbnail
+        </label>
+          </div>
+        <div class="mb-2 flex items-center justify-center md:justify-start">
+          <img :src="`${thumbnailUrl}`" alt="Placeholder Image" class="mt-2 mb-3 h-auto max-w-xs rounded-lg"/>
         </div>
+        <input @change="onFileChange($event.target.files[0])" type="file" id="thumbnail"/>
+        <div class="text-red-600 mt-1">
+          <div v-for="message in validationErrors?.thumbnail" :key="message">
+            {{ message }}
+          </div>
+        </div>
+      </div>
         <!-- Barcode -->
       <div class="mt-4">
         <collection-item-text-input
