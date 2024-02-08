@@ -55,7 +55,7 @@ const routes = [
                 path: '/collection-items/details/:id',
                 name: 'collection-items.details',
                 component: CollectionItemsDetails,
-                meta: { title: 'Details Collection Item', breadcrumb: 'Details Collection Item' }
+                meta: { title: 'Collection Item Details', breadcrumb: 'Details Collection Item' }
             },
             {
                 path: '/collection-items/edit/:id',

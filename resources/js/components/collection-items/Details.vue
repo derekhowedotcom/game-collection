@@ -23,10 +23,17 @@
         <p>{{ collectionItem.barcode }}</p>
     </div>
     <!-- Title -->
-    <div class="mb-4">
-        <h1><span class="block font-medium text-sm text-gray-700">Title:</span></h1>
-        <p><titleEditComponent :collectionItem="collectionItem" /></p>
-    </div>
+  <div class="mb-4">
+    <h1><span class="block font-medium text-sm text-gray-700">Title:</span></h1>
+    <p>
+      <title-edit-component @quick-edit-save="quickEditSaveHandler"
+                            @quick-edit-esc-key="resetTitle"
+                            :collectionItem="collectionItem"
+                            :canEdit="can('collection-items.update')"
+                            :isLoading="isLoading"
+      />
+    </p>
+  </div>
     <!-- Date added  -->
     <div class="mb-4">
         <h1><span class="block font-medium text-sm text-gray-700">Date Added:</span></h1>
@@ -78,7 +85,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
@@ -93,7 +99,7 @@ import {SVG_DELETE, SVG_EDIT, SVG_EBAY_LOGO, SVG_CEX_LOGO} from "../../constants
 
 // Extract composables
 const { categories, getCategories } = useCategories();
-const { collectionItem, getCollectionItem, deleteCollectionItem } = useCollectionItems();
+const { collectionItem, getCollectionItem, deleteCollectionItem, updateCollectionItem, isLoading } = useCollectionItems();
 
 // Get route and abilities
 const route = useRoute();
@@ -109,4 +115,13 @@ onMounted(() => {
 const boxedText = computed(() => {
     return collectionItem.value.boxed === 1 ? 'Yes' : 'No';
 });
+
+const quickEditSaveHandler = () => {
+    // update the collection item
+    updateCollectionItem(collectionItem.value, true);
+};
+
+const resetTitle = (title) => {
+    collectionItem.value.title = title;
+};
 </script>

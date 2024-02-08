@@ -2,10 +2,20 @@ export const SVG_TICK = `<svg class="w-6 h-6 inline-block" fill="none" stroke="c
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
 </svg>`;
 
+export const SVG_TICK_MED = `<svg class="w-10 h-10 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+</svg>`;
+
 export const SVG_BARCODE = ` <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path
                       d="m0 448v-384h18v384zm26.857-.273v-383.727h9.143v383.727zm27.143 0v-383.727h8.857v383.727zm44.857 0v-383.727h8.857v383.727zm36 0v-383.727h17.714v383.727zm44.857 0v-383.727h8.857v383.727zm18 0v-383.727h8.857v383.727zm18 0v-383.727h8.857v383.727zm35.715 0v-383.727h18v383.727zm44.857 0v-383.727h18v383.727zm35.999 0v-383.727h18.001v383.727zm36.001 0v-383.727h18.001v383.727zm26.857 0v-383.727h18v383.727zm45.143 0v-383.727h26.857v383.727zm35.714 0v-383.727h9.143v383.727zm18 .273v-384h18v384z"/></svg>`;
 
 export const SVG_EDIT = `<svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+           xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+      </svg>`;
+
+export const SVG_EDIT_MED = `<svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"
            xmlns="http://www.w3.org/2000/svg">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>

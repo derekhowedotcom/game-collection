@@ -40,21 +40,21 @@
         <!-- Page Heading -->
         <header class="bg-white shadow text-center">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h2 class="font-bold text-xl text-gray-800 leading-tight">
+                <h2 class="mb-2 font-bold text-xl text-gray-800 leading-tight">
                     {{ currentPageTitle }}
-                    <h3 class="font-semibold text-xs text-gray-800 leading-tight">
-                        Hardware: {{collectionItemCounts?.hardware}}</h3>
-                    <h3 class="font-semibold text-xs text-gray-800 leading-tight">
-                        Software: {{collectionItemCounts?.software}}</h3>
-                    <h3 class="font-semibold text-xs text-gray-800 leading-tight">
-                        Other: {{collectionItemCounts?.other}}</h3>
-                    <h3 class="font-bold text-xs text-gray-800 leading-tight">
-                        Total collection items: {{collectionItemCounts?.total}}</h3>
-                  <h3 class="font-bold text-xs text-gray-800 leading-tight">
-                    Total Value: &pound;{{ formatCurrency(collectionItemValueAndAmountSpent?.totalValue) }}</h3>
-                  <h3 class="font-bold text-xs text-gray-800 leading-tight">
-                    Total Spent: &pound;{{ formatCurrency(collectionItemValueAndAmountSpent?.totalAmountSpent) }}</h3>
                 </h2>
+                <h3 class="font-semibold text-xs text-gray-800 leading-tight">
+                    Hardware: {{collectionItemCounts?.hardware}}</h3>
+                <h3 class="font-semibold text-xs text-gray-800 leading-tight">
+                    Software: {{collectionItemCounts?.software}}</h3>
+                <h3 class="font-semibold text-xs text-gray-800 leading-tight">
+                    Other: {{collectionItemCounts?.other}}</h3>
+                <h3 class="font-bold text-xs text-gray-800 leading-tight">
+                    Total collection items: {{collectionItemCounts?.total}}</h3>
+              <h3 class="font-bold text-xs text-gray-800 leading-tight">
+                Total Value: &pound;{{ formatCurrency(collectionItemValueAndAmountSpent?.totalValue) }}</h3>
+              <h3 class="font-bold text-xs text-gray-800 leading-tight">
+                Total Spent: &pound;{{ formatCurrency(collectionItemValueAndAmountSpent?.totalAmountSpent) }}</h3>
             </div>
         </header>
 

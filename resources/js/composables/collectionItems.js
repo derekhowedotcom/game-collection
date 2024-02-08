@@ -92,11 +92,11 @@ export default function useCollectionItems() {
     }
 
     // Update a collectionItem
-    const updateCollectionItem = async (collectionItem) => {
+    const updateCollectionItem = async (collectionItem, qucikEdit) => {
         console.log(collectionItem);
         if(isLoading.value) return;
 
-       isLoading.value =true
+       isLoading.value = true
        validationErrors.value = {}
 
        let serializedCollectionItem = new FormData()
@@ -116,13 +116,14 @@ export default function useCollectionItems() {
         axios.post('/api/collection-items/' + collectionItem.id, serializedCollectionItem)
             .then(response => {
                 //router.push({ name: 'collection-items.index' })
-
-                // redirect to the details page of the item just updated
-                router.push({ name: 'collection-items.details', params: { id: response.data.data.id } })
-                swal({
-                    icon: 'success',
-                    title: 'CollectionItem saved successfully'
-                })
+                if(!qucikEdit){
+                    // redirect to the details page of the item just updated
+                    router.push({ name: 'collection-items.details', params: { id: response.data.data.id } })
+                    swal({
+                        icon: 'success',
+                        title: 'CollectionItem saved successfully'
+                    })
+                }
                 collectionItems.value = response.data
             })
             .catch(error => {

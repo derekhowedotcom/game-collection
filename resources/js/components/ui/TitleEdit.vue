@@ -1,99 +1,84 @@
 <template>
-    <!-- {{ collectionItem.title }} -->
-    <!-- <router-link class="router-link" :to="{ name: 'collection-items.details', params: { id: this.$route.params.id } }">{{ collectionItem.title }}</router-link>  -->
-
-
-  <div v-for="field in fields" :key="field.id" class="editable-field">
-    <template v-if="editedFieldId === field.id">
-      <input class="mr-1" type="text" v-model="collectionItem.title" :ref="`field${field.id}`"/>
-      <a href="#" v-if="can('collection-items.delete')" @click.prevent="toggleEdit()"
-         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded ml-2">
-        <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-             xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        </a>
-    </template>
-    <template v-else>
-        <span class="mr-1">
-          {{ collectionItem.title }}
+  <div class="editable-field">
+      <input
+          class="mr-1"
+          type="text"
+          v-model="collectionItem.title"
+          ref="field"
+          v-if="editedField"
+          @keydown.esc="reset"
+          @keydown.enter="toggleEdit"
+      />
+      <a
+          href="#"
+          @click.prevent="toggleEdit()"
+          class="text-green-700 font-bold py-2 px-3 rounded"
+          v-if="editedField"
+      >
+        <span v-html="SVG_TICK_MED"></span>
+      </a>
+      <span v-if="!editedField" class="mr-1">{{ collectionItem.title }}</span>
+      <a
+          href="#"
+          @click.prevent="toggleEdit()"
+          class="text-blue-700 font-bold py-2 px-2 rounded"
+          v-if="!editedField && canEdit"
+      >
+        <div v-if="isLoading"
+             class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
+        <span v-else>
+          <span v-html="SVG_EDIT_MED"></span>
         </span>
-      <a href="#" v-if="can('collection-items.delete')" @click.prevent="toggleEdit(field.id)"
-         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">
-        <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-             xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-        </svg>
-        </a>
-    </template>
+      </a>
   </div>
-
-
 </template>
 
-<script>
-import { ref } from 'vue';
-import { useAbility } from '@casl/vue'
+<script setup>
+import {ref, defineProps, nextTick, computed} from 'vue';
+import { useAbility } from '@casl/vue';
+import { SVG_EDIT_MED, SVG_TICK_MED } from "../../constants/svgConstants";
 
-export default {
+const props = defineProps({
+  collectionItem: Object,
+  canEdit: Boolean,
+  isLoading: Boolean,
+});
 
-    setup(){
-        const { can } = useAbility()
-        return {  can }
-    },
-    props: {
-        collectionItem: Object
-    },
+const editedField = ref(false);
+const field = ref(null);
+const emit = defineEmits(['quick-edit-save', 'quick-edit-esc-key']);
+const defaultTitle = ref('');
 
-
-    data: function () {
-        return {
-        editedFieldId: null,
-        fields: [
-            {
-            id: 1,
-            value: null,
-            }
-        ],
-        };
-    },
-    methods: {
-        toggleEdit(id) {
-            if (id) {
-                this.editedFieldId = id;
-                this.$nextTick(() => {
-                    if (this.$refs["field" + id]) {
-                        this.$refs["field" + id][0].focus();
-                    }
-                });
-            } else {
-                this.editedFieldId = null;
-                this.doSave()
-            }
-
-
-        },
-        doSave(){
-            console.log('save here')
-        }
+// function to reset the title on escape key or blur
+const reset = (event) => {
+    if (event.key === 'Escape') {
+      editedField.value = false;
+      // Reset the title
+      emit('quick-edit-esc-key', defaultTitle.value);
     }
+};
 
-}
+const toggleEdit = async () => {
+  if (editedField.value) {
+    editedField.value = false;
+    await doSave();
+  } else {
+    editedField.value = true;
+    // Focus the input field on next tick once it's shown
+    await nextTick(() => {
+      field.value.focus();
+    });
+    // Save the default title
+   defaultTitle.value = props.collectionItem.title;
+  }
+};
+
+const doSave = () => {
+  emit('quick-edit-save');
+};
 </script>
 
 <style scoped>
-.router-link:hover {
-    color: rgb(37 99 235)
-}
-
-
-
-
-
-.editable-field {
-  margin: 10px 0;
-}
 .editable-field input,
 .editable-field button {
   border: 1px solid #4c4c4c;
