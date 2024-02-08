@@ -34,12 +34,12 @@
                             </div>
                             <div class="select-none">
                                 <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'title',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'title',
-                                }">&uarr;</span>
-                                <span :class="{
                                   'text-blue-600': orderDirection === 'desc' && orderColumn === 'title',
                                   'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'title',
+                                }">&uarr;</span>
+                                <span :class="{
+                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'title',
+                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'title',
                                 }">&darr;</span>
                             </div>
                         </div>
@@ -103,7 +103,7 @@ const search_title = ref('');
 const search_description = ref('');
 const search_global = ref('');
 const orderColumn = ref('title');
-const orderDirection = ref('desc');
+const orderDirection = ref('asc');
 
 const { collectionItems, getCollectionItems, deleteCollectionItem } = useCollectionItems();
 const { categories, getCategories } = useCategories();
