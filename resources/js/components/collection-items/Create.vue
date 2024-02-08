@@ -149,6 +149,9 @@ import CollectionItemPrimaryButton from "../ui/CollectionItemPrimaryButton.vue";
 import { BOXED_OPTIONS } from "../../constants/collectionConstants";
 import BarcodeScanner from "../ui/BarcodeScanner.vue";
 import { SVG_BARCODE } from "../../constants/svgConstants";
+import {useAbility} from "@casl/vue";
+import {useRoute, useRouter} from "vue-router";
+
 
 // Declare reactive state and functions
 const collectionItem = ref({
@@ -171,16 +174,20 @@ const toggleModal = () => {
     modalActive.value = !modalActive.value;
 };
 
-
-// Extract composables
 const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
 const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems();
 const { cexItem, getCexItem, isLoading: cexIsLoading } = useCex();
-
+const { can } = useAbility();
+const router = useRouter()
 
 // On mount actions
 onMounted(() => {
+  // Redirect if user does not have permission to be here
+  if(!can('collection-items.create')){
+    router.push({ name: 'collection-items.index' });
+  }
+
     getCategories();
     getRarities();
     collectionItem.value = {

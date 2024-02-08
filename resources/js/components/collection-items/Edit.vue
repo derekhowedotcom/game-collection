@@ -129,7 +129,7 @@
 
 <script setup>
 import { onMounted, reactive, ref, computed, watch } from "vue";
-import { useRoute } from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import useCex from '../../composables/cex';
 import useCategories from "../../composables/categories";
 import useRarities from '../../composables/rarities';
@@ -147,6 +147,7 @@ import {SVG_BARCODE, SVG_TICK} from "../../constants/svgConstants";
 import CollectionItemCancelButton from "../ui/CollectionItemCancelButton.vue";
 import CollectionItemSaveButton from "../ui/CollectionItemSaveButton.vue";
 import CollectionItemPrimaryButton from "../ui/CollectionItemPrimaryButton.vue";
+import {useAbility} from "@casl/vue";
 
 const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
@@ -164,9 +165,15 @@ const modalActive = ref(false);
 const toggleModal = () => {
   modalActive.value = !modalActive.value;
 };
+const route = useRoute();
+const router = useRouter()
+const { can } = useAbility();
 
-const route = useRoute()
 onMounted(() => {
+  // If the user does not have the ability to update collection items redirect them to the index page
+  if(!can('collection-items.update')){
+    router.push({ name: 'collection-items.index' });
+  }
     getCollectionItem(route.params.id)
     getCategories()
     getRarities()
@@ -260,5 +267,7 @@ function barcodeFoundHandler(code) {
     timer: 2000,
   });
 }
+
+
 
 </script>
