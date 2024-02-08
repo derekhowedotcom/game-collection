@@ -34,8 +34,7 @@
 </template>
 
 <script setup>
-import {ref, defineProps, nextTick, computed} from 'vue';
-import { useAbility } from '@casl/vue';
+import { ref, defineProps, nextTick } from 'vue';
 import { SVG_EDIT_MED, SVG_TICK_MED } from "../../constants/svgConstants";
 
 const props = defineProps({
@@ -49,7 +48,7 @@ const field = ref(null);
 const emit = defineEmits(['quick-edit-save', 'quick-edit-esc-key']);
 const defaultTitle = ref('');
 
-// function to reset the title on escape key or blur
+// function to reset the title on escape key
 const reset = (event) => {
     if (event.key === 'Escape') {
       editedField.value = false;
