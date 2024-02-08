@@ -115,7 +115,7 @@
         <div class="mt-4">
             <Collection-item-cancel-button @click="$router.push({ name: 'collection-items.index' })">Cancel</Collection-item-cancel-button>
             <Collection-item-save-button :is-loading="isLoading">Save</Collection-item-save-button>
-            <Collection-item-primary-button @click="handleCexClick">Get CEX Details</Collection-item-primary-button>
+            <Collection-item-primary-button :is-loading="cexIsLoading" @click="handleCexClick">Get CEX Details</Collection-item-primary-button>
         </div>
     </form>
      <modal @close="toggleModal" :modalActive="modalActive">
@@ -172,7 +172,7 @@ const toggleModal = () => {
 const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
 const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems();
-const { cexItem, getCexItem } = useCex();
+const { cexItem, getCexItem, isLoading: cexIsLoading } = useCex();
 
 
 // On mount actions

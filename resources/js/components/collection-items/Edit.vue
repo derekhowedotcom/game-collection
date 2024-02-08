@@ -114,24 +114,9 @@
 
         <!-- Buttons -->
         <div class="mt-4">
-            <button @click="$router.push({ name: 'collection-items.index' })" type="button"
-                    class="inline-flex content-center items-center mt-3 px-3 py-2 bg-red-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
-                Cancel
-            </button>
-            <button :disabled="isLoading"
-                    class="inline-flex items-center ml-3 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded ml-2 disabled:opacity-75 disabled:cursor-not-allowed">
-              <div v-show="isLoading"
-                   class="inline-block animate-spin w-4 h-4 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
-              <span v-if="isLoading">Processing...</span>
-              <span v-else>
-                    <span v-html="SVG_TICK"></span>
-                    Save
-                  </span>
-            </button>
-            <button @click="handleCexClick" type="button"
-                    class="inline-flex content-center items-center mt-3 ml-3 px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-75 disabled:cursor-not-allowed">
-                Get CEX Details
-            </button>
+          <Collection-item-cancel-button @click="$router.push({ name: 'collection-items.index' })">Cancel</Collection-item-cancel-button>
+          <Collection-item-save-button :is-loading="isLoading">Save</Collection-item-save-button>
+          <Collection-item-primary-button :is-loading="cexIsLoading" @click="handleCexClick">Get CEX Details</Collection-item-primary-button>
         </div>
     </form>
     <modal @close="toggleModal" :modalActive="modalActive">
@@ -159,6 +144,9 @@ import { BOXED_OPTIONS } from "../../constants/collectionConstants";
 import BarcodeScanner from "../ui/BarcodeScanner.vue";
 import Modal from "../Modal.vue";
 import {SVG_BARCODE, SVG_TICK} from "../../constants/svgConstants";
+import CollectionItemCancelButton from "../ui/CollectionItemCancelButton.vue";
+import CollectionItemSaveButton from "../ui/CollectionItemSaveButton.vue";
+import CollectionItemPrimaryButton from "../ui/CollectionItemPrimaryButton.vue";
 
 const { categories, getCategories } = useCategories();
 const { rarities, getRarities } = useRarities();
@@ -169,7 +157,7 @@ const {
     validationErrors,
     isLoading
 } = useCollectionItems();
-const { cexItem, getCexItem } = useCex();
+const { cexItem, getCexItem, isLoading: cexIsLoading } = useCex();
 const cexErrorMessage = ref(null);
 const thumbnailUrl = ref(false);
 const modalActive = ref(false);
