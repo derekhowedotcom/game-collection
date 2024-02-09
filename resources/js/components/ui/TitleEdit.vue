@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, nextTick } from 'vue';
+import { ref, nextTick } from 'vue';
 import { SVG_EDIT_MED, SVG_TICK_MED } from "../../constants/svgConstants";
 
 const props = defineProps({

@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import {ref, onMounted, onUnmounted, defineProps, defineEmits, watch} from 'vue';
+import {ref, onMounted, onUnmounted, watch} from 'vue';
 import Quagga from 'quagga';
 
 const scannerActive = ref(false);

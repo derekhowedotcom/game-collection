@@ -18,7 +18,10 @@
                     </option>
                 </select>
             </div>
-            <table class="min-w-full divide-y divide-gray-200 border mb-4" v-if="collectionItems.data && collectionItems.data.length > 0">
+          <div v-if="isCollectionItemsLoading" class="flex items-center justify-center mt-10 mb-10">
+            <div class="inline-block content-center animate-spin w-20 h-20 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
+          </div>
+            <table class="min-w-full divide-y divide-gray-200 border mb-4" v-if="collectionItems.data && collectionItems.data.length > 0 && !isCollectionItemsLoading">
                 <thead>
                 <tr>
                     <th class="px-6 py-3 bg-gray-50 text-left">
@@ -58,8 +61,8 @@
                             :src="`/storage/images/collection-items/small/${collectionItem.thumbnail}`" width="50"
                             alt=""/></router-link>
                         <router-link v-else
-                                     :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }"><img
-                            src="/storage/images/collection-items/small/image-placeholder.jpg" width="50" alt=""/>
+                                     :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }">
+                          <img :src="`/storage/images/collection-items/image-placeholder.jpg`" width="50" alt=""/>
                         </router-link>
 
                     </td>
@@ -72,7 +75,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div v-else class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+            <div v-else-if="!isCollectionItemsLoading" class="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="flex justify-center items-center">
                     <div class="text-gray-500">No collection items found.</div>
                 </div>
@@ -105,7 +108,7 @@ const search_global = ref('');
 const orderColumn = ref('title');
 const orderDirection = ref('asc');
 
-const { collectionItems, getCollectionItems, deleteCollectionItem } = useCollectionItems();
+const { collectionItems, getCollectionItems, deleteCollectionItem, isLoading: isCollectionItemsLoading } = useCollectionItems();
 const { categories, getCategories } = useCategories();
 const { can } = useAbility();
 

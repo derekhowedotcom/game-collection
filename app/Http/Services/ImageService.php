@@ -22,7 +22,10 @@ class ImageService
             $filename = $this->createImageName($request);
 
             // Get the path to store the image
-            $path = storage_path().'/app/public/images/collection-items/' . $filename;
+            //$path = storage_path().'/app/public/images/collection-items/' . $filename;
+
+            // Get the path to store the image in the public folder
+            $path = public_path().'/storage/images/collection-items/' . $filename;
 
             // Save the image
             Image::make($request->thumbnail->getRealPath())->resize(300, null, function ($constraint) {
@@ -52,10 +55,14 @@ class ImageService
     public function saveSmallImage($filename): void
     {
         // Get the original image path
-        $path = storage_path().'/app/public/images/collection-items/' . $filename;
+//        $path = storage_path().'/app/public/images/collection-items/' . $filename;
+
+        $path = public_path().'/storage/images/collection-items/' . $filename;
 
         // Get the path to store the small image
-        $thumbnailPath = storage_path().'/app/public/images/collection-items/small/' . $filename;
+        //$thumbnailPath = storage_path().'/app/public/images/collection-items/small/' . $filename;
+
+        $thumbnailPath = public_path().'/storage/images/collection-items/small/' . $filename;
 
         // Resize the image to a width of 300 and constrain aspect ratio (auto height)
         Image::make($path)->resize(100, null, function ($constraint) {
@@ -73,13 +80,15 @@ class ImageService
     {
         // Delete the image if there is a filename
         if ($filename) {
-            $path = storage_path() . '/app/public/images/collection-items/' . $filename;
+//            $path = storage_path() . '/app/public/images/collection-items/' . $filename;
+            $path = public_path().'/storage/images/collection-items/' . $filename;
             if (file_exists($path)) {
                 unlink($path);
             }
 
             // Delete the small image
-            $thumbnailPath = storage_path() . '/app/public/images/collection-items/small/' . $filename;
+            //$thumbnailPath = storage_path() . '/app/public/images/collection-items/small/' . $filename;
+            $thumbnailPath = public_path().'/storage/images/collection-items/small/' . $filename;
             if (file_exists($thumbnailPath)) {
                 unlink($thumbnailPath);
             }

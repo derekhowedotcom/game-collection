@@ -16,8 +16,6 @@
   </template>
 
 <script setup>
-import { ref } from 'vue';
-
 const props = defineProps({
   modalActive: {
     type: Boolean,

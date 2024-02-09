@@ -1,6 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
     <!-- Image -->
-    <div class="mb-4 flex items-center justify-center md:justify-start">
+    <div v-if="collectionItem.thumbnail" class="mb-4 flex items-center justify-center md:justify-start">
         <img width="300" :src="`/storage/images/collection-items/${ collectionItem.thumbnail }`" alt="" />
     </div>
     <!-- Retailers -->
@@ -73,7 +73,7 @@
   <div class="mt-4">
     <router-link class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                  v-if="can('collection-items.update')"
-                 :to="{ name: 'collection-items.edit', params: { id: this.$route.params.id } }">
+                 :to="{ name: 'collection-items.edit', params: { id: router.currentRoute.value.params.id } }">
       <span v-html="SVG_EDIT"></span>
       Edit
     </router-link>
@@ -93,7 +93,7 @@ import useCollectionItems from '../../composables/collectionItems';
 import { useAbility } from '@casl/vue';
 import titleEditComponent from '../ui/TitleEdit.vue';
 import { formatDate } from '../../helpers/dateHelpers';
-import { basename } from '../../helpers/fileHelpers';
+import { useRouter } from 'vue-router'
 import { formatCurrency } from '../../helpers/numberHelpers'
 import {SVG_DELETE, SVG_EDIT, SVG_EBAY_LOGO, SVG_CEX_LOGO} from "../../constants/svgConstants";
 
@@ -103,6 +103,7 @@ const { collectionItem, getCollectionItem, deleteCollectionItem, updateCollectio
 
 // Get route and abilities
 const route = useRoute();
+const router = useRouter();
 const { can } = useAbility();
 
 // On mount actions

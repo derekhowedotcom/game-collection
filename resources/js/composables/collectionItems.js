@@ -26,6 +26,7 @@ export default function useCollectionItems() {
         order_column = 'title',
         order_direction = 'asc'
     ) => {
+        isLoading.value =true
         axios.get('/api/collection-items?page=' + page +
             '&search_category=' + search_category +
             '&search_id=' + search_id +
@@ -37,6 +38,7 @@ export default function useCollectionItems() {
             )
             .then(response => {
                 collectionItems.value = response.data
+                isLoading.value = false
             })
     }
 
