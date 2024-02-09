@@ -1,4 +1,8 @@
 <template>
+  <div v-if="isCollectionItemLoading" class="flex items-center justify-center mt-10 mb-10">
+    <div class="inline-block content-center animate-spin w-20 h-20 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
+  </div>
+  <div v-else-if="!isCollectionItemLoading">
     <form @submit.prevent="updateCollectionItem(collectionItem)">
         <!-- Thumbnail -->
         <div class="mt-4">
@@ -115,7 +119,7 @@
         <!-- Buttons -->
         <div class="mt-4">
           <Collection-item-cancel-button @click="$router.push({ name: 'collection-items.index' })">Cancel</Collection-item-cancel-button>
-          <Collection-item-save-button :is-loading="isLoading">Save</Collection-item-save-button>
+          <Collection-item-save-button :is-loading="isProcessing">Save</Collection-item-save-button>
           <Collection-item-primary-button :is-loading="cexIsLoading" @click="handleCexClick">Get CEX Details</Collection-item-primary-button>
         </div>
     </form>
@@ -125,6 +129,7 @@
         <barcode-scanner @barcodeFound="barcodeFoundHandler" :startBarcodeScanner="modalActive" ></barcode-scanner>
       </div>
     </modal>
+  </div>
 </template>
 
 <script setup>
@@ -156,7 +161,8 @@ const {
     getCollectionItem,
     updateCollectionItem,
     validationErrors,
-    isLoading
+    isLoading: isCollectionItemLoading,
+    isProcessing
 } = useCollectionItems();
 const { cexItem, getCexItem, isLoading: cexIsLoading } = useCex();
 const cexErrorMessage = ref(null);
@@ -170,10 +176,6 @@ const router = useRouter()
 const { can } = useAbility();
 
 onMounted(() => {
-  // If the user does not have the ability to update collection items redirect them to the index page
-  if(!can('collection-items.update')){
-    router.push({ name: 'collection-items.index' });
-  }
     getCollectionItem(route.params.id)
     getCategories()
     getRarities()

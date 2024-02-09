@@ -11,6 +11,7 @@ export default function useCollectionItems() {
     const router = useRouter()
     const validationErrors = ref({})
     const isLoading = ref(false)
+    const isProcessing = ref(false)
     const swal = inject('$swal')
     const { collectionItemCounts, getCollectionItemCounts, getCollectionItemValueAndAmountSpent } = useCollectionItemCounts({
         categoryNames: 'hardware,software,other',
@@ -44,10 +45,12 @@ export default function useCollectionItems() {
 
     //get one collectionItem
     const getCollectionItem = async (id) => {
+        isLoading.value = true
 
         axios.get('/api/collection-items/' + id)
             .then(response => {
                 collectionItem.value = response.data.data;
+                isLoading.value = false
             })
     }
 
@@ -96,9 +99,9 @@ export default function useCollectionItems() {
     // Update a collectionItem
     const updateCollectionItem = async (collectionItem, qucikEdit) => {
         console.log(collectionItem);
-        if(isLoading.value) return;
+        if(isProcessing.value) return;
 
-       isLoading.value = true
+        isProcessing.value = true
        validationErrors.value = {}
 
        let serializedCollectionItem = new FormData()
@@ -134,7 +137,7 @@ export default function useCollectionItems() {
                     validationErrors.value = error.response.data.errors
                 }
             })
-            .finally(() => isLoading.value = false)
+            .finally(() => isProcessing.value = false)
     }
 
     // Delete a collectionItem
@@ -182,7 +185,8 @@ export default function useCollectionItems() {
         deleteCollectionItem,
         collectionItemCounts,
         validationErrors,
-        isLoading
+        isLoading,
+        isProcessing
     }
 
 }

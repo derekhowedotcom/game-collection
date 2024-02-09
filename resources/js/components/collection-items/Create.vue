@@ -183,11 +183,6 @@ const router = useRouter()
 
 // On mount actions
 onMounted(() => {
-  // Redirect if user does not have permission to be here
-  if(!can('collection-items.create')){
-    router.push({ name: 'collection-items.index' });
-  }
-
     getCategories();
     getRarities();
     collectionItem.value = {
