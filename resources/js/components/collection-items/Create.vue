@@ -3,7 +3,7 @@
         <!-- Thumbnail -->
       <div class="mt-1">
         <div class="flex items-center justify-center md:justify-start">
-        <label for="thumbnail" class="block font-bold text-sm text-gray-700">
+        <label for="thumbnail" class="block font-medium text-sm text-gray-700">
           Thumbnail
         </label>
           </div>
@@ -91,6 +91,7 @@
                     :id="'collectionItem-value'"
                     :field-name="'value'"
                     :validation-errors="validationErrors"
+                    :inputmode="'decimal'"
             />
         </div>
         <!-- Price Paid -->
@@ -101,6 +102,7 @@
                     :id="'collectionItem-pricePiad'"
                     :field-name="'price_paid'"
                     :validation-errors="validationErrors"
+                    :inputmode="'decimal'"
             />
         </div>
         <!-- Boxed -->
@@ -180,6 +182,7 @@ const { storeCollectionItem, validationErrors, isLoading } = useCollectionItems(
 const { cexItem, getCexItem, isLoading: cexIsLoading } = useCex();
 const { can } = useAbility();
 const router = useRouter()
+const emit = defineEmits(['close-menu']);
 
 // On mount actions
 onMounted(() => {
@@ -198,6 +201,7 @@ onMounted(() => {
         price_paid: '',
         boxed: 0,
     };
+    emit('close-menu', true);
 });
 
 function onFileChange(target) {

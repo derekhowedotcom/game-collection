@@ -111,10 +111,15 @@ const route = useRoute();
 const router = useRouter();
 const { can } = useAbility();
 
+// Define emits
+const emit = defineEmits(['close-menu']);
+
 // On mount actions
 onMounted(() => {
     getCollectionItem(route.params.id);
     getCategories();
+
+    emit('close-menu', true);
 });
 
 // Computed properties

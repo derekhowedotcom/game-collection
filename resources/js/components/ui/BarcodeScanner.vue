@@ -2,7 +2,7 @@
   <div class="flex items-center justify-center mt-10">
     <div v-if="isLoading"
         class="inline-block content-center animate-spin w-20 h-20 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
-    <div v-show="!isLoading" id="videoWindow" class="video"></div>
+    <div v-show="!isLoading" id="videoWindow" class="video flex justify-center"></div>
   </div>
 </template>
 

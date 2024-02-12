@@ -108,8 +108,8 @@ C55.664,29,57,30.336,57,31.984v23.032C57,56.664,55.664,58,54.016,58z"/>
             <div class="py-2">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-4 bg-white border-b border-gray-200">
-                            <router-view></router-view>
+                        <div class="p-2 bg-white border-b border-gray-200 pb-4">
+                            <router-view @close-menu="closeMenuHandler"></router-view>
                         </div>
                     </div>
                 </div>
@@ -152,6 +152,13 @@ const showMenu = ref(false);
 const toggleNav = () => (showMenu.value = !showMenu.value);
 // Get current page title
 const currentPageTitle = computed(() => route.meta.title);
+
+const closeMenuHandler = shouldClose => {
+  if(shouldClose){
+    showMenu.value = false;
+  }
+}
+
 
 
 </script>

@@ -3,8 +3,6 @@ import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import useCollectionItemCounts from "./collectionItemCounts";
 
-
-
 export default function useCollectionItems() {
     const collectionItems = ref({})
     const collectionItem = ref({})
@@ -81,7 +79,7 @@ export default function useCollectionItems() {
                 router.push({ name: 'collection-items.details', params: { id: response.data.data.id } })
                 swal({
                     icon: 'success',
-                    title: 'CollectionItem saved successfully'
+                    title: 'Collection Item saved successfully'
                 })
                 collectionItems.value = response.data
 
@@ -126,7 +124,7 @@ export default function useCollectionItems() {
                     router.push({ name: 'collection-items.details', params: { id: response.data.data.id } })
                     swal({
                         icon: 'success',
-                        title: 'CollectionItem saved successfully'
+                        title: 'Collection Item saved successfully'
                     })
                 }
                 collectionItems.value = response.data
@@ -161,7 +159,7 @@ export default function useCollectionItems() {
                         router.push({name: 'collection-items.index'})
                         swal({
                             icon: 'success',
-                            title: 'CollectionItem deleted successfully'
+                            title: 'Collection Item deleted successfully'
                         })
                     })
                     .catch(error => {

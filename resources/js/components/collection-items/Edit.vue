@@ -6,10 +6,14 @@
     <form @submit.prevent="updateCollectionItem(collectionItem)">
         <!-- Thumbnail -->
         <div class="mt-4">
+          <div class="flex items-center justify-center md:justify-start">
             <label for="thumbnail" class="block font-medium text-sm text-gray-700">
                 Thumbnail
             </label>
+          </div>
+          <div class="mb-2 flex items-center justify-center md:justify-start">
             <img :src="getThumbUrl()" alt="Placeholder Image" class="mt-2 mb-3 h-auto max-w-xs rounded-lg"/>
+          </div>
             <input @change="onFileChange($event.target.files[0])" type="file" id="thumbnail" />
             <div class="text-red-600 mt-1">
                 <div v-for="message in validationErrors?.thumbnail" :key="message">
@@ -91,6 +95,7 @@
               :id="'collectionItem-value'"
               :field-name="'value'"
               :validation-errors="validationErrors"
+              :inputmode="'decimal'"
           />
         </div>
         <!-- Price Paid -->
@@ -101,6 +106,7 @@
               :id="'collectionItem-pricePiad'"
               :field-name="'price_paid'"
               :validation-errors="validationErrors"
+              :inputmode="'decimal'"
           />
         </div>
         <!-- Boxed -->
@@ -108,7 +114,6 @@
           <collection-item-radio
               v-model:value="collectionItem.boxed"
               :id="'collectionItem-boxed'"
-
               :categories="BOXED_OPTIONS"
               :label="'Boxed'"
               :field-name="'boxed'"
@@ -175,10 +180,15 @@ const route = useRoute();
 const router = useRouter()
 const { can } = useAbility();
 
+// Define emits
+const emit = defineEmits(['close-menu']);
+
 onMounted(() => {
     getCollectionItem(route.params.id)
     getCategories()
     getRarities()
+
+    emit('close-menu', true);
 })
 
 async function handleCexClick() {

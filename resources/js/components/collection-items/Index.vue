@@ -58,11 +58,11 @@
                     <td class="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         <router-link v-if="collectionItem.thumbnail"
                                      :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }"><img
-                            :src="`/storage/images/collection-items/small/${collectionItem.thumbnail}`" width="50"
+                            :src="`/storage/images/collection-items/small/${collectionItem.thumbnail}`" class="table-image"
                             alt=""/></router-link>
                         <router-link v-else
                                      :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }">
-                          <img :src="`/storage/images/collection-items/image-placeholder.jpg`" width="50" alt=""/>
+                          <img :src="`/storage/images/collection-items/image-placeholder.jpg`" class="table-image" alt=""/>
                         </router-link>
 
                     </td>
@@ -112,6 +112,9 @@ const { collectionItems, getCollectionItems, deleteCollectionItem, isLoading: is
 const { categories, getCategories } = useCategories();
 const { can } = useAbility();
 
+// Define emits
+const emit = defineEmits(['close-menu']);
+
 const {
   collectionItemValueAndAmountSpent,
   getCollectionItemValueAndAmountSpent,
@@ -121,6 +124,8 @@ onMounted(() => {
   getCollectionItems();
   getCategories();
   getCollectionItemValueAndAmountSpent();
+
+  emit('close-menu', true);
 });
 
 const updateOrdering = (column) => {
@@ -195,4 +200,16 @@ watch(search_global, (current, previous) => {
 
 </script>
 
+<style scoped>
+.table-image {
+  width: 80px;
+}
+
+@media (max-width: 640px) {
+  .table-image {
+    width: 150px;
+  }
+}
+
+</style>
 

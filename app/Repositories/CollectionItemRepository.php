@@ -42,7 +42,7 @@ class CollectionItemRepository implements CollectionItemRepositoryInterface
                 });
             })
             ->orderBy($orderColumn, $orderDirection)
-            ->paginate(10);
+            ->paginate(20);
 
             return $collectionItem;
    }

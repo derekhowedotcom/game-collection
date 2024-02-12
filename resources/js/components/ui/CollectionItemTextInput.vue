@@ -26,6 +26,11 @@ const props = defineProps({
         type: String,
         required: true,
     },
+  inputmode: {
+    type: String,
+    required: false,
+    default: 'text',
+  },
 });
 
 const emit = defineEmits(['update:value', 'blur', 'keydown']);
@@ -53,7 +58,7 @@ watch(toRef(props,'value'),  (newValue) => {
         {{ label }}
     </label>
   <div class="flexContainer">
-    <input v-model="inputValue" type="text" :id="id"
+    <input v-model="inputValue" type="text" :id="id" :inputmode="inputmode"
            class=" inputField block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
            @blur="updateValue(inputValue)"
            @keydown="updateValue(inputValue)"
