@@ -71,7 +71,7 @@
       <!-- Boxed -->
       <div class="mb-4">
           <h1><span class="block font-medium text-sm text-gray-700">Boxed:</span></h1>
-          <p>{{ boxedText }}</p>
+          <p>{{ collectionItem.boxed === 1 ? 'Yes' : 'No' }}</p>
       </div>
       <!-- Buttons -->
     <div class="mt-4">
@@ -120,11 +120,6 @@ onMounted(() => {
     getCategories();
 
     emit('close-menu', true);
-});
-
-// Computed properties
-const boxedText = computed(() => {
-    return collectionItem.value.boxed === 1 ? 'Yes' : 'No';
 });
 
 const quickEditSaveHandler = () => {
