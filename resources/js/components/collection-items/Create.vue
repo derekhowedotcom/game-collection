@@ -242,7 +242,7 @@ async function handleCexClick() {
         if(cexItem?.value?.response?.data !== null){
             collectionItem.value.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName;
             //trim white space and html tags
-            if(collectionItem.value.description){
+            if(cexItem?.value.response?.data?.boxDetails[0]?.boxDescription){
               collectionItem.value.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
                   .replace(/<\/?[^>]+(>|$)/g, "")
                   .trim()
