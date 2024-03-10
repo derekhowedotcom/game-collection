@@ -19,6 +19,8 @@ export default function useCex() {
           })
           .catch((error) => {
             reject(error);
+          }).finally(() => {
+            isLoading.value = false;
           });
       });
     };

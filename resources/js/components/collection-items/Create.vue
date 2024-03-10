@@ -242,10 +242,13 @@ async function handleCexClick() {
         if(cexItem?.value?.response?.data !== null){
             collectionItem.value.title = cexItem?.value?.response?.data?.boxDetails[0]?.boxName;
             //trim white space and html tags
-            collectionItem.value.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
-                                        .replace(/<\/?[^>]+(>|$)/g, "")
-                                        .trim()
-                                        .replace(/\s{2,10}/g, ' ');
+            if(collectionItem.value.description){
+              collectionItem.value.description = cexItem?.value?.response?.data?.boxDetails[0]?.boxDescription
+                  .replace(/<\/?[^>]+(>|$)/g, "")
+                  .trim()
+                  .replace(/\s{2,10}/g, ' ');
+            }
+
             collectionItem.value.cex_image = cexItem?.value?.response?.data?.boxDetails[0]?.imageUrls?.large;
             collectionItem.value.value = cexItem?.value?.response?.data?.boxDetails[0]?.sellPrice;
             collectionItem.value.category_id = getCexCategory(cexItem?.value?.response?.data?.boxDetails[0]?.categoryName);
