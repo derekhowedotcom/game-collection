@@ -24,7 +24,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     // Get collection item values and price paid
     Route::get('collection-items/value-and-amount-spent', [CollectionItemController::class, 'valueAndAmountSpent']);
 
-// This is an extra route needed for updates to images due to put not supporting form data
+    // This is an extra route needed for updates to images due to put not supporting form data
     Route::post('collection-items/{collection_item}', [CollectionItemController::class, 'update']);
     Route::apiResource('collection-items', CollectionItemController::class);
     Route::get('categories', [CategoryController::class, 'index']);
