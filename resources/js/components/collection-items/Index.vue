@@ -82,7 +82,7 @@
             </div>
             <div class="flex justify-center items-center">
                 <Pagination :data="collectionItems"
-                            @pagination-change-page="page => getCollectionItems(page, selectedCategory)"/>
+                            @pagination-change-page="page => getCollectionItems(page, search_category)"/>
             </div>
         </div>
     </div>
