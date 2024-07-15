@@ -35,8 +35,7 @@ class CexController extends Controller
                     'Accept' => 'text/html,application/json',
                     'Accept-Language' => 'en-US',
                     'referer' => 'https://google.co.uk/'
-                ])
-                    ->get($this->baseCexUrl . '/' . $barcode . '/detail');
+                ])->get($this->baseCexUrl . '/' . $barcode . '/detail');
 
                 return response()->json($data->json(), Response::HTTP_OK);
             }
