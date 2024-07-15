@@ -30,7 +30,12 @@ class CexController extends Controller
         try{
             // If we have a barcode send the request
             if(!empty($barcode)){
-                $data = Http::withUserAgent($this->userAgent)
+                $data = Http::withHeaders([
+                    'User-Agent' => $this->userAgent,
+                    'Accept' => 'text/html,application/json',
+                    'Accept-Language' => 'en-US',
+                    'referer' => 'https://google.co.uk/'
+                ])
                     ->get($this->baseCexUrl . '/' . $barcode . '/detail');
 
                 return response()->json($data->json(), Response::HTTP_OK);
