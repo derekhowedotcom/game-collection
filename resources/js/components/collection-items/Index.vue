@@ -107,7 +107,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 const search_category = ref(router.currentRoute.value.query.searchCategory || '');
 const search_id = ref('');
-const search_title = ref(router.currentRoute.value.query.searchTitle || '');
+const search_title = ref( '');
 const search_description = ref('');
 const search_global = ref('');
 const orderColumn = ref('title');
@@ -134,27 +134,6 @@ onMounted(() => {
   emit('close-menu', true);
 });
 
-// detect browser back/forward button
-window.addEventListener('popstate', () => {
-  currentPage.value = router.currentRoute.value.query.page || 1;
-  search_category.value = router.currentRoute.value.query.searchCategory || '';
-  search_id.value = router.currentRoute.value.query.searchId || '';
-  search_title.value = router.currentRoute.value.query.searchTitle || '';
-  search_description.value = router.currentRoute.value.query.searchDescription || '';
-  search_global.value = router.currentRoute.value.query.searchGlobal || '';
-
-  getCollectionItems(
-      currentPage.value,
-      search_category.value,
-      search_id.value,
-      search_title.value,
-      search_description.value,
-      search_global.value,
-      orderColumn.value,
-      orderDirection.value
-  );
-
-});
 
 onMounted(() => {
     getCollectionItems(currentPage.value, search_category.value);
@@ -163,9 +142,9 @@ onMounted(() => {
 const updatePage = page => {
 
     currentPage.value = page;
-    router.push({ query: { page, searchCategory: search_category.value, searchTitle: search_title.value } });
+    router.push({ query: { page, searchCategory: search_category.value } });
 
-    getCollectionItems(page, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
+    getCollectionItems(page, search_category.value);
 };
 
 
