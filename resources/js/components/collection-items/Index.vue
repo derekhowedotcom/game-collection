@@ -138,10 +138,12 @@ onMounted(() => {
     getCollectionItems(currentPage.value, search_category.value);
 });
 
-const updatePage = (page) => {
+const updatePage = page => {
 
     currentPage.value = page;
     router.push({ query: { page } });
+
+    console.log(search_category.value);
 
     getCollectionItems(page, search_category.value);
 };
