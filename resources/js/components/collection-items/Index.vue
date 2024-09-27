@@ -82,7 +82,8 @@
             </div>
             <div class="flex justify-center items-center">
                 <Pagination :data="collectionItems"
-                            @pagination-change-page="page => getCollectionItems(page, search_category)"/>
+                            @pagination-change-page="page => updatePage(page)"
+                />
             </div>
         </div>
     </div>
@@ -99,7 +100,9 @@ import titleLinkComponent from '../ui/TitleLink.vue';
 import { formatDate } from '../../helpers/dateHelpers';
 import { basename } from '../../helpers/fileHelpers';
 import useCollectionItemCounts from '../../composables/collectionItemCounts';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const search_category = ref('');
 const search_id = ref('');
 const search_title = ref('');
@@ -107,6 +110,7 @@ const search_description = ref('');
 const search_global = ref('');
 const orderColumn = ref('title');
 const orderDirection = ref('asc');
+const currentPage = ref(router.currentRoute.value.query.page || 1);
 
 const { collectionItems, getCollectionItems, deleteCollectionItem, isLoading: isCollectionItemsLoading } = useCollectionItems();
 const { categories, getCategories } = useCategories();
@@ -127,6 +131,21 @@ onMounted(() => {
 
   emit('close-menu', true);
 });
+
+
+
+onMounted(() => {
+    getCollectionItems(currentPage.value, search_category.value);
+});
+
+const updatePage = (page) => {
+
+    currentPage.value = page;
+    router.push({ query: { page } });
+
+    getCollectionItems(page, search_category.value);
+};
+
 
 const updateOrdering = (column) => {
   orderColumn.value = column;
