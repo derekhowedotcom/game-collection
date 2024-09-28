@@ -90,7 +90,7 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, watch } from 'vue';
+import {ref, onMounted, watch, nextTick} from 'vue';
 import useCollectionItems from '../../composables/collectionItems';
 import useCategories from '../../composables/categories';
 import { current } from 'tailwindcss/colors';
@@ -133,16 +133,17 @@ onMounted(() => {
     emit('close-menu', true);
 });
 
-onBeforeRouteUpdate((to, from, next) => {
+onBeforeRouteUpdate(async (to, from, next) => {
     console.log('onBeforeRouteUpdate page - ' + to.query.page);
 
 
     currentPage.value = to.query.page || 1;
+    await nextTick(() => {
+        getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
+    });
+
+
     next();
-    getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
-
-
-
 
 });
 
