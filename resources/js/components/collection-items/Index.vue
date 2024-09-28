@@ -126,8 +126,6 @@ const {
 } = useCollectionItemCounts({});
 
 onMounted(() => {
-    console.log('onMounted page - ' + currentPage.value);
-
     getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
     getCategories();
     getCollectionItemValueAndAmountSpent();
@@ -136,36 +134,18 @@ onMounted(() => {
 });
 
 onBeforeRouteUpdate(async (to, from, next) => {
-    console.log('onBeforeRouteUpdate page - ' + to.query.page);
-
-
     currentPage.value = to.query.page || 1;
     await nextTick(() => {
         getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
     });
+
+    // refresh the component for iPhone page number highlight issue
     refreshComponent();
 
-
     next();
-
 });
 
-
-
-
-// Force re-render of the pagination component
-const refreshComponent = () => {
-    renderComponent.value = false;
-    // Ensure the component is fully removed before re-rendering
-    setTimeout(() => {
-        renderComponent.value = true;
-    }, 0);
-};
-
-
-
 const updatePageAndParams = (page) => {
-    console.log('updatePageAndParams - page' + page);
 
    // set the current page
     currentPage.value = page;
@@ -176,6 +156,7 @@ const updatePageAndParams = (page) => {
         }
     });
 
+    // refresh the component for iPhone page number highlight issue
     refreshComponent();
 
     getCollectionItems(
@@ -203,6 +184,15 @@ const updateOrdering = (column) => {
         orderColumn.value,
         orderDirection.value
     );
+};
+
+// Force re-render of the component
+const refreshComponent = () => {
+    renderComponent.value = false;
+    // Ensure the component is fully removed before re-rendering
+    setTimeout(() => {
+        renderComponent.value = true;
+    }, 0);
 };
 
 watch(search_category, (current, previous) => {
