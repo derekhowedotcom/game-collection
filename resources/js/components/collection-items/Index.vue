@@ -82,7 +82,7 @@
             </div>
             <div class="flex justify-center items-center">
                 <Pagination :data="collectionItems"
-                            @pagination-change-page="page => getCollectionItems(page, search_category)"/>
+                            @pagination-change-page="page => updatePageAndParams(page)"/>
             </div>
         </div>
     </div>
@@ -99,7 +99,9 @@ import titleLinkComponent from '../ui/TitleLink.vue';
 import { formatDate } from '../../helpers/dateHelpers';
 import { basename } from '../../helpers/fileHelpers';
 import useCollectionItemCounts from '../../composables/collectionItemCounts';
+import {onBeforeRouteUpdate, useRouter} from 'vue-router'
 
+const router = useRouter();
 const search_category = ref('');
 const search_id = ref('');
 const search_title = ref('');
@@ -107,6 +109,7 @@ const search_description = ref('');
 const search_global = ref('');
 const orderColumn = ref('title');
 const orderDirection = ref('asc');
+const currentPage = ref(router.currentRoute.value.query.page || 1);
 
 const { collectionItems, getCollectionItems, deleteCollectionItem, isLoading: isCollectionItemsLoading } = useCollectionItems();
 const { categories, getCategories } = useCategories();
@@ -121,12 +124,45 @@ const {
 } = useCollectionItemCounts({});
 
 onMounted(() => {
-    getCollectionItems();
+    console.log('onMounted page - ' + currentPage.value);
+
+    getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
     getCategories();
     getCollectionItemValueAndAmountSpent();
 
     emit('close-menu', true);
 });
+onBeforeRouteUpdate((to, from, next) => {
+    console.log('onBeforeRouteUpdate page - ' + to.query.page);
+
+    currentPage.value = to.query.page || 1;
+    getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
+    next();
+});
+
+const updatePageAndParams = (page) => {
+    console.log('updatePageAndParams - page' + page);
+
+   // set the current page
+    currentPage.value = page;
+
+    router.push({
+        query: {
+            page: page,
+        }
+    });
+
+    getCollectionItems(
+        currentPage.value,
+        search_category.value,
+        search_id.value,
+        search_title.value,
+        search_description.value,
+        search_global.value,
+        orderColumn.value,
+        orderDirection.value
+    );
+};
 
 const updateOrdering = (column) => {
     orderColumn.value = column;
