@@ -153,7 +153,7 @@ const updatePageAndParams = (page) => {
     });
 
     getCollectionItems(
-        currentPage.value,
+        page,
         search_category.value,
         search_id.value,
         search_title.value,
