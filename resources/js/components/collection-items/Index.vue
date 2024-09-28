@@ -82,6 +82,7 @@
             </div>
             <div class="flex justify-center items-center">
                 <Pagination :data="collectionItems"
+                            :currentPage="currentPage"
                             @pagination-change-page="page => updatePageAndParams(page)"/>
             </div>
         </div>
@@ -135,8 +136,13 @@ onMounted(() => {
 onBeforeRouteUpdate((to, from, next) => {
     console.log('onBeforeRouteUpdate page - ' + to.query.page);
 
+
+
     currentPage.value = to.query.page || 1;
     getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
+
+
+
     next();
 });
 
@@ -153,7 +159,7 @@ const updatePageAndParams = (page) => {
     });
 
     getCollectionItems(
-        page,
+        currentPage.value,
         search_category.value,
         search_id.value,
         search_title.value,
