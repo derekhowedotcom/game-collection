@@ -2,17 +2,15 @@
     <div class="overflow-hidden overflow-x-auto p-1 bg-white border-gray-200">
         <div class="min-w-full align-middle">
             <div class="mb-4 grid lg:grid-cols-4 gap-4">
-<!--                <input v-model="search_global" type="text" placeholder="Search everything..."-->
-<!--                       class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">-->
+                <!--                <input v-model="search_global" type="text" placeholder="Search everything..."-->
+                <!--                       class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">-->
                 <input v-model="search_title" type="text"
-                       @keyup="updatePage(1)"
                        class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                        placeholder="Search Title...">
 
             </div>
             <div class="mb-4 grid lg:grid-cols-4 gap-4">
                 <select v-model="search_category"
-                        @change="updatePage(1)"
                         class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     <option value="" selected>-- All Categories --</option>
                     <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -20,9 +18,9 @@
                     </option>
                 </select>
             </div>
-          <div v-if="isCollectionItemsLoading" class="flex items-center justify-center mt-10 mb-10">
-            <div class="inline-block content-center animate-spin w-20 h-20 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
-          </div>
+            <div v-if="isCollectionItemsLoading" class="flex items-center justify-center mt-10 mb-10">
+                <div class="inline-block content-center animate-spin w-20 h-20 mr-2 border-t-2 border-t-white border-r-2 border-r-white border-b-2 border-b-white border-l-2 border-l-blue-600 rounded-full"></div>
+            </div>
             <table class="min-w-full divide-y divide-gray-200 border mb-4" v-if="collectionItems.data && collectionItems.data.length > 0 && !isCollectionItemsLoading">
                 <thead>
                 <tr>
@@ -64,7 +62,7 @@
                             alt=""/></router-link>
                         <router-link v-else
                                      :to="{ name: 'collection-items.details', params: { id: collectionItem.id } }">
-                          <img :src="`/storage/images/collection-items/image-placeholder.jpg`" class="table-image" alt=""/>
+                            <img :src="`/storage/images/collection-items/image-placeholder.jpg`" class="table-image" alt=""/>
                         </router-link>
 
                     </td>
@@ -101,17 +99,14 @@ import titleLinkComponent from '../ui/TitleLink.vue';
 import { formatDate } from '../../helpers/dateHelpers';
 import { basename } from '../../helpers/fileHelpers';
 import useCollectionItemCounts from '../../composables/collectionItemCounts';
-import { useRouter } from 'vue-router';
 
-const router = useRouter()
-const search_category = ref(router.currentRoute.value.query.searchCategory || '');
+const search_category = ref('');
 const search_id = ref('');
-const search_title = ref( '');
+const search_title = ref('');
 const search_description = ref('');
 const search_global = ref('');
 const orderColumn = ref('title');
 const orderDirection = ref('asc');
-const currentPage = ref(router.currentRoute.value.query.page || 1);
 
 const { collectionItems, getCollectionItems, deleteCollectionItem, isLoading: isCollectionItemsLoading } = useCollectionItems();
 const { categories, getCategories } = useCategories();
@@ -121,56 +116,42 @@ const { can } = useAbility();
 const emit = defineEmits(['close-menu']);
 
 const {
-  collectionItemValueAndAmountSpent,
-  getCollectionItemValueAndAmountSpent,
+    collectionItemValueAndAmountSpent,
+    getCollectionItemValueAndAmountSpent,
 } = useCollectionItemCounts({});
 
 onMounted(() => {
-  getCollectionItems();
-  getCategories();
-  getCollectionItemValueAndAmountSpent();
+    getCollectionItems();
+    getCategories();
+    getCollectionItemValueAndAmountSpent();
 
-  emit('close-menu', true);
+    emit('close-menu', true);
 });
-
-
-onMounted(() => {
-    getCollectionItems(currentPage.value, search_category.value);
-});
-
-const updatePage = page => {
-
-    currentPage.value = page;
-    router.push({ query: { page, searchCategory: search_category.value } });
-
-    getCollectionItems(page, search_category.value);
-};
-
 
 const updateOrdering = (column) => {
-  orderColumn.value = column;
-  orderDirection.value = orderDirection.value === 'asc' ? 'desc' : 'asc';
-  getCollectionItems(
-      1,
-      search_category.value,
-      search_id.value,
-      search_title.value,
-      search_description.value,
-      search_global.value,
-      orderColumn.value,
-      orderDirection.value
-  );
+    orderColumn.value = column;
+    orderDirection.value = orderDirection.value === 'asc' ? 'desc' : 'asc';
+    getCollectionItems(
+        1,
+        search_category.value,
+        search_id.value,
+        search_title.value,
+        search_description.value,
+        search_global.value,
+        orderColumn.value,
+        orderDirection.value
+    );
 };
 
 watch(search_category, (current, previous) => {
-  getCollectionItems(
-      1,
-      current,
-      search_id.value,
-      search_title.value,
-      search_description.value,
-      search_global.value
-  );
+    getCollectionItems(
+        1,
+        current,
+        search_id.value,
+        search_title.value,
+        search_description.value,
+        search_global.value
+    );
 });
 
 watch(search_id, (current, previous) => {
@@ -221,14 +202,13 @@ watch(search_global, (current, previous) => {
 
 <style scoped>
 .table-image {
-  width: 80px;
+    width: 80px;
 }
 
 @media (max-width: 640px) {
-  .table-image {
-    width: 150px;
-  }
+    .table-image {
+        width: 150px;
+    }
 }
 
 </style>
-
