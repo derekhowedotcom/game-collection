@@ -128,6 +128,14 @@ const {
 } = useCollectionItemCounts({});
 
 onMounted(() => {
+
+    // Set the search values from the query string
+    search_category.value = router.currentRoute.value.query.searchCategory || '';
+    search_id.value = router.currentRoute.value.query.searchId || '';
+    search_title.value = router.currentRoute.value.query.searchTitle || '';
+    currentPage.value = router.currentRoute.value.query.page || 1;
+
+
     getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
     getCategories();
     getCollectionItemValueAndAmountSpent();
