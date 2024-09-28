@@ -135,7 +135,13 @@ onMounted(() => {
 });
 
 onBeforeRouteUpdate(async (to, from, next) => {
+    // Set the search values from the query string
+    search_category.value = to.query.searchCategory || '';
+    search_id.value = to.query.searchId || '';
+    search_title.value = to.query.searchTitle || '';
     currentPage.value = to.query.page || 1;
+
+    // Wait for the next tick to ensure the search values are set before fetching the collection items
     await nextTick(() => {
         getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
     });
