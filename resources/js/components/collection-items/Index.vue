@@ -11,6 +11,7 @@
             </div>
             <div class="mb-4 grid lg:grid-cols-4 gap-4">
                 <select v-model="search_category"
+                        @change="updatePageAndParams(1)"
                         class="inline-block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     <option value="" selected>-- All Categories --</option>
                     <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -103,7 +104,7 @@ import useCollectionItemCounts from '../../composables/collectionItemCounts';
 import {onBeforeRouteUpdate, useRouter} from 'vue-router'
 
 const router = useRouter();
-const search_category = ref('');
+const search_category = ref(router.currentRoute.value.query.searchCategory ||'');
 const search_id = ref('');
 const search_title = ref('');
 const search_description = ref('');
@@ -153,6 +154,9 @@ const updatePageAndParams = (page) => {
     router.push({
         query: {
             page: page,
+            searchCategory: search_category.value,
+            searchId: search_id.value,
+            searchTitle: search_title.value,
         }
     });
 
