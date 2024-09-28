@@ -82,6 +82,7 @@
             </div>
             <div class="flex justify-center items-center">
                 <Pagination :data="collectionItems"
+                            v-if="renderComponent"
                             @pagination-change-page="page => updatePageAndParams(page)"/>
             </div>
         </div>
@@ -110,6 +111,7 @@ const search_global = ref('');
 const orderColumn = ref('title');
 const orderDirection = ref('asc');
 const currentPage = ref(router.currentRoute.value.query.page || 1);
+const renderComponent = ref(true);
 
 const { collectionItems, getCollectionItems, deleteCollectionItem, isLoading: isCollectionItemsLoading } = useCollectionItems();
 const { categories, getCategories } = useCategories();
@@ -141,11 +143,26 @@ onBeforeRouteUpdate(async (to, from, next) => {
     await nextTick(() => {
         getCollectionItems(currentPage.value, search_category.value, search_id.value, search_title.value, search_description.value, search_global.value);
     });
+    refreshComponent();
 
 
     next();
 
 });
+
+
+
+
+// Force re-render of the pagination component
+const refreshComponent = () => {
+    renderComponent.value = false;
+    // Ensure the component is fully removed before re-rendering
+    setTimeout(() => {
+        renderComponent.value = true;
+    }, 0);
+};
+
+
 
 const updatePageAndParams = (page) => {
     console.log('updatePageAndParams - page' + page);
@@ -158,6 +175,8 @@ const updatePageAndParams = (page) => {
             page: page,
         }
     });
+
+    refreshComponent();
 
     getCollectionItems(
         currentPage.value,
@@ -255,3 +274,5 @@ watch(search_global, (current, previous) => {
 }
 
 </style>
+
+
